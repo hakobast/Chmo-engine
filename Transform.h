@@ -10,7 +10,7 @@
 #define OpenGLTesting_GameTransform_h
 
 #include <GL\glut.h>
-#include "Vector3.h"
+#include "Vectors.h"
 #include "Matrix4.h"
 #include "Component.h"
 
@@ -27,10 +27,9 @@ private:
 		Location(Vector3(0.0f, 0.0f, 0.0f)),
 		_Up(Vector3(0.0f, 1.0f, 0.0f)),
 		_Forward(Vector3(0.0f,0.0f,1.0f)),
-		ScaleLocal(Vector3(1.0f,1.0f,1.0f))
-	{
-		std::cout << "Tranform created" << std::endl;
-	};
+		ScaleLocal(Vector3(1.0f,1.0f,1.0f)){};
+protected:
+	~GameTransform();
 public:
 	Vector3 Location;
 	Vector3 ScaleLocal;
@@ -38,9 +37,8 @@ public:
 	Vector3 Up();
 	Vector3 Forward();
 	Matrix4 getMatrix(bool calcScale = false);
-	~GameTransform();
 	void Init();
-	void Update(float deltaTime);
+	void Update();
 
 	void applyTransformation();
 	void Translate(GLfloat x, GLfloat y, GLfloat z);

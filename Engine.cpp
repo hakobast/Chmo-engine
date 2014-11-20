@@ -16,11 +16,11 @@ void Engine::Init()
 	std::cout << "Engine::Init()" << std::endl;
 }
 
-void Engine::Update(float delta)
+void Engine::Update()
 {
 	//std::cout << "ENGINE UPDATE " << delta << std::endl;
 	for (System* s : systems)
-		s->Update(delta);
+		s->Update();
 }
 
 void Engine::addSystem(System &s, int priority)

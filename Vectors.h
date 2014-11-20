@@ -20,6 +20,186 @@
 
 const GLfloat EPSILON = 0.000001f;
 
+struct Vector2
+{
+	GLfloat x, y;
+	Vector2() :x(0.0f), y(0.0f){}
+	Vector2(GLfloat x, GLfloat y) :x(x), y(y){}
+
+public:
+	void set(GLfloat x, GLfloat y);
+	Vector2 duplicate() const;
+	GLfloat magnitude() const;
+	GLfloat sqrmagnitude() const;
+	Vector2& normalize();
+	Vector2 normalized() const;
+	GLfloat distance(const Vector2& other) const;
+	GLfloat dot(const Vector2& other) const;
+	Vector2 cross(const Vector2& other) const;
+	bool compare(const Vector2& other, GLfloat epsilon) const;
+	void print() const;
+
+	Vector2 operator +(const Vector2& other);
+	Vector2 operator -(const Vector2& other);
+	Vector2 operator *(const Vector2& other);
+	Vector2 operator *(const GLfloat scale);
+	Vector2 operator /(const Vector2& other);
+	Vector2 operator /(const GLfloat scale);
+	Vector2& operator +=(const Vector2& other);
+	Vector2& operator -=(const Vector2& other);
+	Vector2& operator *=(const Vector2& other);
+	Vector2& operator *=(const GLfloat scale);
+	Vector2& operator /=(const Vector2& other);
+	Vector2& operator /=(const GLfloat scale);
+	GLfloat operator [](int index) const;
+	GLfloat& operator [](int index);
+	bool operator ==(const Vector2& other) const;
+	bool operator !=(const Vector2& other) const;
+};
+
+inline void Vector2::print() const
+{
+	std::cout << "(" << x << "," << y << ")\n";
+}
+
+inline void Vector2::set(GLfloat x, GLfloat y)
+{
+	this->x = x; this->y = y;
+}
+
+inline Vector2 Vector2::duplicate() const
+{
+	return Vector2(x, y);
+}
+
+inline GLfloat Vector2::magnitude() const
+{
+	return sqrtf(x*x + y*y);
+}
+
+inline GLfloat Vector2::sqrmagnitude() const
+{
+	return x*x + y*y;
+}
+
+inline GLfloat Vector2::distance(const Vector2& other) const
+{
+	return sqrtf((other.x - x)*(other.x - x) +
+		(other.y - y)*(other.y - y));
+}
+
+inline GLfloat Vector2::dot(const Vector2& other) const
+{
+	return x*other.x + y*other.y;
+}
+
+inline Vector2& Vector2::normalize()
+{
+	GLfloat m = sqrtf(x*x + y*y);
+	if (m < EPSILON)
+		return *this;
+
+	x /= m;
+	y /= m;
+
+	return *this;
+}
+
+inline Vector2 Vector2::normalized() const
+{
+	GLfloat m = sqrtf(x*x + y*y);
+	if (m < EPSILON)
+		return *this;
+
+	return Vector2(x / m, y / m);
+}
+
+inline bool Vector2::compare(const Vector2& other, GLfloat epsilon) const
+{
+	return fabs(x - other.x) <= epsilon && fabs(y - other.y) <= epsilon;
+}
+
+inline GLfloat Vector2:: operator [](int index) const
+{
+	return (&x)[index];
+}
+
+inline GLfloat& Vector2:: operator [](int index)
+{
+	return (&x)[index];
+}
+
+inline Vector2 Vector2:: operator+(const Vector2& other)
+{
+	return Vector2(x + other.x, y + other.y);
+}
+
+inline Vector2 Vector2:: operator-(const Vector2& other)
+{
+	return Vector2(x - other.x, y - other.y);
+}
+
+inline Vector2 Vector2:: operator*(const Vector2& other)
+{
+	return Vector2(x*other.x, y*other.y);
+}
+
+inline Vector2 Vector2:: operator*(const GLfloat scale)
+{
+	return Vector2(x*scale, y*scale);
+}
+
+inline Vector2 Vector2:: operator/(const Vector2& other)
+{
+	return Vector2(x / other.x, y / other.y);
+}
+
+inline Vector2 Vector2:: operator/(const GLfloat scale)
+{
+	return Vector2(x / scale, y / scale);
+}
+
+inline Vector2& Vector2:: operator +=(const Vector2& other)
+{
+	x += other.x; y += other.y; return *this;
+}
+
+inline Vector2& Vector2:: operator -=(const Vector2& other)
+{
+	x -= other.x; y -= other.y; return *this;
+}
+
+inline Vector2& Vector2:: operator *=(const Vector2& other)
+{
+	x *= other.x; y *= other.y; return *this;
+}
+
+inline Vector2& Vector2:: operator /=(const Vector2& other)
+{
+	x /= other.x; y /= other.y; return *this;
+}
+
+inline Vector2& Vector2:: operator *=(const GLfloat scale)
+{
+	x *= scale; y *= scale; return *this;
+}
+
+inline Vector2& Vector2:: operator /=(const GLfloat scale)
+{
+	x /= scale; y /= scale; return *this;
+}
+
+inline bool Vector2:: operator ==(const Vector2& other) const
+{
+	return fabs(x - other.x) <= EPSILON && fabs(y - other.y) <= EPSILON;
+}
+
+inline bool Vector2:: operator !=(const Vector2& other) const
+{
+	return fabs(x - other.x) > EPSILON && fabs(y - other.y) > EPSILON;
+}
+
+
 struct Vector3
 {
     GLfloat x,y,z;

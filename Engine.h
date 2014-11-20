@@ -24,7 +24,7 @@ class Engine
 
 public:
     void Init();
-    void Update(float delta);
+    void Update();
     void addSystem(System &s, int priority);
     void addGameObject(GameObject &obj);
     void addComponent(Component &comp, int priority);

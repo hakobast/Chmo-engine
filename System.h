@@ -14,18 +14,18 @@
 #include "Utils.h"
 #include "Component.h"
 
-class Component;
-
 static bool sortComponents(const Component* lhs, const Component* rhs) { return lhs->priority < rhs->priority; }
 
 class System
 {
+friend class Engine;
+
 public:
-    int priority;
-    
-    virtual ~System(){};
-	virtual void Init(){};
-    virtual void Update(float delta){};
+	int priority;
+protected:
+	virtual ~System(){};
+	virtual void Init() = 0;
+    virtual void Update() = 0;
     virtual void addComponent(Component &c)
 	{
 		components.push_back(&c);

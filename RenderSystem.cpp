@@ -12,7 +12,7 @@
 
 class RenderSystem : public System
 {
-public:
+protected:
 	RenderSystem::~RenderSystem()
 	{
 		std::cout << "RenderSystem:: ~~~deleted~~~" << std::endl;
@@ -23,14 +23,14 @@ public:
 		std::cout << "RenderSystem:: Init()" << std::endl;
 	}
 
-	void RenderSystem::Update(float delta)
+	void RenderSystem::Update()
 	{
-		std::cout << "RenderSystem:: Update()" << std::endl;
+		//std::cout << "RenderSystem:: Update()" << std::endl;
 
 		for (int i = 0; i < components.size(); i++)
 		{
 			if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
-				components[i]->Update(delta);
+				components[i]->Update();
 		}
 	}
 

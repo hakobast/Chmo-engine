@@ -15,21 +15,18 @@
 #include "Component.h"
 #include "Transform.h"
 
-class Component;
-class System;
-
-
 class GameObject
 {
 friend class Component;
-friend class Behaviour;
+friend class ActiveComponent;
 
+protected:
+	~GameObject();
 public:
     std::string name;
 	std::string tag;
     
 	GameObject(std::string name);
-	~GameObject();
     
 	template<class T>
 	T* addComponent();

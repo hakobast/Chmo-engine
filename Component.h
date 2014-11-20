@@ -15,11 +15,12 @@ class GameTransform;
 class Component
 {
 	friend class GameObject;
+protected:
+	virtual ~Component(){};
 public:
     int priority;
-    virtual ~Component(){}
-    virtual void Init(){};
-    virtual void Update(float deltaTime){};
+    virtual void Init() = 0;
+    virtual void Update() = 0;
 	bool isEnabled() const;
 	GameObject*const getGameObject();
 	GameTransform*const getTransform();

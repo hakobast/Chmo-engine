@@ -7,12 +7,12 @@
 //
 
 #include "Engine.h"
-#include "Behaviour.h"
+#include "ActiveComponent.h"
 #include <iostream>
 
 using namespace std;
 
-class TestComponent: public Behaviour
+class TestComponent : public ActiveComponent
 {
 public:
 

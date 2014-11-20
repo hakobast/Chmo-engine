@@ -8,11 +8,11 @@
 
 #include <iostream>
 #include "System.h"
-#include "Behaviour.h"
+#include "GameLogic.h"
 
 class GameLogicSystem:  public System
 {
-public:
+protected:
 	GameLogicSystem::~GameLogicSystem()
 	{
 		std::cout << "GameLogicSystem:: ~~~deleted~~~" << std::endl;
@@ -23,27 +23,21 @@ public:
 		std::cout << "GameLogicSystem:: Init()" << std::endl;
 	}
 
-	void GameLogicSystem::Update(float delta)
+	void GameLogicSystem::Update()
 	{
-		std::cout << "GameLogicSystem:: Update()" << std::endl;
+		//std::cout << "GameLogicSystem:: Update()" << std::endl;
 
 		for (int i = 0; i < components.size(); i++)
 		{
 			if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
-				components[i]->Update(delta);
+				components[i]->Update();
 		}
 	}
 
 	void GameLogicSystem::addComponent(Component &c)
 	{
 		//implement component checking
-		if (dynamic_cast<Behaviour*>(&c))
+		if (dynamic_cast<GameLogic*>(&c))
 			System::addComponent(c);
 	}
-
-	void GameLogicSystem::removeComponent(Component &c)
-	{
-		System::removeComponent(c);
-	}
-
 };

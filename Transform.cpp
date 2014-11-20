@@ -22,7 +22,7 @@ void GameTransform::Init()
 	cout << "GameTransform Init()" << endl;
 }
 
-void GameTransform::Update(float deltaTime)
+void GameTransform::Update()
 {
 	cout << "Update Transform" << endl;
 	/*getMatrix(true);

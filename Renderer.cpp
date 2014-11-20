@@ -13,9 +13,9 @@ void Renderer::Init()
 	cout << "Renderer: Init(): " << endl;
 }
 
-void Renderer::Update(float delta)
+void Renderer::Update()
 {
-	cout << "Renderer: Updated(): " << endl;
+	//cout << "Renderer: Updated(): " << endl;
 	
 	glPushMatrix();
 	transform->applyTransformation();

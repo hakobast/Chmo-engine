@@ -5,9 +5,11 @@
 #include <GLUT/GLUT.h>
 #endif
 
-#include <ctime>
+#include <chrono>
 
 #include "Engine.h"
+#include "Input.h"
+#include "GameTime.h"
 #include "GameLogicSystem.cpp"
 #include "RenderSystem.cpp"
 #include "Renderer.h"
@@ -16,14 +18,12 @@
 #include "SecondComponent.cpp"
 #include "GLTestComponent.cpp"
 
-static float prevTime;
 
 void Render(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	Engine::getInstance().Update(time(0)*1000 - prevTime);
-	prevTime = time(0)*1000;
+	Engine::getInstance().Update();
 
 	glutSwapBuffers();
 	//glutPostRedisplay();
@@ -51,17 +51,10 @@ void Resize(int w, int h)
 	glLoadIdentity();
 }
 
-void SpecialKeys(int key, int x, int y)
+void TimerFunc(int value)
 {
-
-}
-
-void Keys(unsigned char key, int x, int y)
-{
-	switch(key)
-	{
-	case 27: exit(0); break;
-	}
+	glutPostRedisplay();
+	glutTimerFunc(1000 / 60, TimerFunc, 0);
 }
 
 int main(int argc, char **argv)
@@ -71,21 +64,22 @@ int main(int argc, char **argv)
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("ENGINE TESTING");
 	glutReshapeFunc(Resize);
-	glutSpecialFunc(SpecialKeys);
-	glutKeyboardFunc(Keys);
 	glutDisplayFunc(Render);
+	glutTimerFunc(1000 / 60, TimerFunc, 0);
 	SetupRendering();
 	
-	prevTime = time(0)*1000;
-
 	//creating engine
 	Engine::getInstance().Init();
 
-	RenderSystem* renderSystem = new RenderSystem(); //renderer system
-	GameLogicSystem* gameLogicSystem = new GameLogicSystem();	//gamelogic system
+	RenderSystem* renderSystem = new RenderSystem; //renderer system
+	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
+	Input* inputSystem = new Input;
+	GameTime* timeSystem = new GameTime;
 
-	Engine::getInstance().addSystem(*gameLogicSystem, 0);
-	Engine::getInstance().addSystem(*renderSystem, 1);
+	Engine::getInstance().addSystem(*timeSystem, 0);
+	Engine::getInstance().addSystem(*gameLogicSystem, 1);
+	Engine::getInstance().addSystem(*renderSystem, 2);
+	Engine::getInstance().addSystem(*inputSystem, 3);
 
 	//creating game logics
 	GameObject* obj = new GameObject("FirstGameObject");

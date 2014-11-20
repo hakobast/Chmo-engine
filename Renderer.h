@@ -11,16 +11,17 @@
 
 #include <GL\glut.h>
 #include "Component.h"
-#include "Behaviour.h"
+#include "ActiveComponent.h"
 
 using namespace std;
 
-class Renderer : public Behaviour
+class Renderer : public ActiveComponent
 {
-public:
+protected:
 	~Renderer();
+public:
 	void Init();
-	void Update(float deltaTime);
+	void Update();
 };
 
 #endif

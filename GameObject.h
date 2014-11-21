@@ -34,6 +34,13 @@ public:
 	T* getComponent(bool enabledOnly = false) const;
 	template<class T>
 	std::vector<T*> getComponents(bool enabledOnly = false) const;
+
+	/*//statics
+	static GameObject* FindGameObjectByName(std::string name);
+	template<class T>
+	static T* FindComponent();
+	template<class T>
+	static std::vector<T*> FindComponents();*/
 	
 	void sendAction(std::string action, void*const data);
 	void sendMessage(std::string function, void *data);
@@ -98,5 +105,35 @@ std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
 
 	return comps;
 }
+
+/*GameObject* GameObject::FindGameObjectByName(std::string name)
+{
+	for (GameObject* obj : Engine::getInstance().gameObjects)
+		if (obj->name == name)
+			return obj;
+
+	return NULL;
+}
+
+template<class T>
+T* GameObject::FindComponent()
+{
+	for (Component* comp : Engine::getInstance().components)
+		if (dynamic_cast<T>(comp))
+			return comp;
+
+	return NULL;
+}
+
+template<class T>
+std::vector<T*> GameObject::FindComponents()
+{
+	std::vector<T*> comps;
+	for (Component* comp : Engine::getInstance().components)
+		if (dynamic_cast<T>(comp))
+			comps.push_back(comp);
+
+	return comps;
+}*/
 
 #endif

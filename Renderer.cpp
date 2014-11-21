@@ -8,9 +8,14 @@ Renderer::~Renderer()
 	cout << "Renderer:: ~~~deleted~~~ " << endl;
 }
 
+void Renderer::Create()
+{
+	
+}
+
 void Renderer::Init()
 {
-	cout << "Renderer: Init(): " << endl;
+	
 }
 
 void Renderer::Update()

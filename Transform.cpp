@@ -17,18 +17,6 @@ GameTransform::~GameTransform()
 	cout << "~GameTransform()" << endl;
 }
 
-void GameTransform::Init()
-{
-	cout << "GameTransform Init()" << endl;
-}
-
-void GameTransform::Update()
-{
-	cout << "Update Transform" << endl;
-	/*getMatrix(true);
-	glMultMatrixf(&matrix[0]);*/
-}
-
 Matrix4 GameTransform::getMatrix(bool calcScale)
 {
 	matrix[3] = 0.0f;

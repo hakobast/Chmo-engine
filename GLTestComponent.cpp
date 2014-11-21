@@ -25,15 +25,18 @@ public:
        cout << "GLTestComponent:: ~~~deleted~~~" << endl; 
     }
     
+	void Create()
+	{
+
+	}
+
     void Init()
     {
-        cout << "GLTestComponent:: Init()" << endl;
+
     }
     
     void Update()
     {
-		//cout << "GLTestComponent:: Updated()" << endl;
-
 		if (Input::GetMouseDown(0))
 		{
 			transform->RotateZ(5.0f);
@@ -46,14 +49,16 @@ public:
 		if (Input::GetKeyDown(27))
 			exit(0);
 
+		float speed = 10.0f;
+		float rotationSpeed = 200.0f;
 		if (Input::GetKeyDown(100))
-			transform->RotateZ(5.0f);
+			transform->RotateZ(rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(101))
-			transform->TranslateUp(0.3f);
+			transform->TranslateUp(speed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(102))
-			transform->RotateZ(-5.0f);
+			transform->RotateZ(-rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(103))
-			transform->TranslateUp(-0.3f);
+			transform->TranslateUp(-speed*GameTime::DeltaTime());
     }
 
 	void OnAction(string action, void*const data)

@@ -32,6 +32,10 @@ public:
 inline void ActiveComponent::setEnabled(bool toogle)
 {
 	enabled = toogle;
+	if (enabled)
+		OnEnable();
+	else
+		OnDisable();
 }
 
 inline void ActiveComponent::destroy()

@@ -43,6 +43,8 @@ protected:
 
 	void RenderSystem::removeComponent(Component &c)
 	{
-		System::removeComponent(c);
+		//implement component checking
+		if (dynamic_cast<Renderer*>(&c))
+			System::removeComponent(c);
 	}
 };

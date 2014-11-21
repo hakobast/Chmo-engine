@@ -24,7 +24,7 @@ public:
 	int priority;
 protected:
 	virtual ~System(){};
-	virtual void Init() = 0;
+	virtual void Init() = 0; //INFO this maybe not usable function
     virtual void Update() = 0;
     virtual void addComponent(Component &c)
 	{

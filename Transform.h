@@ -37,8 +37,6 @@ public:
 	Vector3 Up();
 	Vector3 Forward();
 	Matrix4 getMatrix(bool calcScale = false);
-	void Init();
-	void Update();
 
 	void applyTransformation();
 	void Translate(GLfloat x, GLfloat y, GLfloat z);

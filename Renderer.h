@@ -20,6 +20,7 @@ class Renderer : public ActiveComponent
 protected:
 	~Renderer();
 public:
+	void Create();
 	void Init();
 	void Update();
 };

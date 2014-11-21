@@ -15,13 +15,12 @@
 #include "System.h"
 #include "GameObject.h"
 #include "Component.h"
-#include "Engine.h"
 
 static bool sortSystems(const System* lhs, const System* rhs) { return lhs->priority < rhs->priority; }
 
 class Engine
 {
-
+friend class GameObject;
 public:
     void Init();
     void Update();
@@ -31,12 +30,21 @@ public:
 	void removeSystem(System &s);
 	void removeGameObject(GameObject &obj);
 	void removeComponent(Component &comp);
+	void print();
+
+	/*GameObject* FindGameObjectByName(std::string name) const;
+	template<class T>
+	T* FindComponent();
+	template<class T>
+	std::vector<T*> FindComponents();*/
+
 	static inline Engine& getInstance()
 	{
 		static Engine engine;
 		return engine;
 	}
 private:
+	std::vector<Component*> componentsToInit;
     std::vector<Component*> components;
     std::vector<GameObject*> gameObjects;
     std::vector<System*> systems;
@@ -46,8 +54,35 @@ private:
 	{
 		std::cout << "ENGINE created" << std::endl;
 	}
-
-	friend class GameObject;
 };
 
+/*GameObject* Engine::FindGameObjectByName(std::string name) const
+{
+	for (GameObject* obj : gameObjects)
+		if (obj->name == name)
+			return obj;
+
+	return NULL;
+}
+
+template<class T>
+T* Engine::FindComponent()
+{
+	for (Component* comp : components)
+		if (dynamic_cast<T>(comp))
+			return comp;
+
+	return NULL;
+}
+
+template<class T>
+std::vector<T*> Engine::FindComponents()
+{
+	std::vector<T*> comps;
+	for (Component* comp : components)
+		if (dynamic_cast<T>(comp))
+			comps.push_back(comp);
+
+	return comps;
+}*/
 #endif

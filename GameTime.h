@@ -7,10 +7,10 @@
 class GameTime :public System
 {
 public:
+	//TODO implement timeScale
 	static float DeltaTime();
-	static int FramesElapsed();
+	static float TimeSinceGameStarted();
 	GameTime(); //TEMP remove this when init function will called
-	float timeScale;
 protected:
 	~GameTime();
 	void Init();
@@ -18,9 +18,9 @@ protected:
 	void addComponent(Component &c);
 private:
 	static GameTime* instance;
+	unsigned long long lastTime;
 	float deltaTime;
-	unsigned long prevTime;
-	int framesCount;
+	float timeSinceGameStarted;
 };
 
 //static functions
@@ -29,9 +29,9 @@ inline float GameTime::DeltaTime()
 	return instance->deltaTime;
 }
 
-inline int GameTime::FramesElapsed()
+inline float GameTime::TimeSinceGameStarted()
 {
-	return instance->framesCount;
+	return instance->timeSinceGameStarted;
 }
 //end
 #endif

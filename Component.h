@@ -19,8 +19,9 @@ protected:
 	virtual ~Component(){};
 public:
     int priority;
-    virtual void Init() = 0;
-    virtual void Update() = 0;
+	virtual void Create(){};
+	virtual void Init(){};
+	virtual void Update(){};
 	bool isEnabled() const;
 	GameObject*const getGameObject();
 	GameTransform*const getTransform();

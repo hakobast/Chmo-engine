@@ -40,4 +40,11 @@ protected:
 		if (dynamic_cast<GameLogic*>(&c))
 			System::addComponent(c);
 	}
+
+	void GameLogicSystem::removeComponent(Component &c)
+	{
+		//implement component checking
+		if (dynamic_cast<GameLogic*>(&c))
+			System::removeComponent(c);
+	}
 };

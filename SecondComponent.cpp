@@ -36,4 +36,3 @@ public:
 		cout << "SecondComponent::Action:" << action << endl;
 	}*/
 };
-

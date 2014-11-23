@@ -19,15 +19,17 @@ GameObject::GameObject(string name)
 	GameObject::name = name;
 
 	cout << "GameObject: " << name << " GameObject()" << endl;
-	Engine::getInstance().addGameObject(*this);
 
 	//adding Transform component to all gameobjects
 	GameTransform* trComp = new GameTransform();
 	trComp->gameObject = this;
 	trComp->transform = trComp;
 
+	transform = trComp;
 	components.push_back(trComp);
+
 	Engine::getInstance().addComponent(*trComp, trComp->priority);
+	Engine::getInstance().addGameObject(*this);
 }
 
 GameObject::~GameObject()

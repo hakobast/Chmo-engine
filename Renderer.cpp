@@ -21,9 +21,7 @@ void Renderer::Init()
 void Renderer::Update()
 {
 	//cout << "Renderer: Updated(): " << endl;
-	
-	glPushMatrix();
-	transform->applyTransformation();
+	getTransform()->applyTransformation();
 
 	glColor3f(0.0f, 1.0f, 0.0f);
 	glBegin(GL_TRIANGLES);
@@ -31,6 +29,4 @@ void Renderer::Update()
 	glVertex3f(0.0f, 1.0f, -20.0f);
 	glVertex3f(-1.0f, 0.0f, -20.0f);
 	glEnd();
-
-	glPopMatrix();
 }

@@ -26,7 +26,6 @@ protected:
 public:
     std::string name;
 	std::string tag;
-    
 	GameObject(std::string name);
     
 	template<class T>
@@ -45,12 +44,14 @@ public:
 
 	void sendAction(std::string action, void*const data);
 	void sendMessage(std::string function, void *data);
+	GameTransform*const getTransform();
     void setActive(bool toogle);
     bool isActive() const;
     void destroy();
     
 private:
     bool _isActive = true;
+	GameTransform* transform;
     std::vector<Component*> components;
 	void removeComponent(Component *);
 };
@@ -58,6 +59,11 @@ private:
 inline bool GameObject::isActive()const
 {
     return _isActive;
+}
+
+inline GameTransform*const GameObject::getTransform()
+{
+	return transform;
 }
 
 #include "GameObjectTemplates.h"

@@ -86,6 +86,14 @@ int main(int argc, char **argv)
 	obj->addComponent<GLTestComponent>();
 	obj->addComponent<Renderer>();
 
+	//creating game logics
+	GameObject* obj2 = new GameObject("SecondGameObject");
+	obj2->addComponent<Renderer>();
+	obj2->addComponent<GLTestComponent>();
+
+
+	obj2->getTransform()->Location = Vector3(2, 1, 0);
+
 	glutMainLoop();
 
 	return 0;

@@ -39,11 +39,11 @@ public:
     {
 		if (Input::GetMouseDown(0))
 		{
-			transform->RotateZ(5.0f);
+			getTransform()->RotateZ(5.0f);
 		}
 		else if (Input::GetMouseDown(2))
 		{
-			transform->RotateZ(-5.0f);
+			getTransform()->RotateZ(-5.0f);
 		}
 
 		if (Input::GetKeyDown(27))
@@ -52,13 +52,13 @@ public:
 		float speed = 10.0f;
 		float rotationSpeed = 200.0f;
 		if (Input::GetKeyDown(100))
-			transform->RotateZ(rotationSpeed*GameTime::DeltaTime());
+			getTransform()->RotateZ(rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(101))
-			transform->TranslateUp(speed*GameTime::DeltaTime());
+			getTransform()->TranslateUp(speed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(102))
-			transform->RotateZ(-rotationSpeed*GameTime::DeltaTime());
+			getTransform()->RotateZ(-rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(103))
-			transform->TranslateUp(-speed*GameTime::DeltaTime());
+			getTransform()->TranslateUp(-speed*GameTime::DeltaTime());
     }
 
 	void OnAction(string action, void*const data)

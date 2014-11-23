@@ -28,7 +28,7 @@ public:
 
 inline void GameLogic::sendAction(std::string action, void*const data)
 {
-	gameObject->sendAction(action, data);
+	getGameObject()->sendAction(action, data);
 }
 
 

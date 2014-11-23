@@ -30,7 +30,11 @@ protected:
 		for (int i = 0; i < components.size(); i++)
 		{
 			if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
+			{
+				glPushMatrix();
 				components[i]->Update();
+				glPopMatrix();
+			}
 		}
 	}
 

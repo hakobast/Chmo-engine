@@ -32,11 +32,11 @@ public:
 	void removeComponent(Component &comp);
 	void print();
 
-	/*GameObject* FindGameObjectByName(std::string name) const;
+	GameObject* FindGameObjectByName(std::string name) const;
 	template<class T>
-	T* FindComponent();
+	T* FindComponent() const;
 	template<class T>
-	std::vector<T*> FindComponents();*/
+	std::vector<T*> FindComponents() const;
 
 	static inline Engine& getInstance()
 	{
@@ -56,33 +56,6 @@ private:
 	}
 };
 
-/*GameObject* Engine::FindGameObjectByName(std::string name) const
-{
-	for (GameObject* obj : gameObjects)
-		if (obj->name == name)
-			return obj;
+#include "EngineTemplates.h"
 
-	return NULL;
-}
-
-template<class T>
-T* Engine::FindComponent()
-{
-	for (Component* comp : components)
-		if (dynamic_cast<T>(comp))
-			return comp;
-
-	return NULL;
-}
-
-template<class T>
-std::vector<T*> Engine::FindComponents()
-{
-	std::vector<T*> comps;
-	for (Component* comp : components)
-		if (dynamic_cast<T>(comp))
-			comps.push_back(comp);
-
-	return comps;
-}*/
 #endif

@@ -14,6 +14,7 @@
 #include <string>
 #include "Component.h"
 #include "Transform.h"
+#include "Engine.h"
 
 class GameObject
 {
@@ -35,13 +36,13 @@ public:
 	template<class T>
 	std::vector<T*> getComponents(bool enabledOnly = false) const;
 
-	/*//statics
+	//statics
 	static GameObject* FindGameObjectByName(std::string name);
 	template<class T>
 	static T* FindComponent();
 	template<class T>
-	static std::vector<T*> FindComponents();*/
-	
+	static std::vector<T*> FindComponents();
+
 	void sendAction(std::string action, void*const data);
 	void sendMessage(std::string function, void *data);
     void setActive(bool toogle);
@@ -59,81 +60,6 @@ inline bool GameObject::isActive()const
     return _isActive;
 }
 
-template<class T>
-T* GameObject::addComponent()
-{
-	if (std::is_base_of<Component, T>::value)
-	{
-		T *t = new T();
-		Component* baseType = t;
-		baseType->gameObject = this; 
-		baseType->transform = (GameTransform*)components[0]; // first component of each gameobject is GameTransform
-
-		components.push_back(baseType);
-		Engine::getInstance().addComponent(*baseType,baseType->priority);
-		return t;
-	}
-
-	return NULL;
-}
-
-template<class T>
-T* GameObject::getComponent(bool enabledOnly) const
-{
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
-		{
-			return (T*)components[i];
-		}
-	}	
-
-	return NULL;
-}
-
-template<class T>
-std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
-{
-	std::vector<T*const> comps;
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
-		{
-			comps.push_back((T*)components[i]);
-		}
-	}
-
-	return comps;
-}
-
-/*GameObject* GameObject::FindGameObjectByName(std::string name)
-{
-	for (GameObject* obj : Engine::getInstance().gameObjects)
-		if (obj->name == name)
-			return obj;
-
-	return NULL;
-}
-
-template<class T>
-T* GameObject::FindComponent()
-{
-	for (Component* comp : Engine::getInstance().components)
-		if (dynamic_cast<T>(comp))
-			return comp;
-
-	return NULL;
-}
-
-template<class T>
-std::vector<T*> GameObject::FindComponents()
-{
-	std::vector<T*> comps;
-	for (Component* comp : Engine::getInstance().components)
-		if (dynamic_cast<T>(comp))
-			comps.push_back(comp);
-
-	return comps;
-}*/
+#include "GameObjectTemplates.h"
 
 #endif

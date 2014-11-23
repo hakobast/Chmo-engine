@@ -76,3 +76,12 @@ void Engine::removeComponent(Component &comp)
 	if (dynamic_cast<ActiveComponent*>(&comp))
 		((ActiveComponent*)&comp)->OnDisable();
 }
+
+GameObject* Engine::FindGameObjectByName(std::string name) const
+{
+	for (GameObject* obj : gameObjects)
+		if (obj->name == name)
+			return obj;
+
+	return NULL;
+}

@@ -99,4 +99,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GameObjectTemplates.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="EngineTemplates.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

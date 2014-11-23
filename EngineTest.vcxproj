@@ -41,6 +41,10 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vectors.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="EngineTemplates.h" />
+    <None Include="GameObjectTemplates.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{76D8E35A-6452-4569-82B0-C2AA3DAFE2E2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

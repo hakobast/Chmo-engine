@@ -68,3 +68,8 @@ void GameObject::destroy()
 { 
 	delete this;
 }
+
+GameObject* GameObject::FindGameObjectByName(std::string name)
+{
+	return Engine::getInstance().FindGameObjectByName(name);
+}

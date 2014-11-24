@@ -91,8 +91,7 @@ int main(int argc, char **argv)
 	obj2->addComponent<Renderer>();
 	obj2->addComponent<GLTestComponent>();
 
-
-	obj2->getTransform()->Location = Vector3(2, 1, 0);
+	obj2->getTransform()->RotateZ(180);
 
 	glutMainLoop();
 

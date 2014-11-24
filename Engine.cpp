@@ -12,6 +12,20 @@
 
 #include <iostream>
 
+static bool sortSystems(const System* lhs, const System* rhs) { return lhs->priority < rhs->priority; }
+static bool ComponentInitPredicate(Component* c)
+{
+	if (c->isEnabled() && c->getGameObject()->isActive())
+	{
+		if (dynamic_cast<ActiveComponent*>(c))
+			((ActiveComponent*)c)->OnEnable();
+		c->Init();
+		return true;
+	}
+
+	return false;
+}
+
 void Engine::Init()
 {
 	std::cout << "Engine::Init()" << std::endl;
@@ -19,15 +33,9 @@ void Engine::Init()
 
 void Engine::Update()
 {
-	//TODO maybe this is bad solution
-	for (Component* c : componentsToInit)
-		if (c->isEnabled() && c->getGameObject()->isActive())
-		{
-			if (dynamic_cast<ActiveComponent*>(c))
-				((ActiveComponent*)c)->OnEnable();
-			c->Init();
-		}
-	componentsToInit.clear();
+	//INFO call component's callback
+	std::vector<Component*>::iterator iter = std::remove_if(componentsToInit.begin(), componentsToInit.end(), ComponentInitPredicate);
+	componentsToInit.erase(iter, componentsToInit.end());
 
 	for (System* s : systems)
 		s->Update();

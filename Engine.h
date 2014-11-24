@@ -16,7 +16,6 @@
 #include "GameObject.h"
 #include "Component.h"
 
-static bool sortSystems(const System* lhs, const System* rhs) { return lhs->priority < rhs->priority; }
 
 class Engine
 {

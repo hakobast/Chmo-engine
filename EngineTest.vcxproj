@@ -12,31 +12,43 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameLogicSystem.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="GLTestComponent.cpp" />
+    <ClCompile Include="imageloader.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix4.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SecondComponent.cpp" />
     <ClCompile Include="TestComponent.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureAtlas.cpp" />
+    <ClCompile Include="TextureTiled.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveComponent.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="imageloader.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Libs.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureAtlas.h" />
+    <ClInclude Include="TextureRegion.h" />
+    <ClInclude Include="TextureTiled.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vectors.h" />

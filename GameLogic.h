@@ -14,7 +14,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "ActiveComponent.h"
-
+#include "Renderer.h"
 
 class GameLogic :public ActiveComponent
 {

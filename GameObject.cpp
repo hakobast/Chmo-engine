@@ -18,10 +18,10 @@ GameObject::GameObject(string name)
 {
 	GameObject::name = name;
 
-	cout << "GameObject: " << name << " GameObject()" << endl;
+	//cout << "GameObject: " << name << " GameObject()" << endl;
 
 	//adding Transform component to all gameobjects
-	GameTransform* trComp = new GameTransform();
+	Transform* trComp = new Transform();
 	trComp->gameObject = this;
 	trComp->transform = trComp;
 

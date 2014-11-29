@@ -44,14 +44,14 @@ public:
 
 	void sendAction(std::string action, void*const data);
 	void sendMessage(std::string function, void *data);
-	GameTransform*const getTransform();
+	Transform*const getTransform();
     void setActive(bool toogle);
     bool isActive() const;
     void destroy();
     
 private:
     bool _isActive = true;
-	GameTransform* transform;
+	Transform* transform;
     std::vector<Component*> components;
 	void removeComponent(Component *);
 };
@@ -61,7 +61,7 @@ inline bool GameObject::isActive()const
     return _isActive;
 }
 
-inline GameTransform*const GameObject::getTransform()
+inline Transform*const GameObject::getTransform()
 {
 	return transform;
 }

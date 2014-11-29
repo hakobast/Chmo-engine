@@ -37,6 +37,12 @@ public:
     
     void Update()
     {
+
+		if (Input::GetKeyDown(KeyCode::a))
+		{
+			getGameObject()->getComponent<Renderer>()->destroy();
+		}
+
 		if (Input::GetMouseDown(0))
 		{
 			getTransform()->RotateZ(5.0f);

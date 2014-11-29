@@ -12,12 +12,12 @@
 
 using namespace std;
 
-GameTransform::~GameTransform()
+Transform::~Transform()
 {
-	cout << "~GameTransform()" << endl;
+	cout << "~Transform()" << endl;
 }
 
-Matrix4 GameTransform::getMatrix(bool calcScale)
+Matrix4 Transform::getMatrix(bool calcScale)
 {
 	matrix[3] = 0.0f;
 	matrix[7] = 0.0f;
@@ -47,27 +47,27 @@ Matrix4 GameTransform::getMatrix(bool calcScale)
 	return matrix;
 }
 
-void GameTransform::applyTransformation()
+void Transform::applyTransformation()
 {
 	getMatrix(true);
 	glMultMatrixf(&matrix[0]);
 }
 
-void GameTransform::TranslateForward(GLfloat step)
+void Transform::TranslateForward(GLfloat step)
 {
 	Location[0] += _Forward[0] * step;
 	Location[1] += _Forward[1] * step;
 	Location[2] += _Forward[2] * step;
 }
 
-void GameTransform::TranslateUp(GLfloat step)
+void Transform::TranslateUp(GLfloat step)
 {
 	Location[0] += _Up[0] * step;
 	Location[1] += _Up[1] * step;
 	Location[2] += _Up[2] * step;
 }
 
-void GameTransform::TranslateRight(GLfloat step)
+void Transform::TranslateRight(GLfloat step)
 {
 	Vector3 R = Right();
 	Location[0] += R[0] * step;
@@ -75,19 +75,19 @@ void GameTransform::TranslateRight(GLfloat step)
 	Location[2] += R[2] * step;
 }
 
-void GameTransform::RotateY(GLfloat Angle)
+void Transform::RotateY(GLfloat Angle)
 {
 	matrix.setRotation(Angle*DEG_TO_RAD, _Up[0], _Up[1], _Up[2]);
 	_Forward.rotateVector(matrix);
 }
 
-void GameTransform::RotateZ(GLfloat Angle)
+void Transform::RotateZ(GLfloat Angle)
 {
 	matrix.setRotation(Angle*DEG_TO_RAD, _Forward[0], _Forward[1], _Forward[2]);
 	_Up.rotateVector(matrix);
 }
 
-void GameTransform::RotateX(GLfloat Angle)
+void Transform::RotateX(GLfloat Angle)
 {
 	Vector3 xAxis = Right();
 	matrix.setRotation(Angle*DEG_TO_RAD, xAxis[0], xAxis[1], xAxis[2]);
@@ -96,7 +96,7 @@ void GameTransform::RotateX(GLfloat Angle)
 	_Up.rotateVector(matrix);
 }
 
-void GameTransform::Translate(GLfloat x, GLfloat y, GLfloat z)
+void Transform::Translate(GLfloat x, GLfloat y, GLfloat z)
 {
 	getMatrix();
 	matrix.TranslateMatrix(x, y, z);
@@ -104,7 +104,7 @@ void GameTransform::Translate(GLfloat x, GLfloat y, GLfloat z)
 	memcpy(&Location[0], &matrix[12], sizeof(GLfloat)* 3);
 }
 
-void GameTransform::Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
+void Transform::Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
 	matrix.setRotation(angle*DEG_TO_RAD, x, y, z);
 
@@ -112,7 +112,7 @@ void GameTransform::Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 	_Forward.rotateVector(matrix);
 }
 
-void GameTransform::SetRotation(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
+void Transform::SetRotation(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
 	matrix.setRotation(angle*DEG_TO_RAD, x, y, z);
 

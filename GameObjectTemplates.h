@@ -8,7 +8,7 @@ T* GameObject::addComponent()
 		T *t = new T();
 		Component* baseType = t;
 		baseType->gameObject = this; 
-		baseType->transform = (GameTransform*)components[0]; // first component of each gameobject is GameTransform
+		baseType->transform = (Transform*)components[0]; // first component of each gameobject is GameTransform
 
 		components.push_back(baseType);
 		Engine::getInstance().addComponent(*baseType,baseType->priority);

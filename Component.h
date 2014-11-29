@@ -10,7 +10,7 @@
 #define EngineTesting_Component_h
 
 class GameObject;
-class GameTransform;
+class Transform;
 
 class Component
 {
@@ -25,10 +25,10 @@ public:
 	virtual void Update(){};
 	bool isEnabled() const;
 	GameObject*const getGameObject() const;
-	GameTransform*const getTransform() const;
+	Transform*const getTransform() const;
 private:
 	GameObject* gameObject;
-	GameTransform* transform;
+	Transform* transform;
 };
 
 inline bool Component::isEnabled() const
@@ -41,7 +41,7 @@ inline GameObject*const Component::getGameObject() const
 	return gameObject;
 }
 
-inline GameTransform*const Component::getTransform() const
+inline Transform*const Component::getTransform() const
 {
 	return transform;
 }

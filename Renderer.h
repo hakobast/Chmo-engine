@@ -13,16 +13,9 @@
 #include "Component.h"
 #include "ActiveComponent.h"
 
-using namespace std;
-
 class Renderer : public ActiveComponent
 {
-protected:
-	~Renderer();
-public:
-	void Create();
-	void Init();
-	void Update();
+//TODO 
 };
 
 #endif

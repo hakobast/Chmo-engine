@@ -16,20 +16,20 @@
 
 using namespace std;
 
-class GameTransform: public Component
+class Transform: public Component
 {
 	friend class GameObject;
 private:
 	Matrix4 matrix;
 	Vector3 _Up;
 	Vector3 _Forward;
-	GameTransform() :
+	Transform() :
 		Location(Vector3(0.0f, 0.0f, 0.0f)),
 		_Up(Vector3(0.0f, 1.0f, 0.0f)),
 		_Forward(Vector3(0.0f,0.0f,1.0f)),
 		ScaleLocal(Vector3(1.0f,1.0f,1.0f)){};
 protected:
-	~GameTransform();
+	~Transform();
 public:
 	Vector3 Location;
 	Vector3 ScaleLocal;
@@ -50,17 +50,17 @@ public:
 	void RotateX(GLfloat Angle);
 };
 
-inline Vector3 GameTransform::Right()
+inline Vector3 Transform::Right()
 {
 	return _Up.cross(_Forward);
 }
 
-inline Vector3 GameTransform::Up()
+inline Vector3 Transform::Up()
 { 
 	return _Up;
 }
 
-inline Vector3 GameTransform::Forward()
+inline Vector3 Transform::Forward()
 {
 	return _Forward;
 }

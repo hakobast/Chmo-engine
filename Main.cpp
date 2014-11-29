@@ -13,10 +13,14 @@
 #include "GameLogicSystem.cpp"
 #include "RenderSystem.cpp"
 #include "Renderer.h"
+#include "SpriteRenderer.h"
+#include "TextureAtlas.h"
+#include "TextureTiled.h"
 
 #include "TestComponent.cpp"
 #include "SecondComponent.cpp"
 #include "GLTestComponent.cpp"
+#include "FPSCounter.cpp"
 
 
 void Render(void)
@@ -35,7 +39,8 @@ void SetupRendering(void)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-
+	/*glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 }
 
 void Resize(int w, int h)
@@ -45,7 +50,7 @@ void Resize(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(40.0f, (GLfloat) w/(GLfloat)h, 1.0f, 200.0f);
+	gluPerspective(45.0f, (GLfloat) w/(GLfloat)h, 1.0f, 200.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -57,10 +62,33 @@ void TimerFunc(int value)
 	glutTimerFunc(1000 / 60, TimerFunc, 0);
 }
 
+class Test
+{
+public:
+	void Test::addVertices(GLuint texture_id, GLfloat* vertices)
+	{
+		if (vertexBuffer.find(texture_id) != vertexBuffer.end())
+		{
+			std::vector<GLfloat>* v = vertexBuffer[texture_id];
+			v->insert(v->begin(), vertices, vertices + 4*4);
+
+			std::cout << "Append vertices to " << texture_id << " buffer: " << vertexBuffer[texture_id]->size() << std::endl;
+		}
+		else
+		{
+			std::vector<GLfloat>* v = new std::vector<GLfloat>();
+			v->insert(v->begin(), vertices, vertices + 4*4);
+			vertexBuffer[texture_id] = v;
+			std::cout << "Created vertex buffer for " << texture_id << " texture, buffer: " << vertexBuffer[texture_id]->size() << std::endl;
+		}
+	}
+private:
+	std::map<GLuint, std::vector<GLfloat>*> vertexBuffer;
+};
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("ENGINE TESTING");
 	glutReshapeFunc(Resize);
@@ -82,16 +110,39 @@ int main(int argc, char **argv)
 	Engine::getInstance().addSystem(*inputSystem, 3);
 
 	//creating game logics
-	GameObject* obj = new GameObject("FirstGameObject");
-	obj->addComponent<GLTestComponent>();
-	obj->addComponent<Renderer>();
+	GameObject* fpsObj = new GameObject("FPSGameObject");
+	fpsObj->addComponent<FPSCounter>();
 
-	//creating game logics
+	Texture2D* txt = new TextureTiled("vtr.bmp",2,2,4);
+
+	for (int i = 0; i < 10; i++)
+	{
+		GameObject* obj = new GameObject("FirstGameObject");
+		obj->addComponent<SpriteRenderer>()->setTexture(txt);// ->color.set(1.0f, 1.0f, 1.0f, 1.0f);
+		obj->addComponent<GLTestComponent>();
+		obj->getTransform()->Location.set(-5.0f + rand() % 10, -5.0f + rand() % 10, -15.0f);
+	}
+
+	//obj->getTransform()->ScaleLocal.set(1.0f, 1.0f, 1.0f);
+	/*//creating game logics
 	GameObject* obj2 = new GameObject("SecondGameObject");
-	obj2->addComponent<Renderer>();
+	obj2->addComponent<Renderer>()->color.set(0.0f, 0.3f, 1.0f,1.0f);
 	obj2->addComponent<GLTestComponent>();
 
 	obj2->getTransform()->RotateZ(180);
+	obj->getTransform()->Location.set(0.0f, 0.0f, 1.0f);*/
+
+	/*GLfloat vertices[] = {
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 0.0f, 1.0f };
+
+	Test a;
+	a.addVertices(1, vertices);
+	a.addVertices(1, vertices);
+
+	a.addVertices(2, vertices);*/
 
 	glutMainLoop();
 

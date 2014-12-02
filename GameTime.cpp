@@ -36,5 +36,3 @@ void GameTime::Update()
 	timeSinceGameStarted += deltaTime;
 	lastTime = timeInMills;
 }
-
-void GameTime::addComponent(Component& c){}

@@ -23,7 +23,6 @@ protected:
 	~Input();
 	void Init();
 	void Update();
-	void addComponent(Component& comp);
 private:
 	static Input* instance;
 	friend void OnKeyDown(unsigned char, int, int);

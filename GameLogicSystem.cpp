@@ -8,43 +8,46 @@
 
 #include <iostream>
 #include "System.h"
-#include "GameLogic.h"
+#include "GameLogicSystem.h"
 
-class GameLogicSystem:  public System
+static bool sortComponents(const GameLogic* lhs, const GameLogic* rhs) { return lhs->priority < rhs->priority; }
+
+GameLogicSystem::~GameLogicSystem()
 {
-protected:
-	GameLogicSystem::~GameLogicSystem()
-	{
-		std::cout << "GameLogicSystem:: ~~~deleted~~~" << std::endl;
-	}
+	std::cout << "GameLogicSystem:: ~~~deleted~~~" << std::endl;
+}
 
-	void GameLogicSystem::Init()
-	{
-		std::cout << "GameLogicSystem:: Init()" << std::endl;
-	}
+void GameLogicSystem::Init()
+{
+	std::cout << "GameLogicSystem:: Init()" << std::endl;
+}
 
-	void GameLogicSystem::Update()
-	{
-		//std::cout << "GameLogicSystem:: Update()" << std::endl;
+void GameLogicSystem::Update()
+{
+	//std::cout << "GameLogicSystem:: Update()" << std::endl;
 
-		for (int i = 0; i < components.size(); i++)
-		{
-			if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
-				components[i]->Update();
-		}
-	}
-
-	void GameLogicSystem::addComponent(Component &c)
+	for (int i = 0; i < components.size(); i++)
 	{
-		//implement component checking
-		if (dynamic_cast<GameLogic*>(&c))
-			System::addComponent(c);
+		if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
+			components[i]->Update();
 	}
+}
 
-	void GameLogicSystem::removeComponent(Component &c)
+void GameLogicSystem::addComponent(Component &c)
+{
+	//implement component checking
+	GameLogic* gm = dynamic_cast<GameLogic*>(&c);
+	if (gm)
 	{
-		//implement component checking
-		if (dynamic_cast<GameLogic*>(&c))
-			System::removeComponent(c);
+		components.push_back(gm);
+		std::sort(components.begin(), components.end(), sortComponents);
 	}
-};
+}
+
+void GameLogicSystem::removeComponent(Component &c)
+{
+	//implement component checking
+	GameLogic* gm = dynamic_cast<GameLogic*>(&c);
+	if (gm)
+		vectorRemove<GameLogic>(components, *gm);
+}

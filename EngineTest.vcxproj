@@ -36,6 +36,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GameLogicSystem.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="imageloader.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Libs.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture2D.h" />

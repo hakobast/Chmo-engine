@@ -10,8 +10,8 @@
 #include "Engine.h"
 #include "Input.h"
 #include "GameTime.h"
-#include "GameLogicSystem.cpp"
-#include "RenderSystem.cpp"
+#include "GameLogicSystem.h"
+#include "RenderSystem.h"
 #include "Renderer.h"
 #include "SpriteRenderer.h"
 #include "TextureAtlas.h"
@@ -62,29 +62,6 @@ void TimerFunc(int value)
 	glutTimerFunc(1000 / 60, TimerFunc, 0);
 }
 
-class Test
-{
-public:
-	void Test::addVertices(GLuint texture_id, GLfloat* vertices)
-	{
-		if (vertexBuffer.find(texture_id) != vertexBuffer.end())
-		{
-			std::vector<GLfloat>* v = vertexBuffer[texture_id];
-			v->insert(v->begin(), vertices, vertices + 4*4);
-
-			std::cout << "Append vertices to " << texture_id << " buffer: " << vertexBuffer[texture_id]->size() << std::endl;
-		}
-		else
-		{
-			std::vector<GLfloat>* v = new std::vector<GLfloat>();
-			v->insert(v->begin(), vertices, vertices + 4*4);
-			vertexBuffer[texture_id] = v;
-			std::cout << "Created vertex buffer for " << texture_id << " texture, buffer: " << vertexBuffer[texture_id]->size() << std::endl;
-		}
-	}
-private:
-	std::map<GLuint, std::vector<GLfloat>*> vertexBuffer;
-};
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -115,12 +92,23 @@ int main(int argc, char **argv)
 
 	Texture2D* txt = new TextureTiled("vtr.bmp",2,2,4);
 
-	for (int i = 0; i < 10; i++)
+	/*GameObject* obj = new GameObject("FirstGameObject");
+	obj->addComponent<SecondComponent>();
+	obj->addComponent<GLTestComponent>();*/
+
+	//for (int i = 0; i < 2; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
-		obj->addComponent<SpriteRenderer>()->setTexture(txt);// ->color.set(1.0f, 1.0f, 1.0f, 1.0f);
 		obj->addComponent<GLTestComponent>();
-		obj->getTransform()->Location.set(-5.0f + rand() % 10, -5.0f + rand() % 10, -15.0f);
+		obj->addComponent<SpriteRenderer>()->setTexture(txt);
+		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
+		obj->getTransform()->Location.set(0.0f,0.0f,-5.0f);
+
+		GameObject* obj2 = new GameObject("SecondGameObject");
+		obj2->addComponent<SpriteRenderer>()->setTexture(txt,2);
+		obj2->getComponent<SpriteRenderer>()->color.set(1.0f, 0.1f, 0.3f, 0.7f);
+		obj2->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,4);
+		obj2->getTransform()->Location.set(0.5f, 0.0f, -5.0f);
 	}
 
 	//obj->getTransform()->ScaleLocal.set(1.0f, 1.0f, 1.0f);

@@ -7,48 +7,81 @@
 //
 
 #include <iostream>
-#include "System.h"
+#include "RenderSystem.h"
 #include "Renderer.h"
+#include "Libs.h"
 
-class RenderSystem : public System
+static bool sortRenderers(const Renderer* lhs, const Renderer* rhs)
 {
-protected:
-	RenderSystem::~RenderSystem()
-	{
-		std::cout << "RenderSystem:: ~~~deleted~~~" << std::endl;
-	}
+	if (lhs->getSortingLayer() < rhs->getSortingLayer()){return true;}
+	if (lhs->getSortingLayer() == rhs->getSortingLayer() && lhs->getLayerOrder() < rhs->getLayerOrder()){ return true; };
 
-	void RenderSystem::Init()
-	{
-		std::cout << "RenderSystem:: Init()" << std::endl;
-	}
+	return false;
+}
 
-	void RenderSystem::Update()
-	{
-		//std::cout << "RenderSystem:: Update()" << std::endl;
+RenderSystem::~RenderSystem()
+{
+	std::cout << "RenderSystem:: ~~~deleted~~~" << std::endl;
+}
 
-		for (int i = 0; i < components.size(); i++)
+void RenderSystem::Init()
+{
+	std::cout << "RenderSystem:: Init()" << std::endl;
+}
+
+void RenderSystem::Update()
+{
+	//std::cout << "RenderSystem:: Update()" << std::endl;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	Renderer* r = NULL;
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
 		{
-			if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
+			//std::cout << "OBJ: " << components[i]->getGameObject()->name << std::endl;
+			if (r != NULL)
 			{
-				glPushMatrix();
-				components[i]->Update();
-				glPopMatrix();
+				if (r->getSortingLayer() != components[i]->getSortingLayer() ||
+					r->getLayerOrder() != components[i]->getLayerOrder())
+				{
+					glClear(GL_DEPTH_BUFFER_BIT);
+				}
 			}
+			
+			glPushMatrix();
+			components[i]->Update();
+			glPopMatrix();
+			r = components[i];
 		}
 	}
+	glDisable(GL_BLEND);
+}
 
-	void RenderSystem::addComponent(Component &c)
+void RenderSystem::addComponent(Component &c)
+{
+	//implement component checking
+	Renderer* r = dynamic_cast<Renderer*>(&c);
+	if (r)
 	{
-		//implement component checking
-		if (dynamic_cast<Renderer*>(&c))
-			System::addComponent(c);
+		r->renderSystem = this;
+		components.push_back(r);
 	}
+}
 
-	void RenderSystem::removeComponent(Component &c)
+void RenderSystem::removeComponent(Component &c)
+{
+	//implement component checking
+	Renderer* r = dynamic_cast<Renderer*>(&c);
+	if (r)
 	{
-		//implement component checking
-		if (dynamic_cast<Renderer*>(&c))
-			System::removeComponent(c);
+		vectorRemove<Renderer>(components, *r);
 	}
-};
+}
+
+void RenderSystem::sortComponents()
+{
+	std::sort(components.begin(), components.end(),sortRenderers);
+}

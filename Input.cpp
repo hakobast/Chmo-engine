@@ -86,5 +86,3 @@ void Input::Update()
 	//std::cout << "InputSystem:: Update()" << std::endl;
 	//keypressed.clear();
 }
-
-void Input::addComponent(Component& comp){}

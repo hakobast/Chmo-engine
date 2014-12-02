@@ -1,5 +1,5 @@
 //
-//  GameLogicSystem.h
+//  RenderSystem.h
 //  EngineTesting
 //
 //  Created by Hakob on 11/13/14.
@@ -9,16 +9,23 @@
 #ifndef EngineTesting_RenderSystem_h
 #define EngineTesting_RenderSystem_h
 
-#include "Libs.h"
+#include <vector>
+#include "System.h"
 
+class Renderer;
 class RenderSystem :public System
 {
-public:
-	virtual ~RenderSystem();
+private:
+	std::vector<Renderer*> components;
+protected:
+	~RenderSystem();
 	void Init();
-	void Update(float delta);
+	void Update();
 	void addComponent(Component &c);
 	void removeComponent(Component &c);
+public:
+	void sortComponents();
+	RenderSystem(){};
 };
 
 #endif

@@ -7,32 +7,47 @@
 //
 
 #include "Engine.h"
-#include "ActiveComponent.h"
+#include "GameLogic.h"
 #include <iostream>
 
 using namespace std;
 
-class SecondComponent: public Component
+class SecondComponent: public Renderer
 {
 public:
-
-	~SecondComponent()
-    {
-       cout << "~SecondComponent()" << endl; 
-    }
     
     void Init()
     {
-        cout << "SecondComponent:Init() Priority: " << priority << endl;
+
     }
     
-    void Update(float deltaTime)
+    void Update()
     {
-		cout << "Delta " << deltaTime << endl;
-    }
+		static GLfloat vertices[] = {
+			1.0f, -1.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			-1.0f, -1.0f, 0.0f
+		};
 
-	/*void OnAction(string action, void*const data)
-	{
-		cout << "SecondComponent::Action:" << action << endl;
-	}*/
+		getTransform()->applyTransformation();
+		
+		glTranslatef(0.0f, 0.0f, -5.0f);
+
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		glTranslatef(2.0f, 0.0f, -2.0f);
+
+
+		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDisableClientState(GL_VERTEX_ARRAY);
+    }
 };

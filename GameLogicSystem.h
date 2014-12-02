@@ -9,16 +9,19 @@
 #ifndef EngineTesting_GameLogicSystem_h
 #define EngineTesting_GameLogicSystem_h
 
-#include "Libs.h"
+#include <vector>
+#include "GameLogic.h"
 
 class GameLogicSystem:public System
 {
+private:
+	std::vector<GameLogic*> components;
 public:
-    virtual ~GameLogicSystem();
+    ~GameLogicSystem();
     void Init();
-    void Update(float delta);
+    void Update();
     void addComponent(Component &c);
-    void removeComponent(Component &c);
+	void removeComponent(Component &c);
 };
 
 #endif

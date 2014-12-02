@@ -19,6 +19,8 @@ Texture2D::Texture2D(const char* filename)
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 	//TODO take function parameters from constructor args
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	delete image;
 	
 	textures = new TextureRegion[1];

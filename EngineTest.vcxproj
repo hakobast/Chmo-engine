@@ -21,6 +21,9 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SecondComponent.cpp" />
@@ -32,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveComponent.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
@@ -42,9 +46,14 @@
     <ClInclude Include="imageloader.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Libs.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="smart_pointer.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture2D.h" />
@@ -100,7 +109,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>

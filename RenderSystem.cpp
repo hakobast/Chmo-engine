@@ -19,6 +19,11 @@ static bool sortRenderers(const Renderer* lhs, const Renderer* rhs)
 	return false;
 }
 
+RenderSystem::RenderSystem()
+{	
+
+}
+
 RenderSystem::~RenderSystem()
 {
 	std::cout << "RenderSystem:: ~~~deleted~~~" << std::endl;
@@ -31,8 +36,8 @@ void RenderSystem::Init()
 
 void RenderSystem::Update()
 {
-	//std::cout << "RenderSystem:: Update()" << std::endl;
-
+	//std::cout << "RenderSystem:: Update() " << std::endl;
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

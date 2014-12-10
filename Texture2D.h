@@ -4,9 +4,10 @@
 #include <GL\glut.h>
 #include <string>
 
+#include "smart_pointer.h"
 #include "TextureRegion.h"
 
-class Texture2D
+class Texture2D:public RemovableObject
 {
 public:
 	GLuint texture_id;

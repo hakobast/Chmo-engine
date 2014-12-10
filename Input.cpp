@@ -22,17 +22,16 @@ void OnKeyUp(unsigned char key, int x, int y)
 	Input::instance->keypressed[(int)key] = false;
 }
 
-
 void OnSpecialKeyDown(int key, int x, int y)
 {
 	//std::cout << "InputSystem:: Special Key down: " << key << std::endl;
 	//Input::instance->keypressed.insert(std::make_pair((int)key, true));
-	Input::instance->keypressed[(int)key] = true;
+	Input::instance->keypressed[key] = true;
 }
 
 void OnSpecialKeyUp(int key, int x, int y)
 {
-	Input::instance->keypressed[(int)key] = false;
+	Input::instance->keypressed[key] = false;
 }
 
 void MouseFunc(int button, int state, int x, int y)

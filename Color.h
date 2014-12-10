@@ -15,11 +15,12 @@ public:
 	void setG(float g);
 	void setB(float b);
 	void setA(float a);
-	float getR();
-	float getG();
-	float getB();
-	float getA();
+	float getR() const;
+	float getG() const;
+	float getB() const;
+	float getA() const;
 	const float*const operator [](int index) const;
+	friend std::ostream& operator << (std::ostream& stream, const Color& color);
 };
 
 inline void Color::set(float r, float g, float b, float a)
@@ -48,14 +49,19 @@ inline void Color::setA(float a)
 	this->a = a > 1.0f ? 1.0f : a;
 }
 
-inline float Color::getR(){ return r; }
-inline float Color::getG(){ return g; }
-inline float Color::getB(){ return b; }
-inline float Color::getA(){ return a; }
+inline float Color::getR()const{ return r; }
+inline float Color::getG()const{ return g; }
+inline float Color::getB()const{ return b; }
+inline float Color::getA()const{ return a; }
 
 inline const float*const Color::operator [](int index) const
 {
 	return &(&r)[index];
+}
+
+inline std::ostream& operator << (std::ostream& stream, const Color& color)
+{
+	return stream << "Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
 }
 
 #endif

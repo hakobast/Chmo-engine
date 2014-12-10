@@ -25,7 +25,7 @@ protected:
 	void removeComponent(Component &c);
 public:
 	void sortComponents();
-	RenderSystem(){};
+	RenderSystem();
 };
 
 #endif

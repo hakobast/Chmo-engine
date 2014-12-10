@@ -9,7 +9,10 @@
 enum KeyCode // implement All symbols
 {
 	A = 65,
-	a = 97
+	a = 97,
+	b = 98,
+	g = 103,
+	r = 114,
 };
 
 class Input : public System
@@ -32,7 +35,7 @@ private:
 	friend void MouseFunc(int button, int state, int x, int y);
 	friend void MouseMotionFunc(int x, int y);
 	friend void MousePassiveMotionFunc(int x, int y);
-	std::map<int, bool> keypressed; //THINK maybe it can be int array
+	std::map<int, bool> keypressed; //TODO make this bool array
 	int mouseButtons[3];
 	Vector2 mousePosition;
 };

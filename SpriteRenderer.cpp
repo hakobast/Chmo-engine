@@ -27,32 +27,35 @@ void SpriteRenderer::Init()
 
 void SpriteRenderer::Update()
 {
-	//cout << "Renderer: Updated():" << endl;
-	if (texture == NULL)
-		return;
+	smart_pointer<Texture2D> mainTexture = getMainTexture();
 
+	if (mainTexture == NULL)
+		return;
+	
 	getTransform()->applyTransformation();
 
 	glEnable(GL_TEXTURE_2D);
 
-	texture->bindTexture();
+	mainTexture->bindTexture();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glColor4fv(color[0]);
+	glColor4fv(getMainMaterial()->color_diffuse[0]);
 
 	glBegin(GL_QUADS);
 	{
-		glTexCoord2fv((*texture)[frame][0]);
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		
+		glTexCoord2fv((*mainTexture)[frame][0]);
 		glVertex3f(-w_range, -h_range, 0.0f);
 
-		glTexCoord2fv((*texture)[frame][2]);
+		glTexCoord2fv((*mainTexture)[frame][2]);
 		glVertex3f(w_range, -h_range, 0.0f);
 
-		glTexCoord2fv((*texture)[frame][4]);
+		glTexCoord2fv((*mainTexture)[frame][4]);
 		glVertex3f(w_range, h_range, 0.0f);
 
-		glTexCoord2fv((*texture)[frame][6]);
+		glTexCoord2fv((*mainTexture)[frame][6]);
 		glVertex3f(-w_range, h_range, 0.0f);
 	}
 	glEnd();
@@ -60,21 +63,25 @@ void SpriteRenderer::Update()
 	glDisable(GL_TEXTURE_2D);
 }
 
-void SpriteRenderer::setTexture(Texture2D* txt, int frame)
+void SpriteRenderer::setTextureFrame(int frame)
 {
-	texture = txt;
+	this->frame = frame;
+	w_range = 0.3f;
+	h_range = 0.3f;
+	/*diffuseMaterial->texture_diffuse = txt;
+
 	this->frame = frame;
 
 	//make pixel perfect
-	GLfloat ratio = texture->width / texture->height;
-	if (texture->width <= texture->height)
+	GLfloat ratio = txt->width / txt->height;
+	if (txt->width <= txt->height)
 	{
-		w_range = meterPerPixel*texture->width;
-		h_range = meterPerPixel*texture->height / ratio;
+		w_range = meterPerPixel*txt->width;
+		h_range = meterPerPixel*txt->height / ratio;
 	}
 	else
 	{
-		w_range = meterPerPixel*texture->width*ratio;
-		h_range = meterPerPixel*texture->height;
-	}
+		w_range = meterPerPixel*txt->width*ratio;
+		h_range = meterPerPixel*txt->height;
+	}*/
 }

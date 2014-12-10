@@ -37,7 +37,6 @@ public:
 	GLfloat dot(const Vector2& other) const;
 	Vector2 cross(const Vector2& other) const;
 	bool compare(const Vector2& other, GLfloat epsilon) const;
-	void print() const;
 
 	Vector2 operator +(const Vector2& other);
 	Vector2 operator -(const Vector2& other);
@@ -55,11 +54,13 @@ public:
 	GLfloat& operator [](int index);
 	bool operator ==(const Vector2& other) const;
 	bool operator !=(const Vector2& other) const;
+	friend std::ostream& operator << (std::ostream& stream, const Vector2& v2);
+
 };
 
-inline void Vector2::print() const
+inline std::ostream& operator << (std::ostream& stream, const Vector2& v2)
 {
-	std::cout << "(" << x << "," << y << ")\n";
+	return stream << "V2(" << v2.x << ", " << v2.y << ")";
 }
 
 inline void Vector2::set(GLfloat x, GLfloat y)
@@ -219,7 +220,6 @@ public:
     Vector3& rotateVector(GLfloat angle, GLfloat xAxis, GLfloat yAxis, GLfloat zAxis);
     Vector3& rotateVector(const Matrix4 rotationMatrix);
     bool compare(const Vector3& other, GLfloat epsilon) const;
-    void print() const;
 
     Vector3 operator +(const Vector3& other);
     Vector3 operator -(const Vector3& other);
@@ -237,11 +237,12 @@ public:
     GLfloat& operator [](int index);
     bool operator ==(const Vector3& other) const;
     bool operator !=(const Vector3& other) const;
+	friend std::ostream& operator <<(std::ostream& stream, const Vector3& v3);
 };
 
-inline void Vector3::print() const
+inline std::ostream& operator <<(std::ostream& stream, const Vector3& v3)
 {
-    std::cout << "(" << x << "," << y << "," << z << ")\n";
+	return stream << "V3(" << v3.x << "," << v3.y << "," << v3.z << ")";
 }
 
 inline void Vector3::set(GLfloat x, GLfloat y,GLfloat z)

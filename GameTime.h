@@ -20,16 +20,16 @@ private:
 	static GameTime* instance;
 	unsigned long long lastTime;
 	GLfloat deltaTime;
-	GLfloat timeSinceGameStarted;
+	GLfloat timeSinceGameStarted = 0;
 };
 
 //static functions
-inline float GameTime::DeltaTime()
+inline GLfloat GameTime::DeltaTime()
 {
 	return instance->deltaTime;
 }
 
-inline float GameTime::TimeSinceGameStarted()
+inline GLfloat GameTime::TimeSinceGameStarted()
 {
 	return instance->timeSinceGameStarted;
 }

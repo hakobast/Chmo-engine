@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <map>
 
+//#define ENABLE_LOG #endif
+
 template<class T>
 class ReferenceManager
 {
@@ -46,28 +48,35 @@ class smart_pointer
 {
 private:
     T* data;
+	static smart_pointer<T> nullPtr;
 public:
     smart_pointer():data(0)
 	{
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type");
+		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
+
+#ifdef ENABLE_LOG
+		std::cout << "smart_pointer() <" << typeid(T).name() << ">" << std::endl;
+#endif
 	}
     
     smart_pointer(const smart_pointer& other):data(other.data)
     {
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type");
-
-		std::cout << "GAGO JAN LAV CHI" << std::endl;
+		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
 		if (data != NULL)
 		{
 			dynamic_cast<RemovableObject*>(data)->refs++;
 
 			//std::cout << "Added reference to: " << data << std::endl;
 		}
+
+#ifdef ENABLE_LOG
+		std::cout << "smart_pointer(const smart_pointer& other) <" << typeid(T).name() << ">" << std::endl;
+#endif
     }
     
-    smart_pointer(T* ptr):data(ptr)
+    explicit smart_pointer(T* ptr):data(ptr)
     {
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type");
+		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
 
 		if (data != NULL)
 		{
@@ -75,6 +84,9 @@ public:
 
 			//std::cout << "Added reference to: " << data << std::endl;
 		}
+#ifdef ENABLE_LOG
+		std::cout << "smart_pointer(" << typeid(T).name() << "* ptr)" << std::endl;
+#endif
     }
     
     ~smart_pointer()
@@ -88,6 +100,9 @@ public:
             }
 			//std::cout << "Pointer to : " << data << " removed, " << dynamic_cast<RemovableObject*>(data)->refs << " left" << std::endl;
         }
+#ifdef ENABLE_LOG
+		std::cout << "~~~~smart_pointer() <" << typeid(T).name() << ">" << std::endl;
+#endif
     }
     
     inline smart_pointer<T> clone()
@@ -100,6 +115,16 @@ public:
         
         return sm;
     }
+
+	inline bool isEmpty() //TODO this function can be operator function 
+	{
+		return data == NULL;
+	}
+
+	static inline smart_pointer<T>& null()
+	{
+		return nullPtr;
+	}
     
     inline T& operator *()
     {
@@ -113,10 +138,12 @@ public:
     
     inline smart_pointer& operator=(const smart_pointer& other)
     {
-		std::cout << "MAKE COPY" << std::endl;
+#ifdef ENABLE_LOG
+		std::cout << "smart_pointer: try to copy " << typeid(T).name() << std::endl;
+#endif
         if(this->data != other.data)
         {
-			std::cout << "Copy complete" << std::endl;
+			//std::cout << "Copy complete" << std::endl;
 			if (data != NULL && --dynamic_cast<RemovableObject*>(data)->refs == 0)
                 delete data;
             
@@ -139,6 +166,11 @@ public:
 		return data != other.data;
 	}
 };
+template<class T>
+smart_pointer<T>& smart_pointer<T>::null();
+
+template<class T>
+smart_pointer<T> smart_pointer<T>::nullPtr;
 
 class RemovableObject
 {

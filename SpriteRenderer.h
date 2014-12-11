@@ -25,7 +25,7 @@ public:
 	void setColor(Color c);
 	Color getColor();
 private:
-	int frame;
+	int frame = 0;
 };
 
 inline void SpriteRenderer::setColor(Color c)

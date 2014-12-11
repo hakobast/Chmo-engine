@@ -106,8 +106,8 @@ void createMyClass()
 	//b = &c;
 }
 
-#define RUN_LANG_TEST
-//#define RUN_ENGINE_TEST
+//#define RUN_LANG_TEST
+#define RUN_ENGINE_TEST
 
 int main(int argc, char **argv)
 {
@@ -146,21 +146,22 @@ int main(int argc, char **argv)
 	fpsObj->addComponent<FPSCounter>();
 	fpsObj->addComponent<GLTestComponent>();
 
-	smart_pointer<Texture2D> txt(new TextureTiled("vtr.bmp", 2, 2, 4));
+	smart_pointer<Texture2D> texture(new TextureTiled("vtr.bmp", 2, 2, 4));
 	smart_pointer<Material> mainMat(new Material("diffuse"));
+	//mainMat->color_diffuse.setG(0.0f);
 
 	srand(time(0));
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
-		obj->addComponent<SpriteRenderer>()->setMainMaterial(mainMat,false);
-		obj->getComponent<SpriteRenderer>()->setMainTexture(txt);
+		obj->addComponent<SpriteRenderer>()->setMainMaterial(mainMat, false);
+		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
 		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 4);
-		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
+		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
 		obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
 	}
 
-	/*GameObject* obj = new GameObject("FirstGameObject");
+	GameObject* obj = new GameObject("FirstGameObject");
 	obj->getTransform()->Location.set(0.0f, 0.0f, -8.0f);
 	obj->getTransform()->RotateX(45.0f);
 	obj->getTransform()->RotateY(25.0f);
@@ -174,7 +175,11 @@ int main(int argc, char **argv)
 
 	//obj->addComponent<GLTestComponent>();
 	MeshRenderer* meshRenderer = obj->addComponent<MeshRenderer>();
+	meshRenderer->setSortingLayer(SortingLayer::Default, 2);
+	//meshRenderer->setMainTexture(texture);
+
 	MeshRenderer* meshRenderer2 = obj2->addComponent<MeshRenderer>();
+	//meshRenderer2->setMainTexture(texture);
 
 	char* matPath = "C:/Users/user/Dropbox/Scripts/OBJ Loader/test.mtl";
 
@@ -200,7 +205,7 @@ int main(int argc, char **argv)
 	meshRenderer2->setSharedMesh(mesh);
 
 	std::cout << &(meshRenderer->getMesh()) << std::endl;
-	std::cout << &(meshRenderer2->getMesh()) << std::endl;*/
+	std::cout << &(meshRenderer2->getMesh()) << std::endl;
 
 	glutMainLoop();
 

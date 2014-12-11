@@ -9,8 +9,9 @@
 #ifndef OpenGLTesting_Renderer_h
 #define OpenGLTesting_Renderer_h
 
-
+#include <assert.h>
 #include <GL\glut.h>
+
 #include "ActiveComponent.h"
 #include "RenderSystem.h"
 #include "Material.h"
@@ -75,19 +76,30 @@ inline std::vector<smart_pointer<Material>>const Renderer::getMaterials()
 
 inline smart_pointer<Material>& Renderer::getMaterial(int index)
 {
-	return materials[index];
+	if (index < materials.size())
+		return materials[index];
+
+	cout << '\a';cout << '\a';cout << '\a';
+	std::cout << "There is no material at index: " << index << std::endl;
+	return smart_pointer<Material>::null();
 }
 
 inline smart_pointer<Material>& Renderer::getMainMaterial()
 {
-	return materials[0];
+	if (materials.size() > 0)
+		return materials[0];
+
+	cout << '\a'; cout << '\a'; cout << '\a';
+	std::cout << "Main material not set: " << std::endl;
+	return smart_pointer<Material>::null();
 }
 
 inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index, bool copy)
 {
 	if (materials.size() <= index)
 	{
-		std::cout << "There is no material at index";
+		cout << '\a'; cout << '\a'; cout << '\a';
+		std::cout << "There is no material at index: " << index << std::endl;
 		return;
 	}
 
@@ -121,12 +133,20 @@ inline void Renderer::setMainMaterial(smart_pointer<Material>& mat, bool copy)
 
 inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
 {
+	if (materials.size() == 0)
+	{
+		smart_pointer<Material> mat(new Material("diffuse"));
+		materials.push_back(mat);
+	}
 	materials[0]->texture_diffuse = texture;
 }
 
 inline smart_pointer<Texture2D>& Renderer::getMainTexture()
 {
-	return materials[0]->texture_diffuse;
+	if (materials.size() > 0)
+		return materials[0]->texture_diffuse;
+
+	return smart_pointer<Texture2D>::null();
 }
 
 #endif

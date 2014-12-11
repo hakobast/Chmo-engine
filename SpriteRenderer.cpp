@@ -4,7 +4,7 @@
 #include "Transform.h"
 
 GLfloat meterPerPixel;
-GLfloat w_range, h_range;
+GLfloat w_range = 1, h_range = 1;
 
 SpriteRenderer::~SpriteRenderer()
 {
@@ -13,6 +13,8 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Create()
 {
+	renderSystem->sortComponents();
+
 	//TODO move this calculation to Camera
 	GLfloat h = 2 * tan(45.0f*(3.1413f / 180) / 2);
 	GLfloat w = ((GLfloat)800 / 600)*h;
@@ -27,9 +29,9 @@ void SpriteRenderer::Init()
 
 void SpriteRenderer::Update()
 {
-	smart_pointer<Texture2D> mainTexture = getMainTexture();
+	smart_pointer<Texture2D>& mainTexture = getMainTexture();
 
-	if (mainTexture == NULL)
+	if (mainTexture.isEmpty())
 		return;
 	
 	getTransform()->applyTransformation();

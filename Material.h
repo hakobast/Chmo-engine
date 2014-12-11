@@ -9,7 +9,16 @@
 class Material :public RemovableObject
 {
 public:
-	Material(std::string name) :name(name){ /*printf("MATERIAL created\n");*/ };
+	Material(std::string name) :name(name)
+	{ 
+		/*printf("MATERIAL created\n");*/ 
+		color_diffuse.set(1.0f);
+	}
+
+	void apply()
+	{
+		//TODO apply material to draw
+	}
 
 	std::string name;
 

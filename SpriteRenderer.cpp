@@ -38,11 +38,7 @@ void SpriteRenderer::Update()
 
 	glEnable(GL_TEXTURE_2D);
 
-	mainTexture->bindTexture();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glColor4fv(getMainMaterial()->color_diffuse[0]);
+	getMainMaterial()->apply();
 
 	glBegin(GL_QUADS);
 	{

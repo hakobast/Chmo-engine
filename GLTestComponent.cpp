@@ -42,14 +42,14 @@ public:
 		lightDir[0] = 0.0f; lightDir[1] = 0.0f; lightDir[2] = -1.0f; lightDir[3] = 1.0f;
 
 		glEnable(GL_LIGHTING);
+
 		glEnable(GL_LIGHT0);
-		
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse); 
+		glLightfv(GL_LIGHT0, GL_SPECULAR, diffuse); 
 		glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 		glLighti(GL_LIGHT0, GL_SPOT_CUTOFF, 10.0f);
 		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDir);
-
-		glEnable(GL_COLOR_MATERIAL);
+		
+		//glEnable(GL_COLOR_MATERIAL);
 	}
     
     void Update()

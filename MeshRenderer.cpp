@@ -20,8 +20,6 @@ void MeshRenderer::Update()
 	if (mesh.isEmpty())
 		return;
 
-	getTransform()->applyTransformation();
-
 	std::vector<Vector3>& vertices = mesh->getVertices();
 	std::vector<Vector2>& uvs = mesh->getUVs();
 	std::vector<Vector3>& normals = mesh->getNormals();
@@ -40,18 +38,19 @@ void MeshRenderer::Update()
 	glEnd();*/
 
 	//TODO use VBO to render models
+	//TODO fix this sheet
+
+	getTransform()->applyTransformation();
 
 	smart_pointer<Texture2D>& mainTexture = getMainTexture();
 
 	if (!mainTexture.isEmpty())
 	{
 		glEnable(GL_TEXTURE_2D);
-		mainTexture->bindTexture();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
+
+	getMainMaterial()->apply();
 
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);

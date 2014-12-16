@@ -91,7 +91,7 @@ public:
 
 void createMyClass()
 {
-	MyClass* cl = new MyClass(10);
+	/*MyClass* cl = new MyClass(10);
 
 	smart_pointer<MyClass> a(cl);
 	smart_pointer<MyClass> b(cl);
@@ -100,7 +100,7 @@ void createMyClass()
 	MyClass c(2);
 
 	(*a) = d;
-	(*b) = c;
+	(*b) = c;*/
 
 	//a = &d;
 	//b = &c;
@@ -147,14 +147,14 @@ int main(int argc, char **argv)
 	fpsObj->addComponent<GLTestComponent>();
 
 	smart_pointer<Texture2D> texture(new TextureTiled("vtr.bmp", 2, 2, 4));
-	smart_pointer<Material> mainMat(new Material("diffuse"));
-	//mainMat->color_diffuse.setG(0.0f);
+	smart_pointer<Material> spriteMat(new Material("my mat"));
+	spriteMat->color_diffuse.set(1.0f, 1.0f, 1.0f, 1.0);
 
 	srand(time(0));
 	for (int i = 0; i < 100; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
-		obj->addComponent<SpriteRenderer>()->setMainMaterial(mainMat, false);
+		obj->addComponent<SpriteRenderer>()->setMainMaterial(spriteMat);
 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
 		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 4);
 		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
@@ -182,19 +182,18 @@ int main(int argc, char **argv)
 	//meshRenderer2->setMainTexture(texture);
 
 	char* matPath = "C:/Users/user/Dropbox/Scripts/OBJ Loader/test.mtl";
-
 	std::vector<smart_pointer<Material>> materials = ModelLoader::LoadMtl(matPath);
 	printf("COUNT: %d\n", materials.size());
 	
-	std::vector<smart_pointer<Material>> rendMats = meshRenderer->getMaterials();
-	rendMats.insert(rendMats.begin(), materials.begin(), materials.end());
-
 	for (smart_pointer<Material> mat : materials)
 	{
-		std::cout << "NAME: " << mat->name << ", Diffuse color: " << mat->color_diffuse << std::endl;
+		std::cout << "NAME: " << mat->name << ", Diffuse color: " << mat->color_specular << std::endl;
 		std::cout << "Ambient texture name: " << mat->ambient_texture_path.size() << std::endl;
 		if (mat->ambient_texture_path.size() > 0)
 			mat->texture_ambient = smart_pointer<Texture2D>(new Texture2D(mat->ambient_texture_path.c_str()));
+
+		meshRenderer->addMaterial(mat);
+		meshRenderer2->addMaterial(mat);
 	}
 
 	char* path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
@@ -206,7 +205,7 @@ int main(int argc, char **argv)
 
 	std::cout << &(meshRenderer->getMesh()) << std::endl;
 	std::cout << &(meshRenderer2->getMesh()) << std::endl;
-
+	
 	glutMainLoop();
 
 #endif

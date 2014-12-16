@@ -41,8 +41,9 @@ public:
 	smart_pointer<Material>& getMaterial(int index);
 	smart_pointer<Material>& getMainMaterial();
 	smart_pointer<Texture2D>& getMainTexture();
-	void setMaterial(smart_pointer<Material>& mat, int index, bool copy = true);
-	void setMainMaterial(smart_pointer<Material>& mat, bool copy = true);
+	void addMaterial(smart_pointer<Material>& mat, bool copy = false);
+	void setMaterial(smart_pointer<Material>& mat, int index, bool copy = false);
+	void setMainMaterial(smart_pointer<Material>& mat, bool copy = false);
 	void setMainTexture(smart_pointer<Texture2D>& texture); 
 };
 
@@ -94,6 +95,18 @@ inline smart_pointer<Material>& Renderer::getMainMaterial()
 	return smart_pointer<Material>::null();
 }
 
+inline void Renderer::addMaterial(smart_pointer<Material>& mat, bool copy)
+{
+	if (copy)
+	{
+		materials.push_back(mat.clone());
+	}
+	else
+	{
+		materials.push_back(mat);
+	}
+}
+
 inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index, bool copy)
 {
 	if (materials.size() <= index)
@@ -138,13 +151,13 @@ inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
 		smart_pointer<Material> mat(new Material("diffuse"));
 		materials.push_back(mat);
 	}
-	materials[0]->texture_diffuse = texture;
+	materials[0]->texture_ambient = texture;
 }
 
 inline smart_pointer<Texture2D>& Renderer::getMainTexture()
 {
 	if (materials.size() > 0)
-		return materials[0]->texture_diffuse;
+		return materials[0]->texture_ambient;
 
 	return smart_pointer<Texture2D>::null();
 }

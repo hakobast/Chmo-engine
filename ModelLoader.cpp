@@ -199,8 +199,9 @@ std::vector<smart_pointer<Material>> ModelLoader::LoadMtl(const char* filename)
 		}
 		else if (strcmp(lineHeader, "d") == 0)
 		{
-			fscanf(file, "%f", &mat->transparency);
-
+			float tr = 1.0f;
+			fscanf(file, "%f", &tr);
+			mat->color_diffuse.setA(tr);
 			//std::cout << "Transparency: " << transparency << std::endl;
 		}
 		else if (strcmp(lineHeader, "Ka") == 0)

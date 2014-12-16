@@ -12,12 +12,25 @@ public:
 	Material(std::string name) :name(name)
 	{ 
 		/*printf("MATERIAL created\n");*/ 
-		color_diffuse.set(1.0f);
+		color_ambient.set(0.2f,0.2f,0.2f,1.0f);
+		color_diffuse.set(0.8f, 0.8f, 0.8f, 1.0f);
+		color_specular.set(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	void apply()
 	{
-		//TODO apply material to draw
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		if (!texture_ambient.isEmpty())
+			texture_ambient->bindTexture();
+
+		//TODO implement other texture binding
+
+		glMaterialfv(GL_FRONT, GL_AMBIENT, color_ambient[0]);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, color_diffuse[0]);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, color_specular[0]);
+		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 	}
 
 	std::string name;
@@ -39,8 +52,6 @@ public:
 	Color color_specular;
 
 	GLint illum = 1;
-	GLfloat shininess; //TODO set defualt value
-	GLfloat transparency = 1.0f;
-
+	GLfloat shininess = 0.0f;
 };
 #endif

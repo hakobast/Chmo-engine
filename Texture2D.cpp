@@ -7,40 +7,42 @@
 
 #include "Texture2D.h"
 
-Texture2D::Texture2D(const char* filename)
+Texture2D::Texture2D(const char* filename, bool generateMipmaps)
 :file_name(filename)
 {
 	Image* image = loadBMP(filename);
+	
+	if (image != NULL)
+	{
+		width = image->width;
+		height = image->height;
 
-	width = image->width;
-	height = image->height;
+		glGenTextures(1, &texture_id);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+		if (generateMipmaps)
+		{
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+			texture_min_filter = GL_NEAREST_MIPMAP_LINEAR;
+			texture_mag_filter = GL_LINEAR_MIPMAP_LINEAR;
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+			texture_min_filter = GL_NEAREST;
+			texture_mag_filter = GL_LINEAR;
+		}
 
-	glGenTextures(1, &texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	//TODO take function parameters from constructor args
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	else
+		std::cout << "Texture2D: Error occurred while reading file: " << filename << std::endl;
 
 	delete image;
-	
-	textures = new TextureRegion[1];
-	textures[0].u_v[0] = 0.0f;
-	textures[0].u_v[1] = 0.0f;
-
-	textures[0].u_v[2] = 1.0f;
-	textures[0].u_v[3] = 0.0f;
-
-	textures[0].u_v[4] = 1.0f;
-	textures[0].u_v[5] = 1.0f;
-
-	textures[0].u_v[6] = 0.0f;
-	textures[0].u_v[7] = 1.0f;
 }
 
-Texture2D::Texture2D(const char*filename, int region[])
-:Texture2D(filename)
+Texture2D::Texture2D(const char*filename, int region[], bool generateMipmaps)
+:Texture2D(filename,generateMipmaps)
 {
-	delete textures;
 	textures = new TextureRegion[1];
 
 	textures[0].u_v[0] = (float)region[0] / width;

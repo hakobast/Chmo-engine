@@ -13,7 +13,7 @@
 #include <type_traits>
 #include <map>
 
-//#define ENABLE_LOG #endif
+//#define ENABLE_LOG
 
 template<class T>
 class ReferenceManager

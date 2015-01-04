@@ -2,10 +2,9 @@
 #include <iostream>
 #include "TextureTiled.h"
 
-TextureTiled::TextureTiled(const char* filename, int rows, int columns, int tilesCount)
-:Texture2D(filename), rows(rows), columns(columns), tiles_count(tilesCount)
+TextureTiled::TextureTiled(const char* filename, int rows, int columns, int tilesCount, bool generateMipmaps)
+:Texture2D(filename,generateMipmaps), rows(rows), columns(columns), tiles_count(tilesCount)
 {
-	delete textures;
 	textures = new TextureRegion[tilesCount];
 
 	float tile_w = (float)width / columns;
@@ -21,7 +20,7 @@ TextureTiled::TextureTiled(const char* filename, int rows, int columns, int tile
 		   |		|
 		   |		|
 		   |		|
- ([0],[1]) ----------([2],[3])*/
+  ([0],[1])----------([2],[3])*/
 		textures[i].u_v[0] = c*tile_w/width; 
 		textures[i].u_v[1] = (rows-1-r)*tile_h/height;
 

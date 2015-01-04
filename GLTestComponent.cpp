@@ -44,7 +44,7 @@ public:
 		glEnable(GL_LIGHTING);
 
 		glEnable(GL_LIGHT0);
-		glLightfv(GL_LIGHT0, GL_SPECULAR, diffuse); 
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 		glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 		glLighti(GL_LIGHT0, GL_SPOT_CUTOFF, 10.0f);
 		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDir);

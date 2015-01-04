@@ -135,6 +135,9 @@ namespace {
 Image* loadBMP(const char* filename) {
 	ifstream input;
 	input.open(filename, ifstream::binary);
+	if (input.fail())
+		return NULL;
+
 	assert(!input.fail() || !"Could not find file");
 	char buffer[2];
 	input.read(buffer, 2);

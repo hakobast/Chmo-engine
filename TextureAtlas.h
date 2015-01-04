@@ -8,7 +8,7 @@
 class TextureAtlas:public Texture2D
 {
 public:
-	TextureAtlas(const char*filename, int regions[],int textures_count);
+	TextureAtlas(const char*filename, int regions[], int textures_count, bool generateMipmaps = false);
 	~TextureAtlas();
 	const int txt_count;
 };

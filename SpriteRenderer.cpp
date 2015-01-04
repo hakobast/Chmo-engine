@@ -29,16 +29,14 @@ void SpriteRenderer::Init()
 
 void SpriteRenderer::Update()
 {
+	getTransform()->applyTransformation();
+
 	smart_pointer<Texture2D>& mainTexture = getMainTexture();
 
 	if (mainTexture.isEmpty())
 		return;
-	
-	getTransform()->applyTransformation();
 
-	glEnable(GL_TEXTURE_2D);
-
-	getMainMaterial()->apply();
+	getMainMaterial()->bind();
 
 	glBegin(GL_QUADS);
 	{
@@ -58,7 +56,7 @@ void SpriteRenderer::Update()
 	}
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D);
+	getMainMaterial()->unbind();
 }
 
 void SpriteRenderer::setTextureFrame(int frame)

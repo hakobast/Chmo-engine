@@ -10,6 +10,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <memory>
 
 #include "Engine.h"
 #include "Input.h"
@@ -25,12 +26,15 @@
 #include "SecondComponent.cpp"
 #include "GLTestComponent.cpp"
 #include "FPSCounter.cpp"
+#include "Utils.h"
 
 
 #include "Mesh.h"
 #include "Color.h"
 #include "MeshRenderer.h"
-#include "ModelLoader.h"
+#include "AssetManager.h"
+
+#define TARGET_FPS 160
 
 void Render(void)
 {
@@ -68,10 +72,8 @@ void Resize(int w, int h)
 void TimerFunc(int value)
 {
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 60, TimerFunc, 0);
+	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 }
-
-void loadObj(const char* filename, std::vector<float>& outVerts, std::vector<float>& outUvs, std::vector<float>& outNormals, std::vector<unsigned int>& outIndices);
 
 class MyClass : public RemovableObject
 {
@@ -89,6 +91,8 @@ public:
 	}
 };
 
+vector<shared_ptr<Mesh>> meshPtr;
+
 void createMyClass()
 {
 	/*MyClass* cl = new MyClass(10);
@@ -98,12 +102,14 @@ void createMyClass()
 
 	MyClass d(1);
 	MyClass c(2);
-
+	
 	(*a) = d;
 	(*b) = c;*/
 
 	//a = &d;
 	//b = &c;
+	shared_ptr<Mesh> ptr1(new Mesh);
+	meshPtr.push_back(ptr1);
 }
 
 //#define RUN_LANG_TEST
@@ -114,6 +120,7 @@ int main(int argc, char **argv)
 #ifdef RUN_LANG_TEST
 	createMyClass();
 
+	std::cout << "GAGO " << std::endl;
 #endif
 
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -125,7 +132,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("ENGINE TESTING");
 	glutReshapeFunc(Resize);
 	glutDisplayFunc(Render);
-	glutTimerFunc(1000 / 60, TimerFunc, 0);
+	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 	SetupRendering();
 	
 	//creating engine
@@ -141,6 +148,7 @@ int main(int argc, char **argv)
 	Engine::getInstance().addSystem(*renderSystem, 2);
 	Engine::getInstance().addSystem(*inputSystem, 3);
 
+
 	//creating game logics
 	GameObject* fpsObj = new GameObject("FPSGameObject");
 	fpsObj->addComponent<FPSCounter>();
@@ -148,64 +156,53 @@ int main(int argc, char **argv)
 
 	smart_pointer<Texture2D> texture(new TextureTiled("vtr.bmp", 2, 2, 4));
 	smart_pointer<Material> spriteMat(new Material("my mat"));
-	spriteMat->color_diffuse.set(1.0f, 1.0f, 1.0f, 1.0);
+	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
 
 	srand(time(0));
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 		obj->addComponent<SpriteRenderer>()->setMainMaterial(spriteMat);
 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
-		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 4);
+		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 1);
 		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
 		obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
+		//obj->getTransform()->Location.set(0.0f,0.0f, -1.0f);
 	}
 
-	GameObject* obj = new GameObject("FirstGameObject");
-	obj->getTransform()->Location.set(0.0f, 0.0f, -8.0f);
-	obj->getTransform()->RotateX(45.0f);
-	obj->getTransform()->RotateY(25.0f);
-	obj->getTransform()->RotateZ(75.0f);
+	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";
+	//char* mat_path = "C:/Users/user/Desktop/untitled2.mtl";
+	//char* mat_path = "C:/Users/user/Desktop/Luke_skywalkers_landspeeder/Luke Skywalkers landspeeder.mtl";
+	/*char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
+	char* mat_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.mtl";
 
-	GameObject* obj2 = new GameObject("SecondGameObject");
-	obj2->getTransform()->Location.set(3.0f, 0.0f, -8.0f);
-	obj2->getTransform()->RotateX(45.0f);
-	obj2->getTransform()->RotateY(25.0f);
-	obj2->getTransform()->RotateZ(75.0f);
+	std::vector<GameObject*> objects = LoadModel(mesh_path, mat_path);
 
-	//obj->addComponent<GLTestComponent>();
-	MeshRenderer* meshRenderer = obj->addComponent<MeshRenderer>();
-	meshRenderer->setSortingLayer(SortingLayer::Default, 2);
-	//meshRenderer->setMainTexture(texture);
-
-	MeshRenderer* meshRenderer2 = obj2->addComponent<MeshRenderer>();
-	//meshRenderer2->setMainTexture(texture);
-
-	char* matPath = "C:/Users/user/Dropbox/Scripts/OBJ Loader/test.mtl";
-	std::vector<smart_pointer<Material>> materials = ModelLoader::LoadMtl(matPath);
-	printf("COUNT: %d\n", materials.size());
-	
-	for (smart_pointer<Material> mat : materials)
+	for (GameObject* obj : objects)
 	{
-		std::cout << "NAME: " << mat->name << ", Diffuse color: " << mat->color_specular << std::endl;
-		std::cout << "Ambient texture name: " << mat->ambient_texture_path.size() << std::endl;
-		if (mat->ambient_texture_path.size() > 0)
-			mat->texture_ambient = smart_pointer<Texture2D>(new Texture2D(mat->ambient_texture_path.c_str()));
+		obj->getTransform()->Location.set(0.0f, 0.0f, -8.0f);
+		obj->getTransform()->RotateX(25);
+		obj->getTransform()->RotateY(25.0f);
+		obj->getTransform()->RotateZ(75.0f);
+	}*/
 
-		meshRenderer->addMaterial(mat);
-		meshRenderer2->addMaterial(mat);
-	}
+	/*std::vector<smart_pointer<Material>> mats = objects[0]->getComponent<MeshRenderer>()->getMaterials();
 
-	char* path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
-	smart_pointer<Mesh> mesh(new Mesh);
-	ModelLoader::LoadObj(path, mesh);
+	for (int i = 0; i < 1000; i++)
+	{
+		GameObject* obj = new GameObject("APEE");
+		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();
+		meshRend->setSharedMesh(objects[0]->getComponent<MeshRenderer>()->getMesh());
+		
+		for (smart_pointer<Material> mat : mats)
+			meshRend->addMaterial(mat);
+		
+		obj->getTransform()->Location.set(0.0f, 0.0f, -8.0f);
+		obj->getTransform()->RotateX(45);
+		obj->getTransform()->RotateY(25.0f);
+		obj->getTransform()->RotateZ(75.0f);
+	}*/
 
-	meshRenderer->setSharedMesh(mesh);
-	meshRenderer2->setSharedMesh(mesh);
-
-	std::cout << &(meshRenderer->getMesh()) << std::endl;
-	std::cout << &(meshRenderer2->getMesh()) << std::endl;
-	
 	glutMainLoop();
 
 #endif

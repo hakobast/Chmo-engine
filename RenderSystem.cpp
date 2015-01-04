@@ -44,6 +44,7 @@ void RenderSystem::Update()
 	Renderer* r = NULL;
 	for (int i = 0; i < components.size(); i++)
 	{
+		//TODO remove disabled components from main components list
 		if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
 		{
 			//std::cout << "OBJ: " << components[i]->getGameObject()->name << std::endl;

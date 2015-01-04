@@ -11,10 +11,9 @@ u3,v3,
 u4,v4
 Un,Vn
 */
-TextureAtlas::TextureAtlas(const char*filename, int regions[], int textures_count)
-:Texture2D(filename), txt_count(textures_count)
+TextureAtlas::TextureAtlas(const char*filename, int regions[], int textures_count, bool generateMipmaps)
+:Texture2D(filename,generateMipmaps), txt_count(textures_count)
 {
-	delete textures;
 	textures = new TextureRegion[textures_count];
 
 	float x1 = 0.0f, x2 = 0.0f,y1 = 0.0f,y2 = 0.0f;

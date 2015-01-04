@@ -10,22 +10,21 @@ class Material :public RemovableObject
 {
 public:
 	Material(std::string name) :name(name)
-	{ 
+	{
 		/*printf("MATERIAL created\n");*/ 
 		color_ambient.set(0.2f,0.2f,0.2f,1.0f);
 		color_diffuse.set(0.8f, 0.8f, 0.8f, 1.0f);
 		color_specular.set(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
-	void apply()
+	void bind()
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glEnable(GL_TEXTURE_2D);
 
 		if (!texture_ambient.isEmpty())
 			texture_ambient->bindTexture();
 
-		//TODO implement other texture binding
+		//TODO implement multi texturing
 
 		glMaterialfv(GL_FRONT, GL_AMBIENT, color_ambient[0]);
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, color_diffuse[0]);
@@ -33,13 +32,16 @@ public:
 		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 	}
 
-	std::string name;
+	void unbind()
+	{
+		//TODO check for solution
+		/*if (!texture_ambient.isEmpty())
+			texture_ambient->unbindTexture();*/
 
-	std::string ambient_texture_path;
-	std::string diffuse_texture_path;
-	std::string specular_texture_path;
-	std::string alpha_texture_path;
-	std::string bump_texture_path;
+		glDisable(GL_TEXTURE_2D);
+	}
+
+	std::string name;
 
 	smart_pointer<Texture2D> texture_ambient;
 	smart_pointer<Texture2D> texture_diffuse;
@@ -52,6 +54,6 @@ public:
 	Color color_specular;
 
 	GLint illum = 1;
-	GLfloat shininess = 0.0f;
+	GLfloat shininess = 128.0f;
 };
 #endif

@@ -15,58 +15,51 @@ void MeshRenderer::Init()
 
 }
 
-void MeshRenderer::Update()
+void  MeshRenderer::Update()
 {
+	getTransform()->applyTransformation();
+
 	if (mesh.isEmpty())
 		return;
 
-	std::vector<Vector3>& vertices = mesh->getVertices();
-	std::vector<Vector2>& uvs = mesh->getUVs();
-	std::vector<Vector3>& normals = mesh->getNormals();
-
-	if (vertices.size() == 0)
-		return;
-
-	/*glBegin(GL_TRIANGLES);
-	for (int i = 0; i < vertices.size(); i++)
+	for (int i = 0; i < mesh->getSubMeshCount(); i++)
 	{
-		//printf("v\t%f, %f, %f\n", vertices[i][0], vertices[i][1], vertices[i][2]);
-		glTexCoord2fv(&uvs[i][0]);
-		glNormal3fv(&normals[i][0]);
-		glVertex3fv(&vertices[i][0]);
-	}
-	glEnd();*/
+		std::vector<Vector3>& vertices = mesh->getVertices(i);
+		std::vector<Vector2>& uvs = mesh->getUVs(i);
+		std::vector<Vector3>& normals = mesh->getNormals(i);
 
-	//TODO use VBO to render models
-	//TODO fix this sheet
+		//TEMP
+		if (vertices.size() == 0 || i >= materials.size())
+			continue;
+		
+		//TODO use VBO to render models
+		//TODO fix this sheet
+		smart_pointer<Material>& material = getMaterial(i);
 
-	getTransform()->applyTransformation();
+		material->bind();
 
-	smart_pointer<Texture2D>& mainTexture = getMainTexture();
+		if (uvs.size() > 0)
+		{
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_FLOAT, 0, &uvs[0]);
+		}
 
-	if (!mainTexture.isEmpty())
-	{
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
+		if (normals.size() > 0)
+		{
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glNormalPointer(GL_FLOAT, 0, &normals[0]);
+		}
 
-	getMainMaterial()->apply();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
 
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
+		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-	if (!mainTexture.isEmpty())glTexCoordPointer(2, GL_FLOAT, 0, &uvs[0]);
-	glNormalPointer(GL_FLOAT, 0, &normals[0]);
-	glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	if (!mainTexture.isEmpty())
-	{
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		material->unbind();
 	}
 }
 

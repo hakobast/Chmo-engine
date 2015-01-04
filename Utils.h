@@ -22,4 +22,6 @@ void vectorRemove(std::vector<T*>& vector, T& item)
 		vector.erase(vector.begin() + index);
 }
 
+unsigned long long timeInMilliseconds();
+
 #endif

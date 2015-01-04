@@ -8,7 +8,7 @@
 class TextureTiled :public Texture2D
 {
 public:
-	TextureTiled(const char*filename, int rows,int columns, int tilesCount);
+	TextureTiled(const char*filename, int rows, int columns, int tilesCount, bool generateMipmaps = false);
 	~TextureTiled();
 	const int tiles_count;
 private:

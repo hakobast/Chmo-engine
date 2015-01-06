@@ -12,13 +12,15 @@
 
 #include <iostream>
 
-static bool sortSystems(const System* lhs, const System* rhs) { return lhs->priority < rhs->priority; }
-static bool ComponentInitPredicate(Component* c)
+static bool pred_sortSystems(const System* lhs, const System* rhs)
+{ 
+	return lhs->priority < rhs->priority;
+}
+
+static bool pred_initComponents(Component* c)
 {
-	if (c->isEnabled() && c->getGameObject()->isActive())
+	if (c->isEnabled())
 	{
-		if (dynamic_cast<ActiveComponent*>(c))
-			((ActiveComponent*)c)->OnEnable();
 		c->Init();
 		return true;
 	}
@@ -33,61 +35,80 @@ void Engine::Init()
 
 void Engine::Update()
 {
-	//INFO call component's callback
-	std::vector<Component*>::iterator iter = std::remove_if(componentsToInit.begin(), componentsToInit.end(), ComponentInitPredicate);
-	componentsToInit.erase(iter, componentsToInit.end());
+	vectorRemove(_compInitList, pred_initComponents);
 
-	for (System* s : systems)
+	for (System* s : _systems)
 		s->Update();
+
+	for (Component* comp : _compDestroyList)
+	{
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+		if (activeComp != NULL)
+		{
+			activeComp->OnDisable();
+			activeComp->OnDestroy();
+		}
+
+		delete comp;
+	}
+
+	for (GameObject* gmObj : _gmObjDestroyList)
+	{
+		delete gmObj;
+	}
+
+	_compDestroyList.clear();
+	_gmObjDestroyList.clear();
 }
 
 void Engine::addSystem(System &s, int priority)
 {
     s.priority = priority;
-    systems.push_back(&s);
-	std::sort(systems.begin(), systems.end(),sortSystems);
+    _systems.push_back(&s);
+	std::sort(_systems.begin(), _systems.end(),pred_sortSystems);
 }
 
 void Engine::addGameObject(GameObject &obj)
 {
-    gameObjects.push_back(&obj);
+    _gameObjects.push_back(&obj);
 }
 
 void Engine::addComponent(Component &comp, int priority)
 {
     comp.priority = priority;
-    components.push_back(&comp);
-	componentsToInit.push_back(&comp);
-	for (System *s : systems)
+    _components.push_back(&comp);
+	_compInitList.push_back(&comp);
+
+	for (System* s : _systems)
 		s->addComponent(comp);
 
+	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(&comp);
+	if (activeComp != NULL && activeComp->isEnabled())
+		activeComp->OnEnable();
 	comp.Create();
 }
 
 void Engine::removeSystem(System &s)
 {
-	vectorRemove<System>(systems, s);
+	vectorRemove<System>(_systems, &s);
 }
 
 void Engine::removeGameObject(GameObject &obj)
 {
-	vectorRemove<GameObject>(gameObjects, obj);
+	vectorRemove<GameObject>(_gameObjects, &obj);
+	_gmObjDestroyList.push_back(&obj);
 }
 
 void Engine::removeComponent(Component &comp)
 {
-	vectorRemove<Component>(components, comp);
-	vectorRemove<Component>(componentsToInit, comp);
-	for (System *s : systems)
-		s->removeComponent(comp);
-
-	if (dynamic_cast<ActiveComponent*>(&comp))
-		((ActiveComponent*)&comp)->OnDisable();
+	vectorRemove<Component>(_components, &comp);
+	vectorRemove<Component>(_compInitList, &comp);
+	_compDestroyList.push_back(&comp);
 }
 
 GameObject* Engine::FindGameObjectByName(std::string name) const
 {
-	for (GameObject* obj : gameObjects)
+	for (GameObject* obj : _gameObjects)
 		if (obj->name == name)
 			return obj;
 

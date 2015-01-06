@@ -6,6 +6,8 @@
 #include "System.h"
 #include "Vectors.h"
 
+#define KeyCodes_Count 256 //Temp size
+
 enum KeyCode // implement All symbols
 {
 	A = 65,
@@ -26,6 +28,9 @@ protected:
 	~Input();
 	void Init();
 	void Update();
+	void addComponent(Component &c);
+	void removeComponent(Component &c);
+
 private:
 	static Input* instance;
 	friend void OnKeyDown(unsigned char, int, int);
@@ -35,25 +40,25 @@ private:
 	friend void MouseFunc(int button, int state, int x, int y);
 	friend void MouseMotionFunc(int x, int y);
 	friend void MousePassiveMotionFunc(int x, int y);
-	std::map<int, bool> keypressed; //TODO make this bool array
-	int mouseButtons[3];
-	Vector2 mousePosition;
+	int _keypressed[KeyCodes_Count];
+	int _mouseButtons[3];
+	Vector2 _mousePosition;
 };
 
 //static functions
 inline bool Input::GetKeyDown(int key)
 {
-	return instance->keypressed[key];
+	return instance->_keypressed[key];
 }
 
 inline bool Input::GetMouseDown(int button)
 {
-	return instance->mouseButtons[button] != 1;
+	return instance->_mouseButtons[button];
 }
 
 inline Vector2 Input::GetMousePosition()
 {
-	return instance->mousePosition;
+	return instance->_mousePosition;
 }
 //end
 #endif

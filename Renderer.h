@@ -30,7 +30,6 @@ friend class RenderSystem;
 protected:
 	int sortingLayer = Default;
 	int layerOrder = 0;
-	RenderSystem* renderSystem;
 	std::vector<smart_pointer<Material>> materials;
 public:
 	int getSortingLayer() const;
@@ -61,13 +60,13 @@ inline void Renderer::setSortingLayer(int layer, int order)
 {
 	sortingLayer = layer;
 	layerOrder = order;
-	renderSystem->sortComponents();
+	dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
 inline void Renderer::setLayerOrder(int order)
 {
 	layerOrder = order;
-	renderSystem->sortComponents();
+	dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
 inline std::vector<smart_pointer<Material>>const Renderer::getMaterials()

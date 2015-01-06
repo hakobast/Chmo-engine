@@ -4,22 +4,27 @@
 
 #include <vector>
 
+template<typename T>
+void free_vector(std::vector<T*> &v)
+{
+	while (!v.empty()) {
+		delete v.back();
+		v.pop_back();
+	}
+}
 
 template<class T>
-void vectorRemove(std::vector<T*>& vector, T& item)
+inline void vectorRemove(std::vector<T*>& vector, T* item)
 {
-	int index = -1;
-	for (int i = 0; i < vector.size(); i++)
-	{
-		if (vector[i] == &item)
-		{
-			index = i;
-			break;
-		}
-	}
+	std::vector<T*>::iterator iter = std::remove(vector.begin(), vector.end(), item);
+	vector.erase(iter, vector.end());
+}
 
-	if (index != -1)
-		vector.erase(vector.begin() + index);
+template<class T>
+inline void vectorRemove(std::vector<T*>& vector, bool (*pred)(T*))
+{
+	std::vector<T*>::iterator iter = std::remove_if(vector.begin(), vector.end(), pred);
+	vector.erase(iter, vector.end());
 }
 
 unsigned long long timeInMilliseconds();

@@ -5,7 +5,6 @@
 //  Created by Hakob on 11/13/14.
 //  Copyright (c) 2014 Haksist. All rights reserved.
 //
-
 #include <iostream>
 #include <GL\glut.h>
 
@@ -13,13 +12,14 @@
 #include "GameLogic.h"
 #include "Input.h"
 #include "GameTime.h"
+#include "FPSCounter.cpp"
 
 using namespace std;
 
 class GLTestComponent : public GameLogic
 {
 public:
-
+	int testInt;
 	~GLTestComponent()
     {
        cout << "GLTestComponent:: ~~~deleted~~~" << endl; 
@@ -27,7 +27,7 @@ public:
     
 	void Create()
 	{
-
+		cout << "GLTestComponent:: Create" << endl;
 	}
 
 
@@ -50,6 +50,10 @@ public:
 		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDir);
 		
 		//glEnable(GL_COLOR_MATERIAL);
+
+		testInt = 20;
+
+		std::cout << "GL TEST INITED" << std::endl;
 	}
     
     void Update()
@@ -64,7 +68,19 @@ public:
 
 		if (Input::GetKeyDown(KeyCode::a))
 		{
-			getGameObject()->getComponent<Renderer>()->destroy();
+			FPSCounter* rend = getGameObject()->getComponent<FPSCounter>();
+			if (rend != NULL)
+			{
+				std::cout << "FOUND " << rend->isEnabled() << " Counter " << !rend->isEnabled() << std::endl;
+				rend->setEnabled(!rend->isEnabled());
+				//rend->destroy();
+				//rend->getGameObject()->destroy();
+
+				//rend->getGameObject()->addComponent<GLTestComponent>();
+				//getGameObject()->destroy();
+			}
+			else
+				std::cout << "CAN'T FIND\n";
 		}
 
 		//RGB
@@ -114,6 +130,21 @@ public:
 	void OnAction(string action, void*const data)
 	{
 		cout << "GLTestComponent::Action:" << action << endl;
+	}
+
+	void OnEnable()
+	{
+		std::cout << "GLTestComponent: OnEnable" << std::endl;
+	}
+
+	void OnDisable()
+	{
+		std::cout << "GLTestComponent: OnDisable" << std::endl;
+	}
+
+	void OnDestroy()
+	{
+		std::cout << "GLTestComponent: OnDestroy" << std::endl;
 	}
 };
 

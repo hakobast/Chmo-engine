@@ -19,6 +19,7 @@
 class GameObject
 {
 friend class Component;
+friend class Engine;
 friend class ActiveComponent;
 
 protected:
@@ -50,11 +51,19 @@ public:
     void destroy();
     
 private:
+	bool destroyState = false;
     bool _isActive = true;
 	Transform* transform;
     std::vector<Component*> components;
 	void removeComponent(Component *);
+
+	friend std::ostream& operator << (std::ostream& stream, const GameObject& obj);
 };
+
+inline std::ostream& operator << (std::ostream& stream, const GameObject& obj)
+{
+	return stream << obj.name << " GameObject(" << obj.components.size() << ")" << std::endl;
+}
 
 inline bool GameObject::isActive()const
 {
@@ -66,6 +75,75 @@ inline Transform*const GameObject::getTransform()
 	return transform;
 }
 
-#include "GameObjectTemplates.h"
+template<class T>
+T* GameObject::addComponent()
+{
+	if (std::is_base_of<Component, T>::value && !std::is_base_of<Transform, T>::value)
+	{
+		T *t = new T();
+		Component* baseType = t;
+		baseType->gameObject = this;
+		baseType->transform = dynamic_cast<Transform*>(components[0]); // first component of each gameobject is GameTransform
+
+		components.push_back(baseType);
+		Engine::getInstance().addComponent(*baseType, baseType->priority);
+
+		//if the gameobject is in destroy state added component must be destroyed
+		if (destroyState)
+		{
+			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(baseType);
+			if (activeComp != NULL)
+			{
+				activeComp->destroy();
+			}
+		}
+
+		return t;
+	}
+
+	return NULL;
+}
+
+template<class T>
+T* GameObject::getComponent(bool enabledOnly) const
+{
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
+		{
+			return (T*)components[i];
+		}
+	}
+
+	return NULL;
+}
+
+template<class T>
+std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
+{
+	std::vector<T*const> comps;
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
+		{
+			comps.push_back((T*)components[i]);
+		}
+	}
+
+	return comps;
+}
+
+//**********STATICS********
+template<class T>
+T* GameObject::FindComponent()
+{
+	return Engine::getInstance().FindComponent<T>();
+}
+
+template<class T>
+std::vector<T*> GameObject::FindComponents()
+{
+	return Engine::getInstance().FindComponents<T>();
+}
 
 #endif

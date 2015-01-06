@@ -9,31 +9,45 @@
 #ifndef EngineTesting_Component_h
 #define EngineTesting_Component_h
 
+#include <iostream>
+
 class GameObject;
 class Transform;
 
 class Component
 {
 	friend class GameObject;
-protected:
-	virtual ~Component(){};
-	bool enabled = true;
+	friend class System;
+	friend class Engine;
 public:
     int priority;
 	virtual void Create(){};
 	virtual void Init(){};
 	virtual void Update(){};
-	bool isEnabled() const;
+	virtual bool isEnabled() const;
 	GameObject*const getGameObject() const;
 	Transform*const getTransform() const;
+protected:
+	virtual ~Component()
+	{
+		std::cout << "Component: ~~~~~~~~~~~~~" << std::endl;
+	};
+	System* system;
 private:
 	GameObject* gameObject;
 	Transform* transform;
+
+friend std::ostream& operator << (std::ostream& stream, const Component& obj);
 };
 
-inline bool Component::isEnabled() const
+inline std::ostream& operator << (std::ostream& stream, const Component& obj)
 {
-	return enabled;
+	return stream << typeid(&obj).name() << " Component(" << obj.isEnabled() << ")" << std::endl;
+}
+
+inline bool Component::isEnabled() const
+{ 
+	return true; 
 }
 
 inline GameObject*const Component::getGameObject() const

@@ -18,7 +18,8 @@
 
 class GameLogic :public ActiveComponent
 {
-	friend class GameObject;
+friend class GameObject;
+friend class GameLogicSystem;
 protected:
 	~GameLogic(){};
 public:

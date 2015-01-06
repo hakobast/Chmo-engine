@@ -13,43 +13,43 @@ Input* Input::instance = NULL;
 void OnKeyDown(unsigned char key, int x, int y)
 {
 	//std::cout << "InputSystem:: Keydown: " << (int)key << std::endl;
-	//Input::instance->keypressed.insert(std::make_pair((int)key, true));
-	Input::instance->keypressed[(int)key] = true;
+	Input::instance->_keypressed[(int)key] = 1;
 }
 
 void OnKeyUp(unsigned char key, int x, int y)
 {
-	Input::instance->keypressed[(int)key] = false;
+	//std::cout << "InputSystem:: Keyup: " << (int)key << std::endl;
+	Input::instance->_keypressed[(int)key] = 0;
 }
 
 void OnSpecialKeyDown(int key, int x, int y)
 {
 	//std::cout << "InputSystem:: Special Key down: " << key << std::endl;
-	//Input::instance->keypressed.insert(std::make_pair((int)key, true));
-	Input::instance->keypressed[key] = true;
+	Input::instance->_keypressed[key] = 1;
 }
 
 void OnSpecialKeyUp(int key, int x, int y)
 {
-	Input::instance->keypressed[key] = false;
+	//std::cout << "InputSystem:: Special Key up: " << key << std::endl;
+	Input::instance->_keypressed[key] = 0;
 }
 
 void MouseFunc(int button, int state, int x, int y)
 {
 	//std::cout << "btn: " << button << " state: " << state << " x: " << x << " y:" << y << std::endl;
-	Input::instance->mouseButtons[button] = state;
+	Input::instance->_mouseButtons[button] = !state;
 }
 
 void MouseMotionFunc(int x, int y)
 {
 	//std::cout << " x: " << x << " y:" << y << std::endl;
-	Input::instance->mousePosition.set(x, y);
+	Input::instance->_mousePosition.set(x, y);
 }
 
 void MousePassiveMotionFunc(int x, int y)
 {
 	//std::cout << "Passive" << " x: " << x << " y:" << y << std::endl;
-	Input::instance->mousePosition.set(x, y);
+	Input::instance->_mousePosition.set(x, y);
 }
 
 //friends
@@ -64,8 +64,11 @@ Input::Input()
 	glutMotionFunc(MouseMotionFunc);
 	glutPassiveMotionFunc(MousePassiveMotionFunc);
 
+	for (int i = 0; i < KeyCodes_Count; i++)
+		_keypressed[i] = 0;
+
 	for (int i = 0; i < 3; i++)
-		mouseButtons[i] = 1;
+		_mouseButtons[i] = 0;
 
 	instance = this;
 }
@@ -85,3 +88,6 @@ void Input::Update()
 	//std::cout << "InputSystem:: Update()" << std::endl;
 	//keypressed.clear();
 }
+
+void Input::addComponent(Component &c){}
+void Input::removeComponent(Component &c){}

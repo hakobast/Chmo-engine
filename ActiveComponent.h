@@ -19,27 +19,52 @@ class ActiveComponent :public Component
 {
 	friend class GameObject;
 protected:
-	~ActiveComponent(){};
+	~ActiveComponent()
+	{
+		std::cout << "ActiveComponent: ~~~~~~~~~~~~~" << std::endl;
+	};
+private:
+	bool enabled = true;
+	bool destroyState = false; //is is for performance reason, if system's list will be a MAP remove this variable
 public:
-	virtual void OnEnable(){};
-	virtual void OnDisable(){};
+	virtual void OnEnable(){/* std::cout << "ActiveComponent: OnEnable" << std::endl;*/ };
+	virtual void OnDisable(){ /*std::cout << "ActiveComponent: OnDisable" << std::endl;*/ };
+	virtual void OnDestroy(){};
+	bool isEnabled() const;
 
 	void destroy();
 	void setEnabled(bool toogle);
 };
 
+inline bool ActiveComponent::isEnabled() const
+{
+	return enabled && getGameObject()->isActive();
+}
 
 inline void ActiveComponent::setEnabled(bool toogle)
 {
+	if (enabled == toogle || !getGameObject()->isActive())
+		return;
+
 	enabled = toogle;
 	if (enabled)
+	{
 		OnEnable();
+		if (!destroyState)
+			system->addComponent(*this);
+	}
 	else
+	{
 		OnDisable();
+		if (!destroyState)
+			system->removeComponent(*this);
+	}
 }
 
 inline void ActiveComponent::destroy()
 {
+	destroyState = true;
+	system->removeComponent(*this);
 	getGameObject()->removeComponent(this);
 }
 

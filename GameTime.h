@@ -16,6 +16,8 @@ protected:
 	~GameTime();
 	void Init();
 	void Update();
+	void addComponent(Component &c);
+	void removeComponent(Component &c);
 private:
 	static GameTime* instance;
 	unsigned long long lastTime;

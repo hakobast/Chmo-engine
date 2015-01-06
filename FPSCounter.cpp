@@ -1,3 +1,6 @@
+#ifndef FPSCOUNTER_CPP
+#define FPSCOUNTER_CPP
+
 #include "GameLogic.h"
 #include "GameTime.h"
 
@@ -19,4 +22,15 @@ public:
 			time = 0;
 		}
 	}
+
+	void OnEnable()
+	{
+		std::cout << "FPSCounter: OnEnable" << std::endl;
+	}
+
+	void OnDisable()
+	{
+		std::cout << "FPSCounter: OnDisable" << std::endl;
+	}
 };
+#endif

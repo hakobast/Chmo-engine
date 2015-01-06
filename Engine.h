@@ -43,11 +43,13 @@ public:
 		return engine;
 	}
 private:
-	std::vector<Component*> componentsToInit;
-    std::vector<Component*> components;
-    std::vector<GameObject*> gameObjects;
-    std::vector<System*> systems;
-    int frameRate;
+	std::vector<Component*> _compInitList;
+	std::vector<Component*> _compDestroyList;
+	std::vector<GameObject*> _gmObjDestroyList;
+
+    std::vector<Component*> _components;
+    std::vector<GameObject*> _gameObjects;
+    std::vector<System*> _systems;
 
 	Engine()
 	{
@@ -55,6 +57,26 @@ private:
 	}
 };
 
-#include "EngineTemplates.h"
+//****STATICS*****
+template<class T>
+T* Engine::FindComponent() const
+{
+	for (Component* comp : _components)
+	if (dynamic_cast<T*>(comp))
+		return (T*)comp;
+
+	return NULL;
+}
+
+template<class T>
+std::vector<T*> Engine::FindComponents() const
+{
+	std::vector<T*> comps;
+	for (Component* comp : _components)
+	if (dynamic_cast<T*>(comp))
+		comps.push_back((T*)comp);
+
+	return comps;
+}
 
 #endif

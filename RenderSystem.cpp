@@ -44,10 +44,9 @@ void RenderSystem::Update()
 	Renderer* r = NULL;
 	for (int i = 0; i < components.size(); i++)
 	{
-		//TODO remove disabled components from main components list
-		if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
+		//if (components[i]->isEnabled())
 		{
-			//std::cout << "OBJ: " << components[i]->getGameObject()->name << std::endl;
+			//TODO improve this solution
 			if (r != NULL)
 			{
 				if (r->getSortingLayer() != components[i]->getSortingLayer() ||
@@ -72,8 +71,8 @@ void RenderSystem::addComponent(Component &c)
 	Renderer* r = dynamic_cast<Renderer*>(&c);
 	if (r)
 	{
-		r->renderSystem = this;
 		components.push_back(r);
+		r->system = this;
 	}
 }
 
@@ -83,7 +82,7 @@ void RenderSystem::removeComponent(Component &c)
 	Renderer* r = dynamic_cast<Renderer*>(&c);
 	if (r)
 	{
-		vectorRemove<Renderer>(components, *r);
+		vectorRemove<Renderer>(components, r);
 	}
 }
 

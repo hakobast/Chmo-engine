@@ -2,12 +2,13 @@
 
 MeshRenderer::~MeshRenderer()
 {
-
+	cout << "MeshRenderer:: ~~~deleted~~~ " << endl;
 }
 
 void MeshRenderer::Create()
 {
-	renderSystem->sortComponents();
+	//renderSystem->sortComponents();
+	dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
 void MeshRenderer::Init()

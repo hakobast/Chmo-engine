@@ -28,26 +28,24 @@ void GameLogicSystem::Update()
 
 	for (int i = 0; i < components.size(); i++)
 	{
-		if (components[i]->isEnabled() && components[i]->getGameObject()->isActive())
-			components[i]->Update();
+		components[i]->Update();
 	}
 }
 
 void GameLogicSystem::addComponent(Component &c)
 {
-	//implement component checking
 	GameLogic* gm = dynamic_cast<GameLogic*>(&c);
 	if (gm)
 	{
 		components.push_back(gm);
+		gm->system = this;
 		std::sort(components.begin(), components.end(), sortComponents);
 	}
 }
 
 void GameLogicSystem::removeComponent(Component &c)
 {
-	//implement component checking
 	GameLogic* gm = dynamic_cast<GameLogic*>(&c);
 	if (gm)
-		vectorRemove<GameLogic>(components, *gm);
+		vectorRemove<GameLogic>(components, gm);
 }

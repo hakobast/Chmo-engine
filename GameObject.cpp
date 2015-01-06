@@ -34,12 +34,8 @@ GameObject::GameObject(string name)
 
 GameObject::~GameObject()
 {
-	for (Component *comp : components)
-	{
-		Engine::getInstance().removeComponent(*comp);
-		delete comp;
-	}
-	cout << "GameObject: " << name << " ~GameObject()" << endl;
+	components.clear();
+	cout << "GameObject ~~~~deleted " << name << " ~GameObject()" << endl;
 }
 
 void GameObject::sendAction(string action, void*const data)
@@ -56,19 +52,47 @@ void GameObject::sendMessage(string function, void *data)
 
 void GameObject::setActive(bool toogle)
 {
+	if (_isActive == toogle)
+		return;
+
+	//if toogle is true we call component's setEnable which check if the 
+	//gameobject is active than call his state-callbacks.
+	//maybe this is bad solution but it works :)
+	if (toogle)
+		_isActive = toogle;
+
+	for (Component* comp : components)
+	{
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+		if (activeComp != NULL && activeComp->enabled)
+		{
+			activeComp->setEnabled(_isActive);
+			activeComp->enabled = true; // restoring component's real state
+		}
+	}
+
 	_isActive = toogle;
 }
 
 void GameObject::removeComponent(Component* comp)
 {
-	vectorRemove(components, *comp);
+	vectorRemove(components, comp);
 	Engine::getInstance().removeComponent(*comp);
-	delete comp;
 }
 
 void GameObject::destroy()
-{ 
-	delete this;
+{
+	destroyState = true;
+	for (int i = 0; i < components.size(); i++)
+	{
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components[i]);
+		if (activeComp != NULL)
+			activeComp->destroy();
+		else
+			Engine::getInstance().removeComponent(*components[i]);
+	}
+
+	Engine::getInstance().removeGameObject(*this);
 }
 
 //******static*****

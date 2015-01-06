@@ -75,26 +75,81 @@ void TimerFunc(int value)
 	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 }
 
-class MyClass : public RemovableObject
+class BaseClass;
+
+class Data
 {
 public:
-	int a;
-	MyClass(int z)
+	BaseClass* object;
+};
+
+class ChildData :public Data
+{
+
+};
+
+class BaseClass
+{
+public:
+	BaseClass()
 	{
-		std::cout << "Created " << std::endl;
-		a = z;
+		std::cout << "BaseClass Created " << std::endl;
 	}
 
-	~MyClass()
+	virtual void pure() = 0;
+
+	virtual void addComponent(Data& obj)
 	{
-		std::cout << "GOOD BYE BABY I'm GONNA DIE: " << a << std::endl;
+		obj.object = this;
+	}
+
+	virtual void print()
+	{
+		std::cout << "PARENT PRINTED " << std::endl;
 	}
 };
 
-vector<shared_ptr<Mesh>> meshPtr;
+class ChildClass:public BaseClass
+{
+public:
+	ChildClass()
+	{
+		std::cout << "ChildClass Created " << std::endl;
+	}
+
+	void pure()
+	{
+
+	}
+
+	void addComponent(Data& obj)
+	{
+		std::cout << "OVERRRIDE " << std::endl;
+		BaseClass::addComponent(obj);
+	}
+
+	void print()
+	{
+		std::cout << "CHILD PRINTED " << std::endl;
+	}
+
+	int result;
+	int getResult()
+	{
+		return result;
+	}
+};
 
 void createMyClass()
 {
+	ChildData myObj;
+
+	ChildClass cl;
+	cl.addComponent(myObj);
+
+	dynamic_cast<ChildClass*>(myObj.object)->print();
+
+
 	/*MyClass* cl = new MyClass(10);
 
 	smart_pointer<MyClass> a(cl);
@@ -108,8 +163,6 @@ void createMyClass()
 
 	//a = &d;
 	//b = &c;
-	shared_ptr<Mesh> ptr1(new Mesh);
-	meshPtr.push_back(ptr1);
 }
 
 //#define RUN_LANG_TEST
@@ -119,10 +172,7 @@ int main(int argc, char **argv)
 {
 #ifdef RUN_LANG_TEST
 	createMyClass();
-
-	std::cout << "GAGO " << std::endl;
 #endif
-
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #ifdef RUN_ENGINE_TEST
 
@@ -159,15 +209,16 @@ int main(int argc, char **argv)
 	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
 
 	srand(time(0));
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 		obj->addComponent<SpriteRenderer>()->setMainMaterial(spriteMat);
 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
 		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 1);
-		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default,2);
+		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
+		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 1);
 		obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
-		//obj->getTransform()->Location.set(0.0f,0.0f, -1.0f);
+		//obj->getTransform()->Location.set(0.0f,0.0f, -2.0f);
 	}
 
 	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";

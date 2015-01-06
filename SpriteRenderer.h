@@ -21,6 +21,7 @@ public:
 	void Create();
 	void Init();
 	void Update();
+
 	void setTextureFrame(int frame);
 	void setColor(Color c);
 	Color getColor();

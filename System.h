@@ -24,8 +24,9 @@ protected:
 	virtual ~System(){};
 	virtual void Init() = 0; //INFO this maybe not usable function
     virtual void Update() = 0;
-    virtual void addComponent(Component &c){};
-    virtual void removeComponent(Component &c){};
+public:
+	virtual void addComponent(Component &c) = 0;
+	virtual void removeComponent(Component &c) = 0;
 };
 
 #endif

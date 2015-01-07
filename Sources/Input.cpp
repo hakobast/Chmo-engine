@@ -91,3 +91,4 @@ void Input::Update()
 
 void Input::addComponent(Component &c){}
 void Input::removeComponent(Component &c){}
+bool Input::isSystemComponent(Component &c){ return false; }

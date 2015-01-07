@@ -39,3 +39,4 @@ void GameTime::Update()
 
 void GameTime::addComponent(Component &c){}
 void GameTime::removeComponent(Component &c){}
+bool GameTime::isSystemComponent(Component &c){ return false; }

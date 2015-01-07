@@ -96,6 +96,8 @@ T* GameObject::addComponent()
 			{
 				activeComp->destroy();
 			}
+			else
+				Engine::getInstance().removeComponent(*baseType);
 		}
 
 		return t;

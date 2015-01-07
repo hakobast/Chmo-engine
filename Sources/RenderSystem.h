@@ -23,6 +23,7 @@ protected:
 	void Update();
 	void addComponent(Component &c);
 	void removeComponent(Component &c);
+	bool isSystemComponent(Component &c);
 public:
 	void sortComponents();
 	RenderSystem();

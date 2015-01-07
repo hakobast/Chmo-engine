@@ -13,8 +13,6 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Create()
 {
-	dynamic_cast<RenderSystem*>(system)->sortComponents();
-
 	//TODO move this calculation to Camera
 	GLfloat h = 2 * tan(45.0f*(3.1413f / 180) / 2);
 	GLfloat w = ((GLfloat)800 / 600)*h;

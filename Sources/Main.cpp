@@ -34,7 +34,7 @@
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 
-#define TARGET_FPS 160
+#define TARGET_FPS 10
 
 void Render(void)
 {
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
 
 	srand(time(0));
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 		obj->addComponent<SpriteRenderer>()->setMainMaterial(spriteMat);

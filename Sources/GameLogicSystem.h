@@ -22,6 +22,7 @@ public:
     void Update();
     void addComponent(Component &c);
 	void removeComponent(Component &c);
+	bool isSystemComponent(Component &c);
 };
 
 #endif

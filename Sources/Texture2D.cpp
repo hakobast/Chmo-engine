@@ -16,7 +16,7 @@ Texture2D::Texture2D(const char* filename, bool generateMipmaps)
 	{
 		width = image->width;
 		height = image->height;
-
+		
 		glGenTextures(1, &texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		if (generateMipmaps)

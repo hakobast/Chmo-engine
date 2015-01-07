@@ -26,12 +26,12 @@ protected:
 private:
 	bool enabled = true;
 	bool destroyState = false; //is is for performance reason, if system's list will be a MAP remove this variable
+	void _destroy();
 public:
 	virtual void OnEnable(){/* std::cout << "ActiveComponent: OnEnable" << std::endl;*/ };
 	virtual void OnDisable(){ /*std::cout << "ActiveComponent: OnDisable" << std::endl;*/ };
 	virtual void OnDestroy(){};
 	bool isEnabled() const;
-
 	void destroy();
 	void setEnabled(bool toogle);
 };
@@ -50,13 +50,13 @@ inline void ActiveComponent::setEnabled(bool toogle)
 	if (enabled)
 	{
 		OnEnable();
-		if (!destroyState)
+		if (system != NULL && !destroyState)
 			system->addComponent(*this);
 	}
 	else
 	{
 		OnDisable();
-		if (!destroyState)
+		if (system != NULL && !destroyState)
 			system->removeComponent(*this);
 	}
 }
@@ -64,8 +64,16 @@ inline void ActiveComponent::setEnabled(bool toogle)
 inline void ActiveComponent::destroy()
 {
 	destroyState = true;
-	system->removeComponent(*this);
 	getGameObject()->removeComponent(this);
+	if (system != NULL)
+		system->removeComponent(*this);
+}
+
+inline void ActiveComponent::_destroy()
+{
+	destroyState = true;
+	if (system != NULL)
+		system->removeComponent(*this);
 }
 
 #endif

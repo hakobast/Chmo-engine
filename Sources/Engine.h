@@ -55,9 +55,10 @@ private:
 	{
 		std::cout << "ENGINE created" << std::endl;
 	}
+
+	friend bool pred_initComponents(Component* c);
 };
 
-//****STATICS*****
 template<class T>
 T* Engine::FindComponent() const
 {

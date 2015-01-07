@@ -27,6 +27,7 @@ protected:
 public:
 	virtual void addComponent(Component &c) = 0;
 	virtual void removeComponent(Component &c) = 0;
+	virtual bool isSystemComponent(Component &c) = 0;
 };
 
 #endif

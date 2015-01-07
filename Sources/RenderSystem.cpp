@@ -68,22 +68,28 @@ void RenderSystem::Update()
 void RenderSystem::addComponent(Component &c)
 {
 	//implement component checking
-	Renderer* r = dynamic_cast<Renderer*>(&c);
-	if (r)
+	if (isSystemComponent(c))
 	{
-		components.push_back(r);
+		Renderer* r = dynamic_cast<Renderer*>(&c);
 		r->system = this;
+		components.push_back(r);
+		sortComponents();
 	}
 }
 
 void RenderSystem::removeComponent(Component &c)
 {
 	//implement component checking
-	Renderer* r = dynamic_cast<Renderer*>(&c);
-	if (r)
+	if (isSystemComponent(c))
 	{
-		vectorRemove<Renderer>(components, r);
+		vectorRemove<Renderer>(components, dynamic_cast<Renderer*>(&c));
 	}
+}
+
+bool RenderSystem::isSystemComponent(Component &c)
+{
+	Renderer* r = dynamic_cast<Renderer*>(&c);
+	return r != NULL;
 }
 
 void RenderSystem::sortComponents()

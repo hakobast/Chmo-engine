@@ -66,7 +66,7 @@ void GameObject::setActive(bool toogle)
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
 		if (activeComp != NULL && activeComp->enabled)
 		{
-			activeComp->setEnabled(_isActive);
+			activeComp->setEnabled(toogle);
 			activeComp->enabled = true; // restoring component's real state
 		}
 	}
@@ -76,21 +76,25 @@ void GameObject::setActive(bool toogle)
 
 void GameObject::removeComponent(Component* comp)
 {
-	vectorRemove(components, comp);
+	vectorRemove<Component>(components, comp);
 	Engine::getInstance().removeComponent(*comp);
 }
 
 void GameObject::destroy()
 {
+	if (destroyState)
+		return;
+
 	destroyState = true;
-	for (int i = 0; i < components.size(); i++)
+
+	for (int i = 1; i < components.size(); i++)
 	{
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components[i]);
 		if (activeComp != NULL)
-			activeComp->destroy();
-		else
-			Engine::getInstance().removeComponent(*components[i]);
+			activeComp->_destroy();
+		Engine::getInstance().removeComponent(*components[i]);
 	}
+	components.erase(components.begin() + 1, components.end());
 
 	Engine::getInstance().removeGameObject(*this);
 }

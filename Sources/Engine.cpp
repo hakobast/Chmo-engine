@@ -12,15 +12,17 @@
 
 #include <iostream>
 
-static bool pred_sortSystems(const System* lhs, const System* rhs)
+bool pred_sortSystems(const System* lhs, const System* rhs)
 { 
 	return lhs->priority < rhs->priority;
 }
 
-static bool pred_initComponents(Component* c)
+bool pred_initComponents(Component* c)
 {
 	if (c->isEnabled())
 	{
+		for (System* s : Engine::getInstance()._systems)
+			s->addComponent(*c);
 		c->Init();
 		return true;
 	}
@@ -45,7 +47,8 @@ void Engine::Update()
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
 		if (activeComp != NULL)
 		{
-			activeComp->OnDisable();
+			if (activeComp->isEnabled())
+				activeComp->OnDisable();
 			activeComp->OnDestroy();
 		}
 
@@ -54,6 +57,11 @@ void Engine::Update()
 
 	for (GameObject* gmObj : _gmObjDestroyList)
 	{
+		for (Component* comp : gmObj->components)
+		{
+			delete comp;
+		}
+
 		delete gmObj;
 	}
 
@@ -80,12 +88,13 @@ void Engine::addComponent(Component &comp, int priority)
 	_compInitList.push_back(&comp);
 
 	for (System* s : _systems)
-		s->addComponent(comp);
+		if (s->isSystemComponent(comp))
+			comp.system = s;
 
+	comp.Create();
 	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(&comp);
 	if (activeComp != NULL && activeComp->isEnabled())
 		activeComp->OnEnable();
-	comp.Create();
 }
 
 void Engine::removeSystem(System &s)

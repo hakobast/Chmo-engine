@@ -60,13 +60,15 @@ inline void Renderer::setSortingLayer(int layer, int order)
 {
 	sortingLayer = layer;
 	layerOrder = order;
-	dynamic_cast<RenderSystem*>(system)->sortComponents();
+	if (isEnabled())
+		dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
 inline void Renderer::setLayerOrder(int order)
 {
 	layerOrder = order;
-	dynamic_cast<RenderSystem*>(system)->sortComponents();
+	if (isEnabled())
+		dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
 inline std::vector<smart_pointer<Material>>const Renderer::getMaterials()

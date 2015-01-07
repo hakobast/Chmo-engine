@@ -18,6 +18,7 @@ protected:
 	void Update();
 	void addComponent(Component &c);
 	void removeComponent(Component &c);
+	bool isSystemComponent(Component &c);
 private:
 	static GameTime* instance;
 	unsigned long long lastTime;

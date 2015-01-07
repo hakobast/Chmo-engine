@@ -30,7 +30,6 @@ public:
 		cout << "GLTestComponent:: Create" << endl;
 	}
 
-
 	GLfloat diffuse[4];// = { 1.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat lightPos[4];// = { 0.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat lightDir[4];
@@ -72,12 +71,16 @@ public:
 			if (rend != NULL)
 			{
 				std::cout << "FOUND " << rend->isEnabled() << " Counter " << !rend->isEnabled() << std::endl;
-				rend->setEnabled(!rend->isEnabled());
-				//rend->destroy();
-				//rend->getGameObject()->destroy();
+				rend->getGameObject()->setActive(false);
 
-				//rend->getGameObject()->addComponent<GLTestComponent>();
-				//getGameObject()->destroy();
+				rend->setEnabled(!rend->isEnabled());
+				rend->destroy();
+				rend->getGameObject()->setActive(true);
+				rend->getGameObject()->destroy();
+
+				rend->getGameObject()->setActive(false);
+				rend->getGameObject()->addComponent<GLTestComponent>();
+				getGameObject()->destroy();
 			}
 			else
 				std::cout << "CAN'T FIND\n";

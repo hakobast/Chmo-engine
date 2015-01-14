@@ -2,8 +2,9 @@
 #define EngineTesting_GameTime_h
 
 #include <map>
+
+#include "GL_LIBS.h"
 #include "System.h"
-#include <GL\glut.h>
 
 class GameTime :public System
 {

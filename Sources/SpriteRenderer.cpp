@@ -60,22 +60,33 @@ void SpriteRenderer::Update()
 void SpriteRenderer::setTextureFrame(int frame)
 {
 	this->frame = frame;
-	w_range = 0.3f;
-	h_range = 0.3f;
-	/*diffuseMaterial->texture_diffuse = txt;
 
-	this->frame = frame;
+	smart_pointer<Texture2D>& txt = getMainTexture();
 
-	//make pixel perfect
-	GLfloat ratio = txt->width / txt->height;
-	if (txt->width <= txt->height)
+	TextureRegion& region = txt->getTextureRegion(frame);
+	float width = (region.u_v[2] - region.u_v[0])*txt->width;
+	float height = (region.u_v[5] - region.u_v[1])*txt->height;
+
+	printf("Width: %0.0f Height: %0.0f\n", width, height);
+	if (!txt.isEmpty())
 	{
-		w_range = meterPerPixel*txt->width;
-		h_range = meterPerPixel*txt->height / ratio;
+		w_range = meterPerPixel*width;
+		h_range = meterPerPixel*height;
+
+		//GLfloat ratio = (GLfloat)width / height;
+		//
+		//if (width <= height)
+		//{
+		//	w_range = meterPerPixel*width*ratio;
+		//	h_range = meterPerPixel*height;
+		//}
+		//else
+		//{
+		//	w_range = meterPerPixel*width;;
+		//	h_range = meterPerPixel*height/ratio;
+		//}
+
+		//std::cout << "RATIO: " << ratio << std::endl;
+		//std::cout << "W: " << w_range << " H: " << h_range << std::endl;
 	}
-	else
-	{
-		w_range = meterPerPixel*txt->width*ratio;
-		h_range = meterPerPixel*txt->height;
-	}*/
 }

@@ -2,8 +2,14 @@
 #include <iostream>
 #include "TextureTiled.h"
 
-TextureTiled::TextureTiled(const char* filename, int rows, int columns, int tilesCount, bool generateMipmaps)
-:Texture2D(filename,generateMipmaps), rows(rows), columns(columns), tiles_count(tilesCount)
+TextureTiled::TextureTiled(const GLvoid*pixels,
+	int width, int height,
+	int rows, int columns, int tilesCount,
+	bool generateMipmaps,
+	GLenum internalFormat,
+	GLenum format,
+	GLenum dataType)
+:Texture2D(pixels, width, height, generateMipmaps,internalFormat,format,dataType), rows(rows), columns(columns), tiles_count(tilesCount)
 {
 	textures = new TextureRegion[tilesCount];
 

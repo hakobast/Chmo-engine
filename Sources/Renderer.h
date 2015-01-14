@@ -10,7 +10,8 @@
 #define OpenGLTesting_Renderer_h
 
 #include <assert.h>
-#include <GL\glut.h>
+
+#include "GL_LIBS.h"
 
 #include "ActiveComponent.h"
 #include "RenderSystem.h"

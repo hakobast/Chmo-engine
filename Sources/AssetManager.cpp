@@ -2,6 +2,7 @@
 #include <math.h>
 #include <sstream>
 #include <queue>
+#include <memory>
 
 #include "MeshRenderer.h"
 #include "AssetManager.h"
@@ -353,7 +354,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_ambient = smart_pointer<Texture2D>(new Texture2D(line));
+			mat->texture_ambient = LoadTexture(line);// smart_pointer<Texture2D>(new Texture2D(line));
 
 			//std::cout << "Ambient Texture: " << line << " Size " << sizeof(line) << std::endl;
 		}
@@ -364,7 +365,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_diffuse = smart_pointer<Texture2D>(new Texture2D(line));
+			mat->texture_diffuse = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
 
 			//std::cout << "Diffuse Texture: " << texture_D << std::endl;
 		}
@@ -375,7 +376,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_specular = smart_pointer<Texture2D>(new Texture2D(line));
+			mat->texture_specular = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
 
 			//std::cout << "Specular Texture: " << texture_S << std::endl;
 		}
@@ -386,7 +387,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_alpha = smart_pointer<Texture2D>(new Texture2D(line));
+			mat->texture_alpha = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
 
 			//std::cout << "Alpha Texture: " << texture_Alpha << std::endl;
 		}
@@ -397,7 +398,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_bump = smart_pointer<Texture2D>(new Texture2D(line));
+			mat->texture_bump = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
 
 			//std::cout << "Bumb Texture: " << texture_Bump << std::endl;
 		}
@@ -444,4 +445,211 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 	}
 
 	return materials;
+}
+
+void LoadTextureData(const char* filename, FIBITMAP* fibitmap, FREE_IMAGE_FORMAT* format)
+{
+	//image format
+	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+	//pointer to the image data
+	BYTE* bits(0);
+	//pointer to the image, once loaded
+	FIBITMAP *dib(0);
+	//image width and height
+	unsigned int width(0), height(0);
+
+	//check the file signature and deduce its format
+	fif = FreeImage_GetFileType(filename, 0);
+	//if still unknown, try to guess the file format from the file extension
+	if (fif == FIF_UNKNOWN)
+		fif = FreeImage_GetFIFFromFilename(filename);
+	//if still unkown, return failure
+	if (fif == FIF_UNKNOWN)
+		return;
+
+	//check that the plugin has reading capabilities and load the file
+	if (FreeImage_FIFSupportsReading(fif))
+		dib = FreeImage_Load(fif, filename);
+	//if the image failed to load, return failure
+	if (!dib)
+		return;
+
+	//retrieve the image data
+	bits = FreeImage_GetBits(dib);
+	//get the image width and height
+	width = FreeImage_GetWidth(dib);
+	height = FreeImage_GetHeight(dib);
+	//if this somehow one of these failed (they shouldn't), return failure
+	if ((bits == 0) || (width == 0) || (height == 0))
+		return;
+
+	*format = fif;
+	fibitmap = dib;
+}
+
+smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
+											int* regions,
+											int textures_count,
+											bool generateMipmaps,
+											bool custom,
+											GLenum internalFormat,
+											GLenum format,
+											GLenum dataType)
+{
+
+	smart_pointer<Texture2D> txt = LoadTexture(filename, generateMipmaps, custom, internalFormat, format, dataType);
+	char* pixels = txt->getPixels();
+
+	smart_pointer<Texture2D> txtAtlas(new TextureAtlas(pixels, txt->width, txt->height, regions, textures_count,
+		txt->generateMipmaps, txt->internalFormat, txt->format, txt->dataType));
+
+	delete pixels;
+	return txtAtlas;
+}
+
+smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
+											int rows,
+											int columns,
+											int tilesCount,
+											bool generateMipmaps,
+											bool custom,
+											GLenum internalFormat,
+											GLenum format,
+											GLenum dataType)
+{
+
+	smart_pointer<Texture2D> txt = LoadTexture(filename, generateMipmaps, custom, internalFormat, format, dataType);
+	char* pixels = txt->getPixels();
+
+	smart_pointer<Texture2D> txtTiled(new TextureTiled(pixels, txt->width, txt->height, rows, columns, tilesCount,
+		txt->generateMipmaps, txt->internalFormat, txt->format, txt->dataType));
+
+	delete pixels;
+	return txtTiled;
+}
+
+smart_pointer<Texture2D> LoadTexture(const char* filename,
+									bool generateMipmaps,
+									bool custom,
+									GLenum internalFormat,
+									GLenum format,
+									GLenum dataType)
+{
+	//image format
+	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+	//pointer to the image, once loaded
+	FIBITMAP *dib(0);
+	//pointer to the image data
+	BYTE* bits(0);
+	//image width and height
+	unsigned int width(0), height(0);
+
+	//check the file signature and deduce its format
+	fif = FreeImage_GetFileType(filename, 0);
+	//if still unknown, try to guess the file format from the file extension
+	if (fif == FIF_UNKNOWN)
+		fif = FreeImage_GetFIFFromFilename(filename);
+	//if still unkown, return failure
+	if (fif == FIF_UNKNOWN)
+		return smart_pointer<Texture2D>::null();
+
+	//check that the plugin has reading capabilities and load the file
+	if (FreeImage_FIFSupportsReading(fif))
+		dib = FreeImage_Load(fif, filename);
+
+	//if the image failed to load, return failure
+	if (!dib)
+		return smart_pointer<Texture2D>::null();
+
+	//retrieve the image data
+	bits = FreeImage_GetBits(dib);
+	//get the image width and height
+	width = FreeImage_GetWidth(dib);
+	height = FreeImage_GetHeight(dib);
+
+	//if this somehow one of these failed (they shouldn't), return failure
+	if ((bits == 0) || (width == 0) || (height == 0))
+		return smart_pointer<Texture2D>::null();
+
+	smart_pointer<Texture2D> texture;
+	if (custom)
+	{
+		texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, internalFormat, format, dataType));
+	}
+	else
+	{
+		switch (fif)
+		{
+		case FIF_UNKNOWN:
+			break;
+		case FIF_BMP:
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			break;
+		case FIF_ICO:
+			break;
+		case FIF_JPEG:
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			break;
+		case FIF_JNG:
+			break;
+		case FIF_KOALA:
+			break;
+		case FIF_LBM:
+			break;
+		case FIF_MNG:
+			break;
+		case FIF_PBM:
+			break;
+		case FIF_PBMRAW:
+			break;
+		case FIF_PCD:
+			break;
+		case FIF_PCX:
+			break;
+		case FIF_PGM:
+			break;
+		case FIF_PGMRAW:
+			break;
+		case FIF_PNG:
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_BGRA_EXT, GL_UNSIGNED_BYTE));
+			break;
+		case FIF_PPM:
+			break;
+		case FIF_PPMRAW:
+			break;
+		case FIF_RAS:
+			break;
+		case FIF_TARGA:
+			break;
+		case FIF_TIFF:
+			break;
+		case FIF_WBMP:
+			break;
+		case FIF_PSD:
+			break;
+		case FIF_CUT:
+			break;
+		case FIF_XBM:
+			break;
+		case FIF_XPM:
+			break;
+		case FIF_DDS:
+			break;
+		case FIF_GIF:
+			break;
+		case FIF_HDR:
+			break;
+		case FIF_FAXG3:
+			break;
+		case FIF_SGI:
+			break;
+		default:
+			break;
+		}
+	}
+
+	//Free FreeImage's copy of the data
+	FreeImage_Unload(dib);
+
+	return texture;
 }

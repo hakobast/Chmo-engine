@@ -8,7 +8,15 @@
 class TextureTiled :public Texture2D
 {
 public:
-	TextureTiled(const char*filename, int rows, int columns, int tilesCount, bool generateMipmaps = false);
+	//TextureTiled(const char*filename, int rows, int columns, int tilesCount, bool generateMipmaps = false);
+	TextureTiled(const GLvoid*pixels,
+		int width, int height,
+		int rows, int columns, int tilesCount,
+		bool generateMipmaps = false,
+		GLenum internalFormat = GL_RGB,
+		GLenum format = GL_BGRA_EXT,
+		GLenum dataType = GL_UNSIGNED_BYTE);
+	
 	~TextureTiled();
 	const int tiles_count;
 private:

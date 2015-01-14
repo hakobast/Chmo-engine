@@ -9,8 +9,9 @@
 #ifndef OpenGLTesting_Vector3_h
 #define OpenGLTesting_Vector3_h
 
+#include "GL_LIBS.h"
+
 #include "Matrix4.h"
-#include <GL\glut.h>
 #include <iostream>
 #include <math.h>
 

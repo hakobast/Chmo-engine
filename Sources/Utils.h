@@ -29,4 +29,6 @@ inline void vectorRemove(std::vector<T*>& vector, bool (*pred)(T*))
 
 unsigned long long timeInMilliseconds();
 
+wchar_t* charToWChar(const char* text);
+
 #endif

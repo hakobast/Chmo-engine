@@ -145,8 +145,8 @@ public:
         {
 			//std::cout << "Copy complete" << std::endl;
 			if (data != NULL && --dynamic_cast<RemovableObject*>(data)->refs == 0)
-                delete data;
-            
+				delete data;
+
             data = other.data;
 			//std::cout << "Added reference to: " << data << std::endl;
 			if (data != NULL)

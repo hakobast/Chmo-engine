@@ -15,10 +15,10 @@ public:
 	float u_v[8];
 };
 
-/*inline float TextureRegion::operator[](int index)const
-{
-	return u_v[index];
-}*/
+//inline float TextureRegion::operator[](int index)const
+//{
+//	return u_v[index];
+//}
 
 inline float* TextureRegion::operator[](int index)
 {

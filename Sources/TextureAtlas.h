@@ -8,7 +8,13 @@
 class TextureAtlas:public Texture2D
 {
 public:
-	TextureAtlas(const char*filename, int regions[], int textures_count, bool generateMipmaps = false);
+	TextureAtlas(const GLvoid*pixels,
+		int width, int height,
+		int* regions, int textures_count,
+		bool generateMipmaps = false,
+		GLenum internalFormat = GL_RGB,
+		GLenum format = GL_BGRA_EXT,
+		GLenum dataType = GL_UNSIGNED_BYTE);
 	~TextureAtlas();
 	const int txt_count;
 };

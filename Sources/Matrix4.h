@@ -9,7 +9,7 @@
 #ifndef OpenGLTesting_Matrix4_h
 #define OpenGLTesting_Matrix4_h
 
-#include <GL\glut.h>
+#include "GL_LIBS.h"
 #include <iostream>
 #include <math.h>
 

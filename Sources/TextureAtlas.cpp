@@ -11,8 +11,15 @@ u3,v3,
 u4,v4
 Un,Vn
 */
-TextureAtlas::TextureAtlas(const char*filename, int regions[], int textures_count, bool generateMipmaps)
-:Texture2D(filename,generateMipmaps), txt_count(textures_count)
+
+TextureAtlas::TextureAtlas(const GLvoid*pixels,
+	int width, int height,
+	int* regions, int textures_count,
+	bool generateMipmaps,
+	GLenum internalFormat,
+	GLenum format,
+	GLenum dataType)
+:Texture2D(pixels, width, height, generateMipmaps, internalFormat, format, dataType), txt_count(textures_count)
 {
 	textures = new TextureRegion[textures_count];
 

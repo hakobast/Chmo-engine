@@ -1,9 +1,4 @@
 
-#ifdef _WIN32
-#include <GL\glut.h>
-#else
-#include <GLUT/GLUT.h>
-#endif
 
 #include <chrono>
 
@@ -11,6 +6,8 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <memory>
+
+#include "GL_LIBS.h"
 
 #include "Engine.h"
 #include "Input.h"
@@ -34,7 +31,7 @@
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 
-#define TARGET_FPS 10
+#define TARGET_FPS 160
 
 void Render(void)
 {
@@ -75,80 +72,30 @@ void TimerFunc(int value)
 	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 }
 
-class BaseClass;
-
-class Data
+class Data : public RemovableObject
 {
 public:
-	BaseClass* object;
-};
+	int a = 5;
 
-class ChildData :public Data
-{
-
-};
-
-class BaseClass
-{
-public:
-	BaseClass()
+	~Data()
 	{
-		std::cout << "BaseClass Created " << std::endl;
-	}
-
-	virtual void pure() = 0;
-
-	virtual void addComponent(Data& obj)
-	{
-		obj.object = this;
-	}
-
-	virtual void print()
-	{
-		std::cout << "PARENT PRINTED " << std::endl;
-	}
-};
-
-class ChildClass:public BaseClass
-{
-public:
-	ChildClass()
-	{
-		std::cout << "ChildClass Created " << std::endl;
-	}
-
-	void pure()
-	{
-
-	}
-
-	void addComponent(Data& obj)
-	{
-		std::cout << "OVERRRIDE " << std::endl;
-		BaseClass::addComponent(obj);
+		std::cout << "DATA deleted " << a << std::endl;
 	}
 
 	void print()
 	{
-		std::cout << "CHILD PRINTED " << std::endl;
-	}
-
-	int result;
-	int getResult()
-	{
-		return result;
+		std::cout << "A= " << a << std::endl;
 	}
 };
 
-void createMyClass()
+
+smart_pointer<Data> createMyClass()
 {
-	ChildData myObj;
+	Data* myObj = new Data;
 
-	ChildClass cl;
-	cl.addComponent(myObj);
+	smart_pointer<Data> ptr1(myObj);
 
-	dynamic_cast<ChildClass*>(myObj.object)->print();
-
+	smart_pointer<Data> ptr2(myObj);
 
 	/*MyClass* cl = new MyClass(10);
 
@@ -163,6 +110,9 @@ void createMyClass()
 
 	//a = &d;
 	//b = &c;
+
+	ptr1->print();
+	return ptr1;
 }
 
 //#define RUN_LANG_TEST
@@ -171,7 +121,9 @@ void createMyClass()
 int main(int argc, char **argv)
 {
 #ifdef RUN_LANG_TEST
-	createMyClass();
+	smart_pointer<Data> ptr1 = createMyClass();
+	ptr1->print();
+	
 #endif
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #ifdef RUN_ENGINE_TEST
@@ -185,6 +137,10 @@ int main(int argc, char **argv)
 	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 	SetupRendering();
 	
+	//TODO move it to asset loader function
+#ifdef FREEIMAGE_LIB
+	FreeImage_Initialise();
+#endif
 	//creating engine
 	Engine::getInstance().Init();
 
@@ -204,21 +160,23 @@ int main(int argc, char **argv)
 	fpsObj->addComponent<FPSCounter>();
 	fpsObj->addComponent<GLTestComponent>();
 
-	smart_pointer<Texture2D> texture(new TextureTiled("vtr.bmp", 2, 2, 4));
+	int regions[4] = { 0, 0, 128, 128 };
+	smart_pointer<Texture2D> texture = LoadTextureTiled("bin/alizee_tga_final.jpg",3,4,7);
+	
 	smart_pointer<Material> spriteMat(new Material("my mat"));
 	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
 
 	srand(time(0));
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 		obj->addComponent<SpriteRenderer>()->setMainMaterial(spriteMat);
 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
-		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 1);
+		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
 		obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
-		obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 1);
-		obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
-		//obj->getTransform()->Location.set(0.0f,0.0f, -2.0f);
+		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
+		obj->getTransform()->Location.set(0.0f,0.0f, -2.0f);
+		//obj->getTransform()->ScaleLocal.set(3.0f, 3.0f, 1.0f);
 	}
 
 	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";
@@ -255,6 +213,10 @@ int main(int argc, char **argv)
 	}*/
 
 	glutMainLoop();
+
+#ifdef FREEIMAGE_LIB
+	FreeImage_DeInitialise();
+#endif
 
 #endif
 	return 0;

@@ -1,7 +1,7 @@
 #ifndef EngineTesting_Material_h
 #define EngineTesting_Material_h
 
-#include <GL\glut.h>
+#include "GL_LIBS.h"
 #include "Color.h"
 #include "Texture2D.h"
 #include "smart_pointer.h"

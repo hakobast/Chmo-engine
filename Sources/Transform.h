@@ -9,7 +9,8 @@
 #ifndef OpenGLTesting_GameTransform_h
 #define OpenGLTesting_GameTransform_h
 
-#include <GL\glut.h>
+#include "GL_LIBS.h"
+
 #include "Vectors.h"
 #include "Matrix4.h"
 #include "Component.h"

@@ -19,7 +19,7 @@ public:
 
 	void bind()
 	{
-		glEnable(GL_TEXTURE_2D);
+		//glEnable(GL_TEXTURE_2D);
 
 		if (!texture_ambient.isEmpty())
 			texture_ambient->bindTexture();
@@ -35,10 +35,10 @@ public:
 	void unbind()
 	{
 		//TODO check for solution
-		/*if (!texture_ambient.isEmpty())
-			texture_ambient->unbindTexture();*/
+		if (!texture_ambient.isEmpty())
+			texture_ambient->unbindTexture();
 
-		glDisable(GL_TEXTURE_2D);
+		//glDisable(GL_TEXTURE_2D);
 	}
 
 	std::string name;

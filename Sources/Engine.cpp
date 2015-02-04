@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 Haksist. All rights reserved.
 //
 
+#include <iostream>
+#include "GL_LIBS.h"
+
 #include "Engine.h"
 #include "ActiveComponent.h"
 #include "Utils.h"
 
-#include <iostream>
 
 bool pred_sortSystems(const System* lhs, const System* rhs)
 { 
@@ -30,8 +32,21 @@ bool pred_initComponents(Component* c)
 	return false;
 }
 
+Engine::~Engine()
+{
+#ifdef FREEIMAGE_LIB
+	FreeImage_DeInitialise();
+#endif
+}
+
 void Engine::Init()
 {
+	glewInit();
+
+#ifdef FREEIMAGE_LIB
+	FreeImage_Initialise();
+#endif
+
 	std::cout << "Engine::Init()" << std::endl;
 }
 

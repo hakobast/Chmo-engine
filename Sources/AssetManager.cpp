@@ -39,6 +39,8 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 		for (int j = 0; j < meshes[i]->getSubMeshCount() && matQueue.size() > 0; j++)
 		{
 			meshRenderer->addMaterial(matQueue.front());
+			std::cout << "Material ambient" << matQueue.front()->color_ambient << std::endl;
+			std::cout << "Material diffuse" << matQueue.front()->color_diffuse << std::endl;
 			matQueue.pop();
 		}
 

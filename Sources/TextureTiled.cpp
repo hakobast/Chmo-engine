@@ -11,6 +11,7 @@ TextureTiled::TextureTiled(const GLvoid*pixels,
 	GLenum dataType)
 :Texture2D(pixels, width, height, generateMipmaps,internalFormat,format,dataType), rows(rows), columns(columns), tiles_count(tilesCount)
 {
+	frameCount = tilesCount;
 	textures = new TextureRegion[tilesCount];
 
 	float tile_w = (float)width / columns;

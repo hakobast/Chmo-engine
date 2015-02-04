@@ -150,7 +150,7 @@ inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
 {
 	if (materials.size() == 0)
 	{
-		smart_pointer<Material> mat(new Material("diffuse"));
+		smart_pointer<Material> mat(new Material("diffuse")); //TODO get shared diffuse material
 		materials.push_back(mat);
 	}
 	materials[0]->texture_ambient = texture;

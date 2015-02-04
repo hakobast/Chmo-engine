@@ -26,9 +26,9 @@ void GameLogicSystem::Update()
 {
 	//std::cout << "GameLogicSystem:: Update()" << std::endl;
 
-	for (int i = 0; i < components.size(); i++)
+	for (GameLogic* logic : components)
 	{
-		components[i]->Update();
+		logic->Update();
 	}
 }
 
@@ -50,7 +50,6 @@ void GameLogicSystem::removeComponent(Component &c)
 		GameLogic* gm = dynamic_cast<GameLogic*>(&c);
 		vectorRemove<GameLogic>(components, gm);
 	}
-
 }
 
 bool GameLogicSystem::isSystemComponent(Component &c)

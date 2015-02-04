@@ -1,5 +1,6 @@
 
-#include <GL\glut.h>
+#include "GL_LIBS.h"
+
 #include <iostream>
 #include "Input.h"
 
@@ -9,7 +10,7 @@ using namespace std;
 Input* Input::instance = NULL;
 //end
 
-//Friend functions
+/////////////Friend functions
 void OnKeyDown(unsigned char key, int x, int y)
 {
 	//std::cout << "InputSystem:: Keydown: " << (int)key << std::endl;
@@ -52,10 +53,12 @@ void MousePassiveMotionFunc(int x, int y)
 	Input::instance->_mousePosition.set(x, y);
 }
 
-//friends
+////////////////////////friends
 
 Input::Input()
 {
+	instance = this;
+
 	glutKeyboardFunc(OnKeyDown);
 	glutKeyboardUpFunc(OnKeyUp);
 	glutSpecialFunc(OnSpecialKeyDown);
@@ -69,8 +72,6 @@ Input::Input()
 
 	for (int i = 0; i < 3; i++)
 		_mouseButtons[i] = 0;
-
-	instance = this;
 }
 
 Input::~Input()

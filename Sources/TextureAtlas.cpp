@@ -19,8 +19,9 @@ TextureAtlas::TextureAtlas(const GLvoid*pixels,
 	GLenum internalFormat,
 	GLenum format,
 	GLenum dataType)
-:Texture2D(pixels, width, height, generateMipmaps, internalFormat, format, dataType), txt_count(textures_count)
+	:Texture2D(pixels, width, height, generateMipmaps, internalFormat, format, dataType), txt_count(textures_count)
 {
+	frameCount = textures_count;
 	textures = new TextureRegion[textures_count];
 
 	float x1 = 0.0f, x2 = 0.0f,y1 = 0.0f,y2 = 0.0f;

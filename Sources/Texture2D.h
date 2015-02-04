@@ -16,6 +16,7 @@ private:
 protected:
 	TextureRegion* textures;
 	GLuint texture_id;
+	int frameCount = 1;
 public:
 	const int width;
 	const int height;
@@ -54,8 +55,10 @@ public:
 //	Texture2D(const char*filename, bool generateMipmaps = false);
 
 	virtual ~Texture2D();
+	int getFrameCount();
 	void setPixels(const GLvoid * pixels);
 	char* getPixels();
+	char* getPixels(GLint x, GLint y, GLint _width, GLint _height);
 	void bindTexture();
 	void unbindTexture();
 	TextureRegion&const getTextureRegion(int index = 0);
@@ -78,6 +81,11 @@ inline void Texture2D::bindTexture()
 inline void Texture2D::unbindTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline int Texture2D::getFrameCount()
+{
+	return frameCount;
 }
 
 inline TextureRegion&const Texture2D::getTextureRegion(int index)

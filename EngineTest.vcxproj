@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Sources\ActiveComponent.h" />
     <ClInclude Include="Sources\AssetManager.h" />
+    <ClInclude Include="Sources\Camera.h" />
     <ClInclude Include="Sources\Color.h" />
     <ClInclude Include="Sources\Component.h" />
     <ClInclude Include="Sources\Engine.h" />
@@ -30,10 +31,14 @@
     <ClInclude Include="Sources\MeshRenderer.h" />
     <ClInclude Include="Sources\Renderer.h" />
     <ClInclude Include="Sources\RenderSystem.h" />
+    <ClInclude Include="Sources\ScreenSystem.h" />
     <ClInclude Include="Sources\smart_pointer.h" />
     <ClInclude Include="Sources\SpriteRenderer.h" />
     <ClInclude Include="Sources\System.h" />
+    <ClInclude Include="Sources\Terrain.h" />
     <ClInclude Include="Sources\Texture2D.h" />
+    <ClInclude Include="Sources\TextureAnimationClip.h" />
+    <ClInclude Include="Sources\TextureAnimator.h" />
     <ClInclude Include="Sources\TextureAtlas.h" />
     <ClInclude Include="Sources\TextureRegion.h" />
     <ClInclude Include="Sources\TextureTiled.h" />
@@ -43,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\AssetManager.cpp" />
+    <ClCompile Include="Sources\Camera.cpp" />
     <ClCompile Include="Sources\Engine.cpp" />
     <ClCompile Include="Sources\FPSCounter.cpp" />
     <ClCompile Include="Sources\GameLogicSystem.cpp" />
@@ -56,10 +62,14 @@
     <ClCompile Include="Sources\Mesh.cpp" />
     <ClCompile Include="Sources\MeshRenderer.cpp" />
     <ClCompile Include="Sources\RenderSystem.cpp" />
+    <ClCompile Include="Sources\ScreenSystem.cpp" />
     <ClCompile Include="Sources\SecondComponent.cpp" />
     <ClCompile Include="Sources\SpriteRenderer.cpp" />
+    <ClCompile Include="Sources\Terrain.cpp" />
     <ClCompile Include="Sources\TestComponent.cpp" />
     <ClCompile Include="Sources\Texture2D.cpp" />
+    <ClCompile Include="Sources\TextureAnimationClip.cpp" />
+    <ClCompile Include="Sources\TextureAnimator.cpp" />
     <ClCompile Include="Sources\TextureAtlas.cpp" />
     <ClCompile Include="Sources\TextureTiled.cpp" />
     <ClCompile Include="Sources\Transform.cpp" />
@@ -111,13 +121,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;C:\Users\user\Documents\ECSGameEngine\Dependencies\DevIL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

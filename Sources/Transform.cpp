@@ -19,15 +19,26 @@ Transform::~Transform()
 
 Matrix4 Transform::getMatrix(bool calcScale)
 {
+	Vector3 _Right = Right();
+	matrix[0] = _Right[0];
+	matrix[1] = _Right[1];
+	matrix[2] = _Right[2];
 	matrix[3] = 0.0f;
-	matrix[7] = 0.0f;
-	matrix[11] = 0.0f;
-	matrix[15] = 1.0f;
 
-	memcpy(&matrix[0], &Right()[0], sizeof(GLfloat)* 3);
-	memcpy(&matrix[4], &_Up[0], sizeof(GLfloat)* 3);
-	memcpy(&matrix[8], &_Forward[0], sizeof(GLfloat)* 3);
-	memcpy(&matrix[12], &Location[0], sizeof(GLfloat)* 3);
+	matrix[4] = _Up[0];
+	matrix[5] = _Up[1];
+	matrix[6] = _Up[2];
+	matrix[7] = 0.0f;
+
+	matrix[8] = _Forward[0];
+	matrix[9] = _Forward[1];
+	matrix[10] = _Forward[2];
+	matrix[11] = 0.0f;
+
+	matrix[12] = Location[0];
+	matrix[13] = Location[1];
+	matrix[14] = Location[2];
+	matrix[15] = 1.0f;
 
 	if (calcScale)
 	{

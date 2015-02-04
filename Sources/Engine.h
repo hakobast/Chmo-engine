@@ -21,6 +21,7 @@ class Engine
 {
 friend class GameObject;
 public:
+	~Engine();
     void Init();
     void Update();
     void addSystem(System &s, int priority);

@@ -34,6 +34,8 @@ void RenderSystem::Init()
 	std::cout << "RenderSystem:: Init()" << std::endl;
 }
 
+#include "Camera.h"
+
 void RenderSystem::Update()
 {
 	//std::cout << "RenderSystem:: Update() " << std::endl;
@@ -41,27 +43,30 @@ void RenderSystem::Update()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	//******************TEMP************************
+	Camera* cam = GameObject::FindComponent<Camera>();
+	glPushMatrix();
+	cam->ApplyTransformation();
+
 	Renderer* r = NULL;
 	for (int i = 0; i < components.size(); i++)
 	{
-		//if (components[i]->isEnabled())
+		if (r != NULL)
 		{
-			//TODO improve this solution
-			if (r != NULL)
+			if (r->getSortingLayer() != components[i]->getSortingLayer() ||
+				r->getLayerOrder() != components[i]->getLayerOrder())
 			{
-				if (r->getSortingLayer() != components[i]->getSortingLayer() ||
-					r->getLayerOrder() != components[i]->getLayerOrder())
-				{
-					glClear(GL_DEPTH_BUFFER_BIT);
-				}
+				glClear(GL_DEPTH_BUFFER_BIT);
 			}
-			
-			glPushMatrix();
-			components[i]->Update();
-			glPopMatrix();
-			r = components[i];
 		}
+			
+		glPushMatrix();
+		components[i]->Update();
+		glPopMatrix();
+		r = components[i];
 	}
+
+	glPopMatrix();
 	glDisable(GL_BLEND);
 }
 

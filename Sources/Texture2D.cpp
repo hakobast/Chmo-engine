@@ -30,7 +30,17 @@ Texture2D::Texture2D(int width, int height,
 		texture_mag_filter = GL_LINEAR;
 	}
 
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_min_filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture2D::Texture2D(const GLvoid* pixels,
@@ -133,7 +143,8 @@ void Texture2D::setPixels(const GLvoid* pixels)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-char* Texture2D::getPixels()
+//TODO implement reading by offset
+char* Texture2D::getPixels(GLint x, GLint y, GLint _width, GLint _height)
 {
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
@@ -157,7 +168,13 @@ char* Texture2D::getPixels()
 
 	char* pixels = new char[width*height*color_componens];
 	glGetTexImage(GL_TEXTURE_2D, 0, format, dataType, pixels);
-	glBindTexture(GL_TEXTURE_2D,0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return pixels;
+}
+
+char* Texture2D::getPixels()
+{
+	return getPixels(0, 0, width, height);
 }

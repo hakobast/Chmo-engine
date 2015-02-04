@@ -165,6 +165,12 @@ public:
 	{
 		return data != other.data;
 	}
+
+	inline void free()
+	{
+		if (data != NULL && --dynamic_cast<RemovableObject*>(data)->refs == 0)
+			delete data;
+	}
 };
 template<class T>
 smart_pointer<T>& smart_pointer<T>::null();

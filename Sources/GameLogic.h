@@ -32,5 +32,4 @@ inline void GameLogic::sendAction(std::string action, void*const data)
 	getGameObject()->sendAction(action, data);
 }
 
-
 #endif

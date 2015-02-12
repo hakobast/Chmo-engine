@@ -4,9 +4,12 @@
 #include "Camera.h"
 #include "ScreenSystem.h"
 
+Camera* Camera::main = NULL;
+
 void Camera::Create()
 {
-
+	if (main == NULL)
+		main = this;
 }
 
 void Camera::Init()
@@ -62,26 +65,26 @@ void Camera::ApplyCameraChanges()
 	int width = ScreenSystem::getWidth();
 	int height = ScreenSystem::getHeight();
 
+	if (height == 0)
+		height = 1;
+
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	if (height == 0)
-		height = 1;
 	GLfloat ratio = (GLfloat)width / (GLfloat)height;
 
 	if (projectionMode_ == Orthographic)
 	{
-		GLfloat range = 10.0f;
-		if (width < height)
-			glOrtho(-range, range, -range / ratio, range / ratio, -range, range);
+		if (width <= height)
+			glOrtho(-orthoSize_, orthoSize_, -orthoSize_ / ratio, orthoSize_ / ratio, zNear_, zFar_);
 		else
-			glOrtho(-range*ratio, range*ratio, -range, range, -range, range);
+			glOrtho(-orthoSize_*ratio, orthoSize_*ratio, -orthoSize_, orthoSize_, zNear_, zFar_);
 	}
 	else
 	{
-		gluPerspective(fovy_, ratio, 1.0f, 1000.0f);
+		gluPerspective(fovy_, ratio, zNear_, zFar_);
 	}
 
 	glMatrixMode(GL_MODELVIEW);

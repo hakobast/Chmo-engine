@@ -44,9 +44,8 @@ void RenderSystem::Update()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//******************TEMP************************
-	Camera* cam = GameObject::FindComponent<Camera>();
 	glPushMatrix();
-	cam->ApplyTransformation();
+	Camera::main->ApplyTransformation();
 
 	Renderer* r = NULL;
 	for (int i = 0; i < components.size(); i++)

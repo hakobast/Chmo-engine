@@ -96,7 +96,7 @@ public:
 			//std::cout << "REFS COUNT " << dynamic_cast<RemovableObject*>(data)->refs << std::endl;
 			if(--(dynamic_cast<RemovableObject*>(data)->refs) == 0)
             {
-                delete data;
+				delete data;
             }
 			//std::cout << "Pointer to : " << data << " removed, " << dynamic_cast<RemovableObject*>(data)->refs << " left" << std::endl;
         }

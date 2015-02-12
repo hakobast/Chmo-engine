@@ -56,12 +56,25 @@ public:
 				std::cout << "CAN'T FIND\n";
 		}
 
+		//glMaterialfv(GL_FRONT, GL_DIFFUSE, new float[4]{ 1.0f, 0.0f, 0.0f, 1.0f });
+		//glBegin(GL_LINES);
+		//{
+		//	float z = -5.0f;
+
+		//	glVertex3f(0.0f, 1.0f, z);
+		//	glVertex3f(0.0f, -1.0f, z);
+
+		//	glVertex3f(-1.0f, 0.0f, z);
+		//	glVertex3f(1.0f, 0.0f, z);
+		//}
+		//glEnd();
+
 		if (Input::GetKeyDown(27))
 			exit(0);
 
 		float speed = 50.0f;
 		float rotationSpeed = 200;
-		if (Input::GetKeyDown(KeyCode::a))
+	/*	if (Input::GetKeyDown(KeyCode::a))
 			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(KeyCode::d))
 			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
@@ -82,7 +95,7 @@ public:
 		if (Input::GetKeyDown(KeyCode::m))
 		{
 			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
-		}
+		}*/
     }
 
 	void OnAction(string action, void*const data)

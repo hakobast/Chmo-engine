@@ -41,7 +41,8 @@ Engine::~Engine()
 
 void Engine::Init()
 {
-	glewInit();
+	if (glewInit() == GLEW_OK)
+		printf("GLEW Inited!\n");
 
 #ifdef FREEIMAGE_LIB
 	FreeImage_Initialise();

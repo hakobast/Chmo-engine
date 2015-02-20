@@ -3,6 +3,7 @@
 
 #include "Input.h"
 #include "GameTime.h"
+#include "SpriteRenderer.h"
 
 void Ship::Init()
 {

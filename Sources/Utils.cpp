@@ -15,3 +15,33 @@ wchar_t* charToWChar(const char* text)
 	mbstowcs(wa, text, size);
 	return wa;
 }
+
+char* loadFile(const char* filename)
+{
+	if (filename == NULL)
+		return NULL;
+
+	FILE* file = fopen(filename, "r");
+	if (file == NULL)
+		return NULL;
+
+	unsigned int sLength = 0;
+	char* text = NULL;
+
+	while (fgetc(file) != EOF)
+	{
+		sLength++;
+	}
+	text = (char *)malloc(sLength + 1);
+
+	rewind(file);
+	if (text != NULL)
+	{
+		fread(text, 1, sLength, file);
+	}
+
+	text[sLength] = '\0';
+	fclose(file);
+
+	return text;
+}

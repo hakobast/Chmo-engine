@@ -31,4 +31,6 @@ unsigned long long timeInMilliseconds();
 
 wchar_t* charToWChar(const char* text);
 
+char* loadFile(const char* filename);
+
 #endif

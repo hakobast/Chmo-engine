@@ -186,45 +186,45 @@ int main(int argc, char **argv)
 	fpsObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
 
 	Camera* camera = fpsObj->addComponent<Camera>();
-	camera->setProjectionMode(ProjectionMode::Orthographic);
-	camera->setOrthoSize(10.0f);
+	camera->setProjectionMode(ProjectionMode::Perspective);
+	camera->setOrthoSize(5.0f);
 	camera->setFOVY(60.0f);
 
-	smart_pointer<Texture2D> shipTexture = LoadTexture("bin/shipgame/ship.png");
+	//smart_pointer<Texture2D> shipTexture = LoadTexture("bin/shipgame/ship.png");
 
-	GameObject* ship = new GameObject("ship");
-	ship->addComponent<Ship>();
-	ship->addComponent<SpriteRenderer>()->setMainTexture(shipTexture);
+	//GameObject* ship = new GameObject("ship");
+	//ship->addComponent<SpriteRenderer>()->setMainTexture(shipTexture);
+	//ship->addComponent<Ship>();
 
-	//int regions[4] = { 0, 0, 128, 128 };
+	int regions[4] = { 0, 0, 128, 128 };
 	//smart_pointer<Texture2D> texture = LoadTextureTiled("bin/alizee_tga_final.jpg", 3, 4, 12);
-	//smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
-	//smart_pointer<Texture2D> grassTexture = LoadTexture("bin/selectblend.png");
+	smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
+	smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
 
 	//smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
 
-	//smart_pointer<Material> spriteMat(new Material("my mat"));
-	//spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
+	smart_pointer<Material> spriteMat(new Material("my mat"));
+	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
 
-	//srand(time(0));
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	GameObject* obj = new GameObject("FirstGameObject");
-	//	//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
-	//	//obj->getComponent<Terrain>()->build(texture, 20.0f);
-	//	//obj->addComponent<TextureAnimator>()->addClip(clip);
-	//	//obj->getComponent<TextureAnimator>()->playClip(0);
-	//	obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
-	//	obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
-	//	//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
-	//	//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
-	//	//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
+	srand(time(0));
+	for (int i = 0; i < 1; i++)
+	{
+		GameObject* obj = new GameObject("FirstGameObject");
+		obj->addComponent<Terrain>()->setMainTexture(grassTexture);
+		obj->getComponent<Terrain>()->build(texture, 20.0f);
+		//obj->addComponent<TextureAnimator>()->addClip(clip);
+		//obj->getComponent<TextureAnimator>()->playClip(0);
+		//obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
+		//obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
+		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
+		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
+		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
 
-	//	float scale = 20;
-	//	obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
-	////	obj->getTransform()->RotateX(90);
-	////	obj->getTransform()->ScaleLocal *= scale;
-	//}
+		float scale = 2;
+		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
+		//obj->getTransform()->RotateX(90);
+		obj->getTransform()->ScaleLocal *= scale;
+	}
 
 	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";
 	//char* mat_path = "C:/Users/user/Desktop/untitled2.mtl";
@@ -237,14 +237,14 @@ int main(int argc, char **argv)
 
 	//for (GameObject* obj : objects)
 	//{
-	//	obj->getTransform()->Location.set(0.0f, 0.0f, -5.0f);
+	//	obj->getTransform()->Location.set(0.0f, 0.0f, 5.0f);
 	//	obj->getTransform()->RotateX(25);
 	//	obj->getTransform()->RotateY(25.0f);
 	//	obj->getTransform()->RotateZ(75.0f);
 	//}
 
 	/*std::vector<smart_pointer<Material>> mats = objects[0]->getComponent<MeshRenderer>()->getMaterials();
-
+hakopik
 	for (int i = 0; i < 1000; i++)
 	{
 		GameObject* obj = new GameObject("APEE");

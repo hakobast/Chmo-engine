@@ -1,4 +1,6 @@
 #include "MeshRenderer.h"
+#include "Input.h"
+#include "GameTime.h"
 
 MeshRenderer::~MeshRenderer()
 {
@@ -18,6 +20,24 @@ void MeshRenderer::Init()
 
 void  MeshRenderer::Update()
 {
+	GLfloat rotation = 180.0f;
+
+	if (Input::GetKeyDown(KeyCode::w))
+		getTransform()->RotateY(rotation*GameTime::DeltaTime());
+
+	if (Input::GetKeyDown(KeyCode::s))
+		getTransform()->RotateY(-rotation*GameTime::DeltaTime());
+
+	if (Input::GetKeyDown(KeyCode::a))
+	{
+		getTransform()->RotateX(rotation*GameTime::DeltaTime());
+	}
+
+	if (Input::GetKeyDown(KeyCode::d))
+	{
+		getTransform()->RotateX(-rotation*GameTime::DeltaTime());
+	}
+
 	getTransform()->applyTransformation();
 
 	if (mesh.isEmpty())
@@ -32,7 +52,7 @@ void  MeshRenderer::Update()
 		//TEMP
 		if (vertices.size() == 0 || i >= materials.size())
 			continue;
-		
+
 		//TODO use VBO to render models
 		//TODO fix this sheet
 		smart_pointer<Material>& material = getMaterial(i);

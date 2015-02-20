@@ -32,6 +32,7 @@
     <ClInclude Include="Sources\Renderer.h" />
     <ClInclude Include="Sources\RenderSystem.h" />
     <ClInclude Include="Sources\ScreenSystem.h" />
+    <ClInclude Include="Sources\ShaderProgram.h" />
     <ClInclude Include="Sources\Ship.h" />
     <ClInclude Include="Sources\smart_pointer.h" />
     <ClInclude Include="Sources\SpriteRenderer.h" />
@@ -65,6 +66,7 @@
     <ClCompile Include="Sources\RenderSystem.cpp" />
     <ClCompile Include="Sources\ScreenSystem.cpp" />
     <ClCompile Include="Sources\SecondComponent.cpp" />
+    <ClCompile Include="Sources\ShaderProgram.cpp" />
     <ClCompile Include="Sources\Ship.cpp" />
     <ClCompile Include="Sources\SpriteRenderer.cpp" />
     <ClCompile Include="Sources\Terrain.cpp" />

@@ -74,7 +74,7 @@ public:
 
 		float speed = 50.0f;
 		float rotationSpeed = 200;
-	/*	if (Input::GetKeyDown(KeyCode::a))
+		if (Input::GetKeyDown(KeyCode::a))
 			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(KeyCode::d))
 			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
@@ -90,12 +90,12 @@ public:
 
 		if (Input::GetKeyDown(KeyCode::n))
 		{
-			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
+			getTransform()->RotateX(rotationSpeed*GameTime::DeltaTime());
 		}
 		if (Input::GetKeyDown(KeyCode::m))
 		{
-			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
-		}*/
+			getTransform()->RotateX(-rotationSpeed*GameTime::DeltaTime());
+		}
     }
 
 	void OnAction(string action, void*const data)

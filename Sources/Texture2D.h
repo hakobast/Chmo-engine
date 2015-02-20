@@ -13,6 +13,13 @@ class Texture2D:public RemovableObject
 {
 private:
 	bool pixelsSet = false;
+	GLenum texture_min_filter;
+	GLenum texture_mag_filter;
+	GLenum texture_wrap_s = GL_REPEAT;
+	GLenum texture_wrap_t = GL_REPEAT;
+	GLenum texture_enviroment = GL_MODULATE;
+	GLfloat anisotroplevel = 1.0f;
+
 protected:
 	TextureRegion* textures;
 	GLuint texture_id;
@@ -24,11 +31,6 @@ public:
 	const GLenum internalFormat;
 	const GLenum format;
 	const GLenum dataType;
-
-	GLenum texture_min_filter;
-	GLenum texture_mag_filter;
-	GLenum texture_wrap_s = GL_REPEAT;
-	GLenum texture_wrap_t = GL_REPEAT;
 
 	//TODO add image format parameter
 	Texture2D(int width, int height, 
@@ -61,21 +63,75 @@ public:
 	char* getPixels(GLint x, GLint y, GLint _width, GLint _height);
 	void bindTexture();
 	void unbindTexture();
+	void setFilterMode(GLenum minFilter, GLenum magFilter);
+	void setWrapmode(GLenum wrap_s, GLenum wrap_t);
+	void setTextureEnviroment(GLenum enviroment);
+	void setAnisoFiltering(bool enabled);
+
 	TextureRegion&const getTextureRegion(int index = 0);
 	TextureRegion&const operator [](int index);
 };
 
-inline void Texture2D::bindTexture()
+inline void Texture2D::setFilterMode(GLenum minFilter, GLenum magFilter)
 {
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,texture_min_filter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
-
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	texture_min_filter = minFilter;
+	texture_mag_filter = magFilter;
 
 	glBindTexture(GL_TEXTURE_2D, texture_id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_min_filter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline void Texture2D::setWrapmode(GLenum wrap_s, GLenum wrap_t)
+{
+	texture_wrap_s = wrap_s;
+	texture_wrap_t = wrap_t;
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline void Texture2D::setTextureEnviroment(GLenum enviroment)
+{
+	texture_enviroment = enviroment;
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texture_enviroment);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline void Texture2D::setAnisoFiltering(bool enable)
+{
+	if (glewGetExtension("GL_EXT_texture_filter_anisotropic"))
+	{
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+		if (enable)
+		{
+			GLfloat max;
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max);
+		}
+		else
+		{
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+		}
+	}
+}
+
+inline void Texture2D::bindTexture()
+{
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,texture_min_filter);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
+
+	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 inline void Texture2D::unbindTexture()
@@ -104,8 +160,6 @@ inline TextureRegion&const Texture2D::getTextureRegion(int index)
 
 		textures->u_v[6] = 0.0f;
 		textures->u_v[7] = 1.0f;
-
-		
 	}
 
 	return textures[index];

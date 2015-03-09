@@ -75,16 +75,16 @@ void Camera::ApplyCameraChanges()
 
 	GLfloat ratio = (GLfloat)width / (GLfloat)height;
 
-	if (projectionMode_ == Orthographic)
+	if (projectionMode_ == ORTHOGRAPHIC)
 	{
 		if (width <= height)
-			glOrtho(-orthoSize_, orthoSize_, -orthoSize_ / ratio, orthoSize_ / ratio, zNear_, zFar_);
+			glOrtho(-_orthoSize, _orthoSize, -_orthoSize / ratio, _orthoSize / ratio, _zNear, _zFar);
 		else
-			glOrtho(-orthoSize_*ratio, orthoSize_*ratio, -orthoSize_, orthoSize_, zNear_, zFar_);
+			glOrtho(-_orthoSize*ratio, _orthoSize*ratio, -_orthoSize, _orthoSize, _zNear, _zFar);
 	}
 	else
 	{
-		gluPerspective(fovy_, ratio, zNear_, zFar_);
+		gluPerspective(_fovy, ratio, _zNear, _zFar);
 	}
 
 	glMatrixMode(GL_MODELVIEW);

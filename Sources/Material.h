@@ -9,12 +9,29 @@
 class Material :public RemovableObject
 {
 public:
+	std::string name;
+
+	smart_pointer<Texture2D> texture_ambient;
+	smart_pointer<Texture2D> texture_diffuse;
+	smart_pointer<Texture2D> texture_specular;
+	smart_pointer<Texture2D> texture_alpha;
+	smart_pointer<Texture2D> texture_bump;
+
+	Color color_ambient;
+	Color color_diffuse;
+	Color color_specular;
+	Color color_emmission;
+
+	GLint illum = 1;
+	GLfloat shininess = 128.0f;
+
 	Material(std::string name) :name(name)
 	{
 		/*printf("MATERIAL created\n");*/ 
 		color_ambient.set(0.2f,0.2f,0.2f,1.0f);
 		color_diffuse.set(0.8f, 0.8f, 0.8f, 1.0f);
 		color_specular.set(0.0f, 0.0f, 0.0f, 1.0f);
+		color_emmission.set(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	void bind()
@@ -41,19 +58,5 @@ public:
 		//glDisable(GL_TEXTURE_2D);
 	}
 
-	std::string name;
-
-	smart_pointer<Texture2D> texture_ambient;
-	smart_pointer<Texture2D> texture_diffuse;
-	smart_pointer<Texture2D> texture_specular;
-	smart_pointer<Texture2D> texture_alpha;
-	smart_pointer<Texture2D> texture_bump;
-
-	Color color_ambient;
-	Color color_diffuse;
-	Color color_specular;
-
-	GLint illum = 1;
-	GLfloat shininess = 128.0f;
 };
 #endif

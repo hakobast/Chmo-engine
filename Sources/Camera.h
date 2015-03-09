@@ -7,8 +7,8 @@
 
 enum ProjectionMode
 {
-	Perspective,
-	Orthographic
+	PERSPECTIVE,
+	ORTHOGRAPHIC
 };
 
 class Camera : public ActiveComponent
@@ -16,11 +16,11 @@ class Camera : public ActiveComponent
 friend class ScreenSystem;
 
 private:
-	ProjectionMode projectionMode_ = Perspective;
-	GLfloat fovy_ = 60.0f;
-	GLfloat orthoSize_ = 5;
-	GLfloat zNear_ = 0.1f;
-	GLfloat zFar_ = 1000.0f;
+	ProjectionMode projectionMode_ = PERSPECTIVE;
+	GLfloat _fovy = 60.0f;
+	GLfloat _orthoSize = 5;
+	GLfloat _zNear = 0.1f;
+	GLfloat _zFar = 1000.0f;
 	void Create();
 	void Init();
 	void Update();
@@ -53,13 +53,13 @@ inline void Camera::setProjectionMode(ProjectionMode mode)
 
 inline GLfloat Camera::getFOVY()
 {
-	return fovy_;
+	return _fovy;
 }
 
 inline void Camera::setFOVY(GLfloat fovy)
 {
-	fovy_ = fovy;
-	if (projectionMode_ == Perspective)
+	_fovy = fovy;
+	if (projectionMode_ == PERSPECTIVE)
 	{
 		ApplyCameraChanges();
 	}
@@ -67,13 +67,13 @@ inline void Camera::setFOVY(GLfloat fovy)
 
 inline GLfloat Camera::getOrthoSize()
 {
-	return orthoSize_;
+	return _orthoSize;
 }
 
 inline void Camera::setOrthoSize(GLfloat size)
 {
-	orthoSize_ = size;
-	if (projectionMode_ == Orthographic)
+	_orthoSize = size;
+	if (projectionMode_ == ORTHOGRAPHIC)
 	{
 		ApplyCameraChanges();
 	}

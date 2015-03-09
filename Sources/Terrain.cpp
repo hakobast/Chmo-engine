@@ -193,15 +193,10 @@ void Terrain::computeNormals()
 }
 
 #include "ShaderProgram.h"
-static float time;
-static smart_pointer<ShaderProgram> shaderProgram;
 
 void Terrain::Create()
 {
-	shaderProgram = smart_pointer<ShaderProgram>(new ShaderProgram());
-	shaderProgram->loadShaderFromFile(GL_VERTEX_SHADER_ARB, "C:/Users/user/Desktop/v_shader.vert");
-	shaderProgram->loadShaderFromFile(GL_FRAGMENT_SHADER_ARB, "C:/Users/user/Desktop/f_shader.frag");
-	shaderProgram->createAndLinkProgram();
+	
 }
 
 void Terrain::Init()
@@ -222,12 +217,6 @@ void Terrain::Update()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	shaderProgram->bind();
-	time += 0.01f;
-
-	int time_loc = glGetUniformLocationARB(shaderProgram->getProgram(), "time");
-	glUniform1fARB(time_loc, time);
 
 	if (glewGetExtension("GL_ARB_vertex_buffer_object"))
 	{
@@ -251,8 +240,6 @@ void Terrain::Update()
 		glTexCoordPointer(2, GL_FLOAT, 0, textures);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 	}
-
-	shaderProgram->unbind();
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

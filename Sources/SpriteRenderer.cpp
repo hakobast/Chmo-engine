@@ -29,14 +29,20 @@ void SpriteRenderer::Create()
 	meterPerPixel = 1.0f/100.0f;
 
 	shaderProgram = smart_pointer<ShaderProgram>(new ShaderProgram());
-	shaderProgram->loadShaderFromFile(GL_VERTEX_SHADER_ARB, "C:/Users/user/Desktop/v_shader.vert");
-	shaderProgram->loadShaderFromFile(GL_FRAGMENT_SHADER_ARB, "C:/Users/user/Desktop/f_shader.frag");
+	shaderProgram->loadShaderFromFile(GL_VERTEX_SHADER_ARB, "C:/Program Files (x86)/OpenGL Shader Designer/My/Diffuse.vert");
+	shaderProgram->loadShaderFromFile(GL_FRAGMENT_SHADER_ARB, "C:/Program Files (x86)/OpenGL Shader Designer/My/Diffuse.frag");
 	shaderProgram->createAndLinkProgram();
 }
 
 void SpriteRenderer::Init()
 {
 	setTextureFrame(frame);
+
+	getMainMaterial()->color_ambient.set(1.0f, 1.0f, 1.0f);
+	getMainMaterial()->color_diffuse.set(1.0f, 1.0f, 1.0f);
+	getMainMaterial()->color_specular.set(1.0f, 1.0f, 1.0f);
+	getMainMaterial()->shininess = 0.0f;
+
 }
 
 float time = 0.0f;
@@ -51,14 +57,16 @@ void SpriteRenderer::Update()
 	getMainMaterial()->bind();
 	shaderProgram->bind();
 
-	int my_vec3_location = glGetUniformLocationARB(shaderProgram->getProgram(), "mainColor");
-	glUniform4fARB(my_vec3_location, 1.0f, 1.0f, 1.0f, 1.0f);
+	//int my_vec3_location = glGetUniformLocationARB(shaderProgram->getProgram(), "mainColor");
+	//glUniform4fARB(my_vec3_location, 1.0f, 1.0f, 1.0f, 1.0f);
 
-	int time_loc = glGetUniformLocationARB(shaderProgram->getProgram(), "time");
-	glUniform1fARB(time_loc, time);
+	//int time_loc = glGetUniformLocationARB(shaderProgram->getProgram(), "time");
+	//glUniform1fARB(time_loc, time);
 
-	time += 0.01f;
+	//time += 0.01f;
 
+	w_range = 3.0f;
+	h_range = 3.0f;
 	glBegin(GL_QUADS);
 	{
 		glNormal3f(0.0f, 0.0f, 1.0f);
@@ -70,7 +78,6 @@ void SpriteRenderer::Update()
 		glTexCoord2fv((*mainTexture)[frame][4]);glVertex3f(w_range, h_range, 0.0f);
 
 		glTexCoord2fv((*mainTexture)[frame][6]);glVertex3f(-w_range, h_range, 0.0f);
-
 	}
 	glEnd();
 

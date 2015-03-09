@@ -25,6 +25,7 @@
     <ClInclude Include="Sources\imageloader.h" />
     <ClInclude Include="Sources\Input.h" />
     <ClInclude Include="Sources\Libs.h" />
+    <ClInclude Include="Sources\Light.h" />
     <ClInclude Include="Sources\Material.h" />
     <ClInclude Include="Sources\Matrix4.h" />
     <ClInclude Include="Sources\Mesh.h" />
@@ -59,6 +60,7 @@
     <ClCompile Include="Sources\GLTestComponent.cpp" />
     <ClCompile Include="Sources\imageloader.cpp" />
     <ClCompile Include="Sources\Input.cpp" />
+    <ClCompile Include="Sources\Light.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
     <ClCompile Include="Sources\Matrix4.cpp" />
     <ClCompile Include="Sources\Mesh.cpp" />

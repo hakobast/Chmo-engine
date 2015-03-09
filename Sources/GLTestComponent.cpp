@@ -70,10 +70,13 @@ public:
 		//glEnd();
 
 		if (Input::GetKeyDown(27))
+		{
+			printf("AUUUUUU\n");
 			exit(0);
+		}
 
-		float speed = 50.0f;
-		float rotationSpeed = 200;
+		float speed = 5.0f;
+		float rotationSpeed = 100.0f;
 		if (Input::GetKeyDown(KeyCode::a))
 			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(KeyCode::d))
@@ -82,11 +85,6 @@ public:
 			getTransform()->TranslateForward(-speed*GameTime::DeltaTime());
 		if (Input::GetKeyDown(KeyCode::s))
 			getTransform()->TranslateForward(speed*GameTime::DeltaTime());
-
-		if (Input::GetKeyDown(KeyCode::z))
-			getTransform()->TranslateForward(speed*GameTime::DeltaTime());
-		if (Input::GetKeyDown(KeyCode::x))
-			getTransform()->TranslateForward(-speed*GameTime::DeltaTime());
 
 		if (Input::GetKeyDown(KeyCode::n))
 		{

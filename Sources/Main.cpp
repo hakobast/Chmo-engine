@@ -35,6 +35,7 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "AssetManager.h"
+#include "Light.h"
 
 #define TARGET_FPS 160
 
@@ -58,16 +59,24 @@ void SetupRendering(void)
 	glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
 
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHTING);
+	/*glEnable(GL_LIGHT0);
 
-	GLfloat ambient[] = { 1.5f, 1.5f, 1.5f, 1.0f };
-	GLfloat diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat pos[] = { 0.0f, 0.0f, 1.0f, 0.0f };
+	GLfloat ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat specular[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat pos[] = { 0.0f, 0.0f, -8, 1.0f };
+	GLfloat spotDir[] = { 0.0f, 0.0f, -1.0f };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	//glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+
+	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 15.0f);
+	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotDir);
+
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);*/
 
 	/*glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
@@ -180,16 +189,27 @@ int main(int argc, char **argv)
 	Engine::getInstance().addSystem(*inputSystem, 4);
 
 	//creating game logics
-	GameObject* fpsObj = new GameObject("FPSGameObject");
-	fpsObj->addComponent<FPSCounter>();
-	fpsObj->addComponent<GLTestComponent>();
-	fpsObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
+	GameObject* lightObj = new GameObject("FPSGameObject");
+	lightObj->addComponent<GLTestComponent>();
+	lightObj->addComponent<FPSCounter>();
 
-	Camera* camera = fpsObj->addComponent<Camera>();
-	camera->setProjectionMode(ProjectionMode::Perspective);
+	Light* light = lightObj->addComponent<Light>();
+	light->setLight(0);
+	light->setAmbient(Color(0.0f,0.0f,0.0f));
+	light->setDiffuse(Color(1.0f, 0.0f, 0.0f));
+	light->setSpecular(Color(0.0f, 0.0f, 0.0f));
+	light->setLightType(POSITIONAL);
+	//light->setLinearAttenuation(0.1f);
+	//light->setSpotCutoff(15.0f);
+	
+	GameObject* camerObj = new GameObject("Camera");
+	camerObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
+
+	Camera* camera = camerObj->addComponent<Camera>();
+	camera->setProjectionMode(ProjectionMode::PERSPECTIVE);
 	camera->setOrthoSize(5.0f);
 	camera->setFOVY(60.0f);
-
+	
 	//smart_pointer<Texture2D> shipTexture = LoadTexture("bin/shipgame/ship.png");
 
 	//GameObject* ship = new GameObject("ship");
@@ -197,9 +217,9 @@ int main(int argc, char **argv)
 	//ship->addComponent<Ship>();
 
 	int regions[4] = { 0, 0, 128, 128 };
-	//smart_pointer<Texture2D> texture = LoadTextureTiled("bin/alizee_tga_final.jpg", 3, 4, 12);
-	smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
-	smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
+	smart_pointer<Texture2D> texture = LoadTextureTiled("bin/alizee_tga_final.jpg", 3, 4, 12);
+	//smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
+	//smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
 
 	//smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
 
@@ -210,17 +230,17 @@ int main(int argc, char **argv)
 	for (int i = 0; i < 1; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
-		obj->addComponent<Terrain>()->setMainTexture(grassTexture);
-		obj->getComponent<Terrain>()->build(texture, 20.0f);
+		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
+		//obj->getComponent<Terrain>()->build(texture, 20.0f);
 		//obj->addComponent<TextureAnimator>()->addClip(clip);
 		//obj->getComponent<TextureAnimator>()->playClip(0);
-		//obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
-		//obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
+		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
+		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
 		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
 
-		float scale = 2;
+		float scale = 1.0f;
 		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
 		//obj->getTransform()->RotateX(90);
 		obj->getTransform()->ScaleLocal *= scale;

@@ -48,7 +48,7 @@ class smart_pointer
 {
 private:
     T* data;
-	static smart_pointer<T> nullPtr;
+	static smart_pointer<T> emptyPtr;
 public:
     smart_pointer():data(0)
 	{
@@ -123,7 +123,7 @@ public:
 
 	static inline smart_pointer<T>& null()
 	{
-		return nullPtr;
+		return emptyPtr;
 	}
     
     inline T& operator *()
@@ -176,7 +176,7 @@ template<class T>
 smart_pointer<T>& smart_pointer<T>::null();
 
 template<class T>
-smart_pointer<T> smart_pointer<T>::nullPtr;
+smart_pointer<T> smart_pointer<T>::emptyPtr;
 
 class RemovableObject
 {

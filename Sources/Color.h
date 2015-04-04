@@ -2,11 +2,23 @@
 #ifndef OpenGLTesting_Color_h
 #define OpenGLTesting_Color_h
 
+#include <iostream>
+
 struct Color
 {
 private:
 	float r,g,b,a;
 public:
+	static const Color BLACK;
+	static const Color WHITE;
+	static const Color RED;
+	static const Color GREEN;
+	static const Color BLUE;
+	static const Color YELLOW;
+	static const Color PURPLE;
+	static const Color CYAN;
+
+
 	Color() :r(1.0f), g(1.0f), b(1.0f), a(1.0f){};
 	Color(float r, float g, float b, float a = 1) :r(r), g(g), b(b), a(a){};
 

@@ -52,6 +52,7 @@
   <ItemGroup>
     <ClCompile Include="Sources\AssetManager.cpp" />
     <ClCompile Include="Sources\Camera.cpp" />
+    <ClCompile Include="Sources\Color.cpp" />
     <ClCompile Include="Sources\Engine.cpp" />
     <ClCompile Include="Sources\FPSCounter.cpp" />
     <ClCompile Include="Sources\GameLogicSystem.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="Sources\Input.cpp" />
     <ClCompile Include="Sources\Light.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
+    <ClCompile Include="Sources\Material.cpp" />
     <ClCompile Include="Sources\Matrix4.cpp" />
     <ClCompile Include="Sources\Mesh.cpp" />
     <ClCompile Include="Sources\MeshRenderer.cpp" />
@@ -80,6 +82,7 @@
     <ClCompile Include="Sources\TextureTiled.cpp" />
     <ClCompile Include="Sources\Transform.cpp" />
     <ClCompile Include="Sources\Utils.cpp" />
+    <ClCompile Include="Sources\Vectors.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{76D8E35A-6452-4569-82B0-C2AA3DAFE2E2}</ProjectGuid>

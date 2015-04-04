@@ -14,7 +14,9 @@ Input* Input::instance = NULL;
 void OnKeyDown(unsigned char key, int x, int y)
 {
 	//std::cout << "InputSystem:: Keydown: " << (int)key << std::endl;
-	Input::instance->_keypressed[(int)key] = 1;
+	
+	if (Input::instance->_keypressed[(int)key] == 0)
+		Input::instance->_keypressed[(int)key] = GameTime::GetFrame();
 }
 
 void OnKeyUp(unsigned char key, int x, int y)
@@ -26,13 +28,14 @@ void OnKeyUp(unsigned char key, int x, int y)
 void OnSpecialKeyDown(int key, int x, int y)
 {
 	//std::cout << "InputSystem:: Special Key down: " << key << std::endl;
-	Input::instance->_keypressed[key] = 1;
+	if (Input::instance->_keypressed[key + Special_Keys_Count] == 0)
+		Input::instance->_keypressed[key + Special_Keys_Count] = GameTime::GetFrame();
 }
 
 void OnSpecialKeyUp(int key, int x, int y)
 {
 	//std::cout << "InputSystem:: Special Key up: " << key << std::endl;
-	Input::instance->_keypressed[key] = 0;
+	Input::instance->_keypressed[key + Special_Keys_Count] = 0;
 }
 
 void MouseFunc(int button, int state, int x, int y)

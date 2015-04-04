@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <vector>
 
 #include "Utils.h"
 #include "ShaderProgram.h"
@@ -90,4 +91,27 @@ void ShaderProgram::createAndLinkProgram()
 	glDeleteObjectARB(_shaders[VERTEX_SHADER]);
 	glDeleteObjectARB(_shaders[FRAGMENT_SHADER]);
 	glDeleteObjectARB(_shaders[GEOMETRY_SHADER]);
+}
+
+
+std::vector<UniformDesc> ShaderProgram::getUniforms(GLenum typeFilter)
+{
+	std::vector<UniformDesc> uniforms;
+
+	int total = -1;
+	glGetProgramiv(getProgram(), GL_ACTIVE_UNIFORMS, &total);
+	for (int i = 0; i < total; i++)
+	{
+		int name_len = -1, num = -1;
+		GLenum type = GL_ZERO;
+		char name[100];
+		glGetActiveUniform(getProgram(), GLuint(i), sizeof(name)-1,
+			&name_len, &num, &type, name);
+		name[name_len] = 0;
+
+		if (typeFilter == -1 || typeFilter == type)
+			uniforms.push_back(UniformDesc(name, type));
+	}
+
+	return uniforms;
 }

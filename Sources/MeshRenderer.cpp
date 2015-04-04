@@ -5,11 +5,13 @@
 MeshRenderer::~MeshRenderer()
 {
 	cout << "MeshRenderer:: ~~~deleted~~~ " << endl;
+
+	if (!mesh.isEmpty())
+		mesh->_sharesCount--;
 }
 
 void MeshRenderer::Create()
 {
-	//renderSystem->sortComponents();
 	dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
@@ -20,81 +22,53 @@ void MeshRenderer::Init()
 
 void  MeshRenderer::Update()
 {
-	GLfloat rotation = 180.0f;
-
-	if (Input::GetKeyDown(KeyCode::w))
-		getTransform()->RotateY(rotation*GameTime::DeltaTime());
-
-	if (Input::GetKeyDown(KeyCode::s))
-		getTransform()->RotateY(-rotation*GameTime::DeltaTime());
-
-	if (Input::GetKeyDown(KeyCode::a))
-	{
-		getTransform()->RotateX(rotation*GameTime::DeltaTime());
-	}
-
-	if (Input::GetKeyDown(KeyCode::d))
-	{
-		getTransform()->RotateX(-rotation*GameTime::DeltaTime());
-	}
+// 	GLfloat rotation = 180.0f;
+// 
+// 	if (Input::IsKeyDown(KeyCode::w))
+// 		getTransform()->RotateY(rotation*GameTime::DeltaTime());
+// 
+// 	if (Input::IsKeyDown(KeyCode::s))
+// 		getTransform()->RotateY(-rotation*GameTime::DeltaTime());
+// 
+// 	if (Input::IsKeyDown(KeyCode::a))
+// 	{
+// 		getTransform()->RotateX(rotation*GameTime::DeltaTime());
+// 	}
+// 
+// 	if (Input::IsKeyDown(KeyCode::d))
+// 	{
+// 		getTransform()->RotateX(-rotation*GameTime::DeltaTime());
+// 	}
 
 	getTransform()->applyTransformation();
 
 	if (mesh.isEmpty())
 		return;
 
+	std::vector<smart_pointer<Material>>& mats = getSharedMaterials();
+	int mats_count = mats.size();
+
 	for (int i = 0; i < mesh->getSubMeshCount(); i++)
 	{
-		std::vector<Vector3>& vertices = mesh->getVertices(i);
-		std::vector<Vector2>& uvs = mesh->getUVs(i);
-		std::vector<Vector3>& normals = mesh->getNormals(i);
-
-		//TEMP
-		if (vertices.size() == 0 || i >= materials.size())
-			continue;
-
-		//TODO use VBO to render models
-		//TODO fix this sheet
-		smart_pointer<Material>& material = getMaterial(i);
-
-		material->bind();
-
-		if (uvs.size() > 0)
+		//TODO implement mult materials
+		if (i < mats_count)
 		{
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_FLOAT, 0, &uvs[0]);
+			mats[i]->bind();
+			mesh->draw(i);
+			mats[i]->unbind();
 		}
-
-		if (normals.size() > 0)
+		else
 		{
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_FLOAT, 0, &normals[0]);
+			if (mats_count > 0)
+			{
+				mats.back()->bind();
+				mesh->draw(i);
+				mats.back()->unbind();
+			}
+			else
+			{
+				mesh->draw(i);
+			}
 		}
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-
-		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		material->unbind();
 	}
-}
-
-void MeshRenderer::setSharedMesh(smart_pointer<Mesh>& m)
-{
-	mesh = m;
-}
-
-void MeshRenderer::setMesh(smart_pointer<Mesh>& m)
-{
-	mesh = m.clone();
-}
-
-smart_pointer<Mesh>& MeshRenderer::getMesh()
-{
-	return mesh;
 }

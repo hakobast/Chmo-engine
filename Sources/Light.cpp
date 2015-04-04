@@ -16,14 +16,13 @@ void Light::Init()
 }
 
 void Light::Update()
-{
-	
+{	
 	glPushMatrix();
 		getTransform()->applyTransformation();
-		glDisable(GL_LIGHTING);
+		//glDisable(GL_LIGHTING);
 		glColor3f(1.0f, 0.0f, 1.0f);
 		glutSolidCone(0.1f, 0.2f, 10.0f, 10.0f);
-		glEnable(GL_LIGHTING);
+		//glEnable(GL_LIGHTING);
 		
 		switch (_type)
 		{

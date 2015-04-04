@@ -60,11 +60,4 @@ smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
 
 void LoadTextureData(const char* filename, FIBITMAP* fibitmap, FREE_IMAGE_FORMAT* format);
 
-void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
-	std::vector<Vector3>& v,
-	std::vector<Vector2>& u,
-	std::vector<Vector3>& n,
-	std::vector<unsigned int>& vIndices,
-	std::vector<unsigned int>& uIndices,
-	std::vector<unsigned int>& nIndices);
 #endif

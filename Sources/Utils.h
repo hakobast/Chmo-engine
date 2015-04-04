@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include "Vectors.h"
+
 template<typename T>
 void free_vector(std::vector<T*> &v)
 {
@@ -32,5 +34,9 @@ unsigned long long timeInMilliseconds();
 wchar_t* charToWChar(const char* text);
 
 char* loadFile(const char* filename);
+
+void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, std::vector<Vector3>&normals, Vector3* tangent, Vector3* bitangent);
+
+bool isVBOSupported();
 
 #endif

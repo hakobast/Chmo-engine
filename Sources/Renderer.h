@@ -33,17 +33,25 @@ protected:
 	int layerOrder = 0;
 	std::vector<smart_pointer<Material>> materials;
 public:
+	virtual ~Renderer()
+	{
+		for (int i = 0; i < materials.size(); i++)
+			materials[i]->_sharesCount--;
+	};
+
 	int getSortingLayer() const;
 	int getLayerOrder() const;
 	void setSortingLayer(int layer, int order = 0);
 	void setLayerOrder(int order);
-	std::vector<smart_pointer<Material>>const getMaterials();
-	smart_pointer<Material>& getMaterial(int index);
-	smart_pointer<Material>& getMainMaterial();
+	std::vector<smart_pointer<Material>>& getMaterials();
+	std::vector<smart_pointer<Material>>& getSharedMaterials();
+	smart_pointer<Material>& getMaterial(int index = 0);
+	smart_pointer<Material>& getSharedMaterial(int index = 0);
 	smart_pointer<Texture2D>& getMainTexture();
-	void addMaterial(smart_pointer<Material>& mat, bool copy = false);
-	void setMaterial(smart_pointer<Material>& mat, int index, bool copy = false);
-	void setMainMaterial(smart_pointer<Material>& mat, bool copy = false);
+
+	void addMaterial(smart_pointer<Material>& mat);
+	void setMaterial(smart_pointer<Material>& mat, int index);
+	void setMainMaterial(smart_pointer<Material>& mat);
 	void setMainTexture(smart_pointer<Texture2D>& texture); 
 };
 
@@ -72,94 +80,105 @@ inline void Renderer::setLayerOrder(int order)
 		dynamic_cast<RenderSystem*>(system)->sortComponents();
 }
 
-inline std::vector<smart_pointer<Material>>const Renderer::getMaterials()
+inline std::vector<smart_pointer<Material>>& Renderer::getSharedMaterials()
 {
 	return materials;
+}
+
+inline std::vector<smart_pointer<Material>>& Renderer::getMaterials()
+{
+	for (int i = 0; i < materials.size(); i++)
+	{
+		if (materials[i]->_sharesCount > 1)
+		{
+			printf("get AllMaterials:: unsharing material\n");
+			materials[i] = materials[i].clone();
+			materials[i]->_sharesCount = 1;
+		}
+	}
+
+	return materials;
+}
+
+inline smart_pointer<Material>& Renderer::getSharedMaterial(int index)
+{
+	if (index < materials.size())
+	{
+		return materials[index];
+	}
+
+	std::cout << "There is no material at index: " << index << std::endl;
+	return smart_pointer<Material>::null();
 }
 
 inline smart_pointer<Material>& Renderer::getMaterial(int index)
 {
 	if (index < materials.size())
-		return materials[index];
+	{
+		if (materials[index]->_sharesCount > 1)
+		{
+			printf("getMaterial:: unsharing material\n");
+			materials[index] = materials[index].clone();
+			materials[index]->_sharesCount = 1;
+		}
 
-	cout << '\a';cout << '\a';cout << '\a';
+		return materials[index];
+	}
+
 	std::cout << "There is no material at index: " << index << std::endl;
 	return smart_pointer<Material>::null();
 }
 
-inline smart_pointer<Material>& Renderer::getMainMaterial()
+inline void Renderer::addMaterial(smart_pointer<Material>& mat)
 {
-	if (materials.size() > 0)
-		return materials[0];
+	if (mat.isEmpty())
+		return;
 
-	cout << '\a'; cout << '\a'; cout << '\a';
-	std::cout << "Main material not set: " << std::endl;
-	return smart_pointer<Material>::null();
+	materials.push_back(mat);
+	mat->_sharesCount++;
 }
 
-inline void Renderer::addMaterial(smart_pointer<Material>& mat, bool copy)
+inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index)
 {
-	if (copy)
+	if (mat.isEmpty())
+		return;
+
+	if (index < materials.size())
 	{
-		materials.push_back(mat.clone());
+		materials[index]->_sharesCount--;
+		materials[index] = mat;
 	}
 	else
 	{
 		materials.push_back(mat);
 	}
+
+	mat->_sharesCount++;
 }
 
-inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index, bool copy)
+inline void Renderer::setMainMaterial(smart_pointer<Material>& mat)
 {
-	if (materials.size() <= index)
-	{
-		cout << '\a'; cout << '\a'; cout << '\a';
-		std::cout << "There is no material at index: " << index << std::endl;
-		return;
-	}
-
-	if (copy)
-	{
-		materials[index] = mat.clone();
-	}
-	else
-	{
-		materials[index] = mat;
-	}
-}
-
-inline void Renderer::setMainMaterial(smart_pointer<Material>& mat, bool copy)
-{
-	if (copy)
-	{
-		if (materials.size() > 0)
-			materials[0] = mat.clone();
-		else
-			materials.push_back(mat.clone());
-	}
-	else
-	{
-		if (materials.size() > 0)
-			materials[0] = mat;
-		else
-			materials.push_back(mat);
-	}
+	setMaterial(mat, 0);
 }
 
 inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
 {
-	if (materials.size() == 0)
+	if (texture.isEmpty())
+		return;
+
+	if (materials.size() > 0)
 	{
-		smart_pointer<Material> mat(new Material("diffuse")); //TODO get shared diffuse material
-		materials.push_back(mat);
+		materials[0]->setMainTexture(texture);
+		return;
 	}
-	materials[0]->texture_ambient = texture;
+	
+	std::cout << "There is no material to set texture: " << std::endl;
 }
 
 inline smart_pointer<Texture2D>& Renderer::getMainTexture()
 {
 	if (materials.size() > 0)
-		return materials[0]->texture_ambient;
+		return materials[0]->getMainTexture();
 
 	return smart_pointer<Texture2D>::null();
 }

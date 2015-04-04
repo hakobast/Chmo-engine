@@ -12,6 +12,7 @@ public:
 	//TODO implement timeScale
 	static GLfloat DeltaTime();
 	static GLfloat TimeSinceGameStarted();
+	static GLuint GetFrame();
 	GameTime(); //TEMP remove this when init function will called
 protected:
 	~GameTime();
@@ -23,8 +24,9 @@ protected:
 private:
 	static GameTime* instance;
 	unsigned long long lastTime;
-	GLfloat deltaTime;
+	GLfloat deltaTime = 0;
 	GLfloat timeSinceGameStarted = 0;
+	GLuint frame = 1;
 };
 
 //static functions
@@ -37,5 +39,11 @@ inline GLfloat GameTime::TimeSinceGameStarted()
 {
 	return instance->timeSinceGameStarted;
 }
+
+inline GLuint GameTime::GetFrame()
+{
+	return instance->frame;
+}
+
 //end
 #endif

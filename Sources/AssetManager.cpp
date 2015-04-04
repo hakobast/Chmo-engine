@@ -7,13 +7,25 @@
 #include "MeshRenderer.h"
 #include "AssetManager.h"
 
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vector3& p, Vector3& n, unsigned int& index);
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector2>& texcoord, Vector3& p, Vector2& t, unsigned int& index);
+bool hasAttributes(std::vector<Vector3>& verts, Vector3& p, unsigned int& index);
+
+void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
+	std::vector<Vector3>& v,
+	std::vector<Vector2>& u,
+	std::vector<Vector3>& n,
+	std::vector<unsigned int>& vIndices,
+	std::vector<unsigned int>& uIndices,
+	std::vector<unsigned int>& nIndices);
+
 std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile)
 {
 	vector<GameObject*> gameObjects;
 
 	//ModelDescriptor descriptor;
 	std::vector<smart_pointer<Mesh>>& meshes = LoadMesh(modelfile);
-
 	/*for (std::string mesh : descriptor.meshNames)
 		std::cout << "g " << mesh << " mat " << descriptor.meshMaterials[mesh] << std::endl;*/
 
@@ -33,7 +45,7 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 
 		obj = new GameObject(stream.str());
 		MeshRenderer* meshRenderer = obj->addComponent<MeshRenderer>();
-		meshRenderer->setSharedMesh(meshes[i]);
+		meshRenderer->setMesh(meshes[i]);
 		
 		//attaching materials
 		for (int j = 0; j < meshes[i]->getSubMeshCount() && matQueue.size() > 0; j++)
@@ -52,10 +64,10 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 	{
 		std::cout << "Name: " << obj->name << std::endl;
 		std::cout << "Submeshes: " << obj->getComponent<MeshRenderer>()->getMesh()->getSubMeshCount() << std::endl;
-		std::cout << "Materials: " << obj->getComponent<MeshRenderer>()->getMaterials().size() << std::endl;
+		std::cout << "Materials: " << obj->getComponent<MeshRenderer>()->getSharedMaterials().size() << std::endl;
 	}
 	std::cout << "***********************************" << std::endl;
-
+	
 	return gameObjects;
 }
 
@@ -90,7 +102,10 @@ std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor*
 
 			if (meshes.size() > 0)
 			{
-				setVertexAttributes(meshes.back(), 0,
+				if (meshes.back()->getSubMeshCount() == 0)
+					meshes.back()->setSubMeshCount(1);
+
+				setVertexAttributes(meshes.back(), meshes.back()->getSubMeshCount()-1,
 					vertexArray, uvArray, normalArray,
 					vertexIndices, uvIndices, normalIndices);
 
@@ -112,6 +127,9 @@ std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor*
 			}
 			else if (meshes.back()->getSubMeshCount() > 0) // other times, setVertexAttributes and add new submesh
 			{
+				if (meshes.back()->getSubMeshCount() == 0)
+					meshes.back()->setSubMeshCount(1);
+
 				setVertexAttributes(meshes.back(), meshes.back()->getSubMeshCount()-1,
 					vertexArray, uvArray, normalArray,
 					vertexIndices, uvIndices, normalIndices);
@@ -276,6 +294,9 @@ std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor*
 			meshes.push_back(mesh);
 		}
 
+		if (meshes.back()->getSubMeshCount() == 0)
+			meshes.back()->setSubMeshCount(1);
+
 		setVertexAttributes(meshes.back(), meshes.back()->getSubMeshCount()-1,
 			vertexArray, uvArray, normalArray,
 			vertexIndices, uvIndices, normalIndices);
@@ -301,21 +322,142 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 	std::vector<Vector3> normals;
 	std::vector<unsigned int> indices;
 
-	//TODO make indexing
-	for (int i = 0; i < vIndices.size(); i++)
-	{
-		//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
-		vertices.push_back(v[vIndices[i] - 1]);
 
-		if (uIndices.size()>0)
-			uvs.push_back(u[uIndices[i] - 1]);
-		if (nIndices.size()>0)
-			normals.push_back(n[nIndices[i] - 1]);
+	if (uIndices.size() > 0 && nIndices.size() > 0)
+	{
+		for (int i = 0; i < vIndices.size(); i++)
+		{
+			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
+			unsigned int index;
+			if (hasAttributes(vertices, normals, uvs, v[vIndices[i] - 1], n[nIndices[i] - 1], u[uIndices[i] - 1],index))
+			{
+				indices.push_back(index);
+			}
+			else
+			{
+				indices.push_back(vertices.size());
+				vertices.push_back(v[vIndices[i] - 1]);
+				uvs.push_back(u[uIndices[i] - 1]);
+				normals.push_back(n[nIndices[i] - 1]);
+			}
+		}
 	}
+	else if (uIndices.size() > 0)
+	{
+		for (int i = 0; i < vIndices.size(); i++)
+		{
+			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
+			unsigned int index;
+			if (hasAttributes(vertices, uvs, v[vIndices[i] - 1], u[uIndices[i] - 1], index))
+			{
+				indices.push_back(index);
+			}
+			else
+			{
+				indices.push_back(vertices.size());
+				vertices.push_back(v[vIndices[i] - 1]);
+				uvs.push_back(u[uIndices[i] - 1]);
+			}
+		}
+	}
+	else if (nIndices.size() > 0)
+	{
+		for (int i = 0; i < vIndices.size(); i++)
+		{
+			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
+			unsigned int index;
+			if (hasAttributes(vertices, normals, v[vIndices[i] - 1], n[nIndices[i] - 1], index))
+			{
+				indices.push_back(index);
+			}
+			else
+			{
+				indices.push_back(vertices.size());
+				vertices.push_back(v[vIndices[i] - 1]);
+				normals.push_back(n[nIndices[i] - 1]);
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < vIndices.size(); i++)
+		{
+			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
+			unsigned int index;
+			if (hasAttributes(vertices, v[vIndices[i] - 1], index))
+			{
+				indices.push_back(index);
+			}
+			else
+			{
+				indices.push_back(vertices.size());
+				vertices.push_back(v[vIndices[i] - 1]);
+			}
+		}
+	}
+
+	printf("submeshes %d, index %d \n", mesh->getSubMeshCount(), subMesh);
 
 	mesh->setVertices(vertices, subMesh);
 	mesh->setUVs(uvs, subMesh);
 	mesh->setNormals(normals, subMesh);
+	mesh->setIndices(indices, subMesh);
+}
+
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t,unsigned int& index)
+{
+	for (int i = 0; i < verts.size(); i++)
+	{
+		if (verts[i].compare(p, 0.001f) && norms[i].compare(n, 0.001f) && texcoord[i].compare(t, 0.001f))
+		{
+			index = i;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vector3& p, Vector3& n, unsigned int& index)
+{
+	for (int i = 0; i < verts.size(); i++)
+	{
+		if (verts[i].compare(p, 0.001f) && norms[i].compare(n, 0.001f))
+		{
+			index = i;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector2>& texcoord, Vector3& p, Vector2& t, unsigned int& index)
+{
+	for (int i = 0; i < verts.size(); i++)
+	{
+		if (verts[i].compare(p, 0.001f) && texcoord[i].compare(t, 0.001f))
+		{
+			index = i;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool hasAttributes(std::vector<Vector3>& verts, Vector3& p, unsigned int& index)
+{
+	for (int i = 0; i < verts.size(); i++)
+	{
+		if (verts[i].compare(p, 0.001f))
+		{
+			index = i;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
@@ -356,8 +498,8 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_ambient = LoadTexture(line);// smart_pointer<Texture2D>(new Texture2D(line));
-
+			//mat->texture_ambient = LoadTexture(line);// smart_pointer<Texture2D>(new Texture2D(line));
+			mat->addTexture(LoadTexture(line));
 			//std::cout << "Ambient Texture: " << line << " Size " << sizeof(line) << std::endl;
 		}
 		else if (strcmp(lineHeader, "map_Kd") == 0)
@@ -367,7 +509,8 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_diffuse = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			//mat->texture_diffuse = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			mat->addTexture(LoadTexture(line));
 
 			//std::cout << "Diffuse Texture: " << texture_D << std::endl;
 		}
@@ -378,7 +521,8 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_specular = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			//mat->texture_specular = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			mat->addTexture(LoadTexture(line));
 
 			//std::cout << "Specular Texture: " << texture_S << std::endl;
 		}
@@ -389,7 +533,8 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_alpha = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			//mat->texture_alpha = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			mat->addTexture(LoadTexture(line));
 
 			//std::cout << "Alpha Texture: " << texture_Alpha << std::endl;
 		}
@@ -400,7 +545,8 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			if (line[length] == '\n')
 				line[length] = '\0';
 
-			mat->texture_bump = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			//mat->texture_bump = LoadTexture(line); //smart_pointer<Texture2D>(new Texture2D(line));
+			mat->addTexture(LoadTexture(line));
 
 			//std::cout << "Bumb Texture: " << texture_Bump << std::endl;
 		}

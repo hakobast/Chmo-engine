@@ -12,6 +12,8 @@
 #include "Input.h"
 #include "GameTime.h"
 #include "FPSCounter.cpp"
+#include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 
 using namespace std;
 
@@ -35,22 +37,41 @@ public:
     
     void Update()
     {
-		if (Input::GetKeyDown(KeyCode::l))
+		if (Input::IsKeyDownNow(KeyCode::RIGHT_ALT))
 		{
-			FPSCounter* rend = getGameObject()->getComponent<FPSCounter>();
-			if (rend != NULL)
+			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
+
+			if (meshRend != NULL)
 			{
-				std::cout << "FOUND " << rend->isEnabled() << " Counter " << !rend->isEnabled() << std::endl;
-				rend->getGameObject()->setActive(false);
+				smart_pointer<Mesh> mesh = meshRend->getSharedMesh();
 
-				rend->setEnabled(!rend->isEnabled());
-				rend->destroy();
-				rend->getGameObject()->setActive(true);
-				rend->getGameObject()->destroy();
+				std::vector<unsigned int> indices{ 0, 1, 2 };
+				std::vector<Vector3> verts{ Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
+				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
 
-				rend->getGameObject()->setActive(false);
-				rend->getGameObject()->addComponent<GLTestComponent>();
-				getGameObject()->destroy();
+				mesh->setVertices(verts);
+				//mesh->setNormals(norms);
+				mesh->setIndices(indices);
+			}
+			else
+				std::cout << "CAN'T FIND\n";
+		}
+
+		if (Input::IsKeyDownNow(KeyCode::LEFT_CTRL))
+		{
+			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
+
+			if (meshRend != NULL)
+			{
+				smart_pointer<Mesh> mesh = meshRend->getSharedMesh();
+
+				std::vector<unsigned int> indices{ 3,0,2 };
+				std::vector<Vector3> verts{ Vector3(-1.0f, -3.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
+				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
+
+				mesh->setVertices(verts);
+				//mesh->setNormals(norms);
+				mesh->setIndices(indices);
 			}
 			else
 				std::cout << "CAN'T FIND\n";
@@ -69,28 +90,28 @@ public:
 		//}
 		//glEnd();
 
-		if (Input::GetKeyDown(27))
+		if (Input::IsKeyDown(27))
 		{
 			printf("AUUUUUU\n");
 			exit(0);
 		}
 
-		float speed = 5.0f;
+		float speed = 15.0f;
 		float rotationSpeed = 100.0f;
-		if (Input::GetKeyDown(KeyCode::a))
+		if (Input::IsKeyDown(KeyCode::a))
 			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
-		if (Input::GetKeyDown(KeyCode::d))
+		if (Input::IsKeyDown(KeyCode::d))
 			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
-		if (Input::GetKeyDown(KeyCode::w))
+		if (Input::IsKeyDown(KeyCode::w))
 			getTransform()->TranslateForward(-speed*GameTime::DeltaTime());
-		if (Input::GetKeyDown(KeyCode::s))
+		if (Input::IsKeyDown(KeyCode::s))
 			getTransform()->TranslateForward(speed*GameTime::DeltaTime());
 
-		if (Input::GetKeyDown(KeyCode::n))
+		if (Input::IsKeyDown(KeyCode::n))
 		{
 			getTransform()->RotateX(rotationSpeed*GameTime::DeltaTime());
 		}
-		if (Input::GetKeyDown(KeyCode::m))
+		if (Input::IsKeyDown(KeyCode::m))
 		{
 			getTransform()->RotateX(-rotationSpeed*GameTime::DeltaTime());
 		}

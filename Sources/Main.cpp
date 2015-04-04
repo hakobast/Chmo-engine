@@ -37,7 +37,7 @@
 #include "AssetManager.h"
 #include "Light.h"
 
-#define TARGET_FPS 160
+#define TARGET_FPS 60
 
 void Render(void)
 {
@@ -55,7 +55,7 @@ void SetupRendering(void)
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
 
@@ -182,16 +182,15 @@ int main(int argc, char **argv)
 	Input* inputSystem = new Input;
 	GameTime* timeSystem = new GameTime;
 
-	Engine::getInstance().addSystem(*timeSystem, 0);
 	Engine::getInstance().addSystem(*gameLogicSystem, 1);
 	Engine::getInstance().addSystem(*screenSystem, 2);
 	Engine::getInstance().addSystem(*renderSystem, 3);
 	Engine::getInstance().addSystem(*inputSystem, 4);
+	Engine::getInstance().addSystem(*timeSystem, 5);
 
 	//creating game logics
 	GameObject* lightObj = new GameObject("FPSGameObject");
 	lightObj->addComponent<GLTestComponent>();
-	lightObj->addComponent<FPSCounter>();
 
 	Light* light = lightObj->addComponent<Light>();
 	light->setLight(0);
@@ -203,6 +202,7 @@ int main(int argc, char **argv)
 	//light->setSpotCutoff(15.0f);
 	
 	GameObject* camerObj = new GameObject("Camera");
+	camerObj->addComponent<FPSCounter>();
 	camerObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
 
 	Camera* camera = camerObj->addComponent<Camera>();
@@ -217,51 +217,72 @@ int main(int argc, char **argv)
 	//ship->addComponent<Ship>();
 
 	int regions[4] = { 0, 0, 128, 128 };
-	smart_pointer<Texture2D> texture = LoadTextureTiled("bin/alizee_tga_final.jpg", 3, 4, 12);
-	//smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
-	//smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
-
-	//smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
-
-	smart_pointer<Material> spriteMat(new Material("my mat"));
-	spriteMat->color_ambient.set(1.0f, 1.0f, 1.0f, 1.0);
-
-	srand(time(0));
-	for (int i = 0; i < 1; i++)
-	{
-		GameObject* obj = new GameObject("FirstGameObject");
-		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
-		//obj->getComponent<Terrain>()->build(texture, 20.0f);
-		//obj->addComponent<TextureAnimator>()->addClip(clip);
-		//obj->getComponent<TextureAnimator>()->playClip(0);
-		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
-		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
-		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
-		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
-		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
-
-		float scale = 1.0f;
-		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
-		//obj->getTransform()->RotateX(90);
-		obj->getTransform()->ScaleLocal *= scale;
-	}
+// 	smart_pointer<Texture2D> texture = LoadTexture("bin/vtr.bmp");
+// 	//smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
+// 	//smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
+// 
+// 	//smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
+// 
+// 	srand(time(0));
+// 	for (int i = 0; i < 1; i++)
+// 	{
+// 		GameObject* obj = new GameObject("FirstGameObject");
+// 		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
+// 		//obj->getComponent<Terrain>()->build(texture, 20.0f);
+// 		//obj->addComponent<TextureAnimator>()->addClip(clip);
+// 		//obj->getComponent<TextureAnimator>()->playClip(0);
+// 		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
+// 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
+// 		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
+// 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
+// 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
+// 
+// 		float scale = 1.0f;
+// 		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
+// 		//obj->getTransform()->RotateX(90);
+// 		obj->getTransform()->ScaleLocal *= scale;
+// 	}
 
 	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";
 	//char* mat_path = "C:/Users/user/Desktop/untitled2.mtl";
 	//char* mat_path = "C:/Users/user/Desktop/Luke_skywalkers_landspeeder/Luke Skywalkers landspeeder.mtl";
 
-	//char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
-	//char* mat_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.mtl";
+	char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
+	char* mat_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.mtl";
 
-	//std::vector<GameObject*> objects = LoadModel(mesh_path, mat_path);
+// 	std::vector<GameObject*> objects = LoadModel(mesh_path, mat_path);
+// 
+// 	for (GameObject* obj : objects)
+// 	{
+// 		obj->getTransform()->Location.set(0.0f, 0.0f, 5.0f);
+// 		obj->getTransform()->RotateX(25);
+// 		obj->getTransform()->RotateY(25.0f);
+// 		obj->getTransform()->RotateZ(75.0f);
+// 	}
+// 
+// 	smart_pointer<Mesh>& mesh = objects[0]->getComponent<MeshRenderer>()->getSharedMesh();
 
-	//for (GameObject* obj : objects)
-	//{
-	//	obj->getTransform()->Location.set(0.0f, 0.0f, 5.0f);
-	//	obj->getTransform()->RotateX(25);
-	//	obj->getTransform()->RotateY(25.0f);
-	//	obj->getTransform()->RotateZ(75.0f);
-	//}
+	smart_pointer<Mesh> mesh(new Mesh);
+
+	mesh->setSubMeshCount(1);
+
+	std::vector<unsigned int> indices{ 0, 1, 2, 3, 0, 2 };
+	std::vector<Vector3> verts{ Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
+
+	mesh->setVertices(verts);
+	mesh->setIndices(indices);
+
+	for (int i = 0; i < 2; i++)
+	{
+		GameObject* obj = new GameObject("MY OBJ");
+		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();
+		meshRend->setMesh(mesh);
+
+		obj->getTransform()->Location.set(-2.0f + 4*i, 0.0f, 5.0f);
+	}
+	//obj->getTransform()->RotateX(25);
+	//obj->getTransform()->RotateY(25.0f);
+	//obj->getTransform()->RotateZ(75.0f);
 
 	/*std::vector<smart_pointer<Material>> mats = objects[0]->getComponent<MeshRenderer>()->getMaterials();
 hakopik

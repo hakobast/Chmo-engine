@@ -82,7 +82,7 @@ void Terrain::build(smart_pointer<Texture2D> heightMap, GLfloat height)
 		}
 	}
 
-	if (glewGetExtension("GL_ARB_vertex_buffer_object"))
+	if (isVBOSupported())
 	{
 		glGenBuffersARB(1, &vertex_vbo_id);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_vbo_id);
@@ -192,8 +192,6 @@ void Terrain::computeNormals()
 	isNormalsComputed = true;
 }
 
-#include "ShaderProgram.h"
-
 void Terrain::Create()
 {
 	
@@ -210,7 +208,7 @@ void Terrain::Update()
 
 	smart_pointer<Texture2D>& mainTexture = getMainTexture();
 	if (!mainTexture.isEmpty())
-		getMainMaterial()->bind();
+		getMaterial()->bind();
 
 	//glColor3f(0.3f, 0.9f, 1.0f);
 
@@ -218,7 +216,7 @@ void Terrain::Update()
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	if (glewGetExtension("GL_ARB_vertex_buffer_object"))
+	if (isVBOSupported())
 	{
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_vbo_id);
 		glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -246,7 +244,7 @@ void Terrain::Update()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	if (!mainTexture.isEmpty())
-		getMainMaterial()->unbind();
+		getMaterial()->unbind();
 
 	/*glBegin(GL_TRIANGLE_STRIP);
 	for (int z = 0; z < length - 1; z++)

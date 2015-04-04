@@ -34,6 +34,7 @@ void GameTime::Update()
 
 	deltaTime = (timeInMills - lastTime) / 1000.0f;
 	timeSinceGameStarted += deltaTime;
+	frame++;
 	lastTime = timeInMills;
 }
 

@@ -28,6 +28,11 @@ struct Vector2
 	Vector2(GLfloat x, GLfloat y) :x(x), y(y){}
 
 public:
+	static const Vector2 ZERO;
+	static const Vector2 ONE;
+	static const Vector2 RIGHT;
+	static const Vector2 UP;
+
 	void set(GLfloat x, GLfloat y);
 	Vector2 duplicate() const;
 	GLfloat magnitude() const;
@@ -38,6 +43,7 @@ public:
 	GLfloat dot(const Vector2& other) const;
 	Vector2 cross(const Vector2& other) const;
 	bool compare(const Vector2& other, GLfloat epsilon) const;
+	GLfloat* getPointer();
 
 	Vector2 operator +(const Vector2& other);
 	Vector2 operator -(const Vector2& other);
@@ -114,6 +120,11 @@ inline Vector2 Vector2::normalized() const
 		return *this;
 
 	return Vector2(x / m, y / m);
+}
+
+inline GLfloat* Vector2::getPointer()
+{
+	return (&x);
 }
 
 inline bool Vector2::compare(const Vector2& other, GLfloat epsilon) const
@@ -201,7 +212,6 @@ inline bool Vector2:: operator !=(const Vector2& other) const
 	return fabs(x - other.x) > EPSILON && fabs(y - other.y) > EPSILON;
 }
 
-
 struct Vector3
 {
     GLfloat x,y,z;
@@ -209,6 +219,12 @@ struct Vector3
     Vector3(GLfloat x, GLfloat y,GLfloat z):x(x),y(y),z(z){}
     
 public:
+	static const Vector3 ZERO;
+	static const Vector3 ONE;
+	static const Vector3 RIGHT;
+	static const Vector3 UP;
+	static const Vector3 FORWARD;
+
     void set(GLfloat x,GLfloat y,GLfloat z);
     Vector3 duplicate() const;
     GLfloat magnitude() const;
@@ -221,6 +237,7 @@ public:
     Vector3& rotateVector(GLfloat angle, GLfloat xAxis, GLfloat yAxis, GLfloat zAxis);
     Vector3& rotateVector(const Matrix4 rotationMatrix);
     bool compare(const Vector3& other, GLfloat epsilon) const;
+	GLfloat* getPointer();
 
     Vector3 operator +(const Vector3& other);
     Vector3 operator -(const Vector3& other);
@@ -301,7 +318,7 @@ inline Vector3& Vector3::rotateVector(const Matrix4 rotationMatrix)
     return *this;
 }
 
-inline Vector3& Vector3:: normalize()
+inline Vector3& Vector3::normalize()
 {
     GLfloat m = sqrtf(x*x+y*y+z*z);
     if(m < EPSILON)
@@ -321,6 +338,11 @@ inline Vector3 Vector3:: normalized() const
         return *this;
     
     return Vector3(x/m,y/m,z/m);
+}
+
+inline GLfloat* Vector3::getPointer()
+{
+	return (&x);
 }
 
 inline bool Vector3:: compare(const Vector3& other, GLfloat epsilon) const

@@ -6,13 +6,13 @@ struct TextureRegion
 {
 public:
 	TextureRegion(){};
-	TextureRegion(const float* uv)
+	TextureRegion(const GLfloat* uv)
 	{
-		std::memcpy(u_v, uv, sizeof(float)* 8);
+		std::memcpy(u_v, uv, sizeof(GLfloat)* 8);
 	}
 	//float operator [](int index) const;
-	float* operator [](int index);
-	float u_v[8];
+	GLfloat* operator [](int index);
+	GLfloat u_v[8];
 };
 
 //inline float TextureRegion::operator[](int index)const
@@ -20,7 +20,7 @@ public:
 //	return u_v[index];
 //}
 
-inline float* TextureRegion::operator[](int index)
+inline GLfloat* TextureRegion::operator[](int index)
 {
 	return &u_v[index];
 }

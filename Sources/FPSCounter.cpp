@@ -8,7 +8,7 @@
 
 class FPSCounter : public GameLogic
 {
-	float time;
+	GLfloat time = 0;
 	int frames;
 public:
 	void Update()

@@ -51,12 +51,11 @@ inline void Light::setLight(int l)
 {
 	glDisable(GL_LIGHT0 + _light);
 	glEnable(GL_LIGHT0 + l);
+	_light = l;
 
 	setAmbient(Color(0.2f, 0.2f, 0.2f));
 	setDiffuse(Color(0.5f, 0.5f, 0.5f));
 	setSpecular(Color(0.0f, 0.0f, 0.0f));
-
-	_light = l;
 }
 
 inline void Light::setLightType(LightType type)
@@ -69,7 +68,7 @@ inline void Light::setLightType(LightType type)
 		//glLightfv(GL_LIGHT0 + _light, GL_POSITION, new float[]{0.0f, 0.0f, 1.0f, 0.0f});
 		break;
 	case POSITIONAL:
-		setLinearAttenuation(0.2f);
+		setLinearAttenuation(1.0f);
 		//glLightfv(GL_LIGHT0 + _light, GL_POSITION, new float[]{0.0f, 0.0f, 0.0f, 1.0f});
 		break;
 	case SPOT:

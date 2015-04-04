@@ -6,115 +6,115 @@
 #include "Transform.h"
 #include "ScreenSystem.h"
 #include "ShaderProgram.h"
+#include "Input.h"
+#include "GameTime.h"
 
-GLfloat meterPerPixel;
-GLfloat w_range = 1, h_range = 1;
 
 SpriteRenderer::~SpriteRenderer()
 {
 	cout << "SpriteRenderer:: ~~~deleted~~~ " << endl;
+	delete[] _verts;
+	delete[] _normals;
+	delete[] _tangent;
+	delete[] _bitangent;
 }
-
-smart_pointer<ShaderProgram> shaderProgram;
 
 void SpriteRenderer::Create()
 {
-	//TODO move this calculation to Camera
-	//GLfloat h = 2 * tan(45.0f*(3.1413f / 180) / 2);
-	//GLfloat w = ((GLfloat)800 / 600)*h;
-
-	GLfloat width = ScreenSystem::getWidth();
-	GLfloat height = ScreenSystem::getHeight();
-
-	meterPerPixel = 1.0f/100.0f;
-
-	shaderProgram = smart_pointer<ShaderProgram>(new ShaderProgram());
-	shaderProgram->loadShaderFromFile(GL_VERTEX_SHADER_ARB, "C:/Program Files (x86)/OpenGL Shader Designer/My/Diffuse.vert");
-	shaderProgram->loadShaderFromFile(GL_FRAGMENT_SHADER_ARB, "C:/Program Files (x86)/OpenGL Shader Designer/My/Diffuse.frag");
-	shaderProgram->createAndLinkProgram();
+	_meterPerPixel = 1.0f/100.0f;
 }
 
 void SpriteRenderer::Init()
 {
-	setTextureFrame(frame);
+	_tangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("tangent");
+	_bitangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("bitangent");
 
-	getMainMaterial()->color_ambient.set(1.0f, 1.0f, 1.0f);
-	getMainMaterial()->color_diffuse.set(1.0f, 1.0f, 1.0f);
-	getMainMaterial()->color_specular.set(1.0f, 1.0f, 1.0f);
-	getMainMaterial()->shininess = 0.0f;
-
+	setTextureFrame(_frame);
 }
 
-float time = 0.0f;
 void SpriteRenderer::Update()
 {
 	getTransform()->applyTransformation();
 	
-	smart_pointer<Texture2D>& mainTexture = getMainTexture();
-	if (mainTexture.isEmpty())
-		return;
-	
-	getMainMaterial()->bind();
-	shaderProgram->bind();
+	smart_pointer<Material> mat = getSharedMaterial();
 
-	//int my_vec3_location = glGetUniformLocationARB(shaderProgram->getProgram(), "mainColor");
-	//glUniform4fARB(my_vec3_location, 1.0f, 1.0f, 1.0f, 1.0f);
+	mat->bind();
 
-	//int time_loc = glGetUniformLocationARB(shaderProgram->getProgram(), "time");
-	//glUniform1fARB(time_loc, time);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	//time += 0.01f;
+	glVertexPointer(2, GL_FLOAT, 0, _verts);
+	glNormalPointer(GL_FLOAT, 0, _normals);
+	glTexCoordPointer(2, GL_FLOAT, 0, _texcoords);
+	glVertexAttribPointerARB(_tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
+	glVertexAttribPointerARB(_bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
 
-	w_range = 3.0f;
-	h_range = 3.0f;
-	glBegin(GL_QUADS);
+	glDrawArrays(GL_QUADS, 0, 4);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+
+	/*glBegin(GL_QUADS);
 	{
 		glNormal3f(0.0f, 0.0f, 1.0f);
 
-		glTexCoord2fv((*mainTexture)[frame][0]);glVertex3f(-w_range, -h_range, 0.0f);
+		glTexCoord2fv((*mainTexture)[_frame][0]); glVertex3f(-_wRange, -_hRange, 0.0f);
+		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
+		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
 
-		glTexCoord2fv((*mainTexture)[frame][2]);glVertex3f(w_range, -h_range, 0.0f);
+		glTexCoord2fv((*mainTexture)[_frame][2]); glVertex3f(_wRange, -_hRange, 0.0f);
+		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
+		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
 
-		glTexCoord2fv((*mainTexture)[frame][4]);glVertex3f(w_range, h_range, 0.0f);
+		glTexCoord2fv((*mainTexture)[_frame][4]); glVertex3f(_wRange, _hRange, 0.0f);
+		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
+		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
 
-		glTexCoord2fv((*mainTexture)[frame][6]);glVertex3f(-w_range, h_range, 0.0f);
+		glTexCoord2fv((*mainTexture)[_frame][6]); glVertex3f(-_wRange, _hRange, 0.0f);		
+		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
+		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
 	}
-	glEnd();
+	glEnd();*/
 
-	shaderProgram->unbind();
-	getMainMaterial()->unbind();
+	mat->unbind();
+
+	float rotationSpeed = 100.0f;
+
+	if (Input::IsKeyDown(KeyCode::z))
+		getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
+	if (Input::IsKeyDown(KeyCode::x))
+		getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
 }
 
 void SpriteRenderer::setTextureFrame(int frame)
 {
-	this->frame = frame;
+	this->_frame = frame;
 	
 	smart_pointer<Texture2D>& txt = getMainTexture();
 	
+	if (txt.isEmpty())
+		return;
+
 	TextureRegion& region = txt->getTextureRegion(frame);
 	float width = (region.u_v[2] - region.u_v[0])*txt->width;
 	float height = (region.u_v[5] - region.u_v[1])*txt->height;
 	
-	//printf("Width: %0.0f Height: %0.0f\n", width, height);
-	if (!txt.isEmpty())
+	_wRange = _meterPerPixel*width;
+	_hRange = _meterPerPixel*height;
+
+	if (_verts != NULL)
+		delete[] _verts;
+
+	_verts = new Vector2[4]
 	{
-		w_range = meterPerPixel*width;
-		h_range = meterPerPixel*height;
-		//printf("w_range: %f h_range: %f\n", w_range, h_range);
-		//GLfloat ratio = (GLfloat)width / height;
-		//
-		//if (width <= height)
-		//{
-		//	w_range = meterPerPixel*width*ratio;
-		//	h_range = meterPerPixel*height;
-		//}
-		//else
-		//{
-		//	w_range = meterPerPixel*width;;
-		//	h_range = meterPerPixel*height/ratio;
-		//}
-			
-		//std::cout << "RATIO: " << ratio << std::endl;
-		//std::cout << "W: " << w_range << " H: " << h_range << std::endl;
-	}
+		Vector2(-_wRange, -_hRange),
+		Vector2(_wRange, -_hRange),
+		Vector2(_wRange, _hRange),
+		Vector2(-_wRange, _hRange)
+	};
+
+	 _texcoords = region.u_v;
 }

@@ -2,101 +2,94 @@
 #define EngineTesting_Mesh_h
 
 #include <vector>
+#include "Utils.h"
 #include "Vectors.h"
 #include "smart_pointer.h"
 
-class SubMesh : public RemovableObject
-{
-public:
-	std::vector<Vector3> vertices;
-	std::vector<Vector2> uvs;
-	std::vector<Vector3> normals;
-	std::vector<unsigned int> indices;
-};
-
 class Mesh:public RemovableObject
 {
+friend class MeshRenderer;
+
+	class SubMesh : public RemovableObject
+	{
+		friend class Mesh;
+		friend class MeshRenderer;
+
+		GLboolean _updateVertices = 0;
+		GLboolean _updateTexCoords = 0;
+		GLboolean _updateNormals = 0;
+		GLboolean _updateIndices = 0;
+
+		GLuint vertex_buffer_id = 0;
+		GLuint uv_buffer_id = 0;
+		GLuint normal_buffer_id = 0;
+		GLuint index_buffer_id = 0;
+
+		GLuint vertex_count = 0;
+		GLuint uv_count = 0;
+		GLuint normal_count = 0;
+		GLuint index_count = 0;
+
+		std::vector<Vector3> vertices;
+		std::vector<Vector2> uvs;
+		std::vector<Vector3> normals;
+		std::vector<unsigned int> indices;
+
+		inline GLboolean _updateVBO()
+		{
+			return _updateVertices || _updateTexCoords || _updateNormals || _updateIndices;
+		}
+	};
+
 private:
-	std::vector<smart_pointer<SubMesh>> submeshes;
+	GLenum _vboUsage = GL_STATIC_DRAW_ARB;
+	int _sharesCount = 0;
+	std::vector<smart_pointer<SubMesh>> _submeshes;
+	void genBuffers(int submesh = 0);
+	void deleteAllBuffers(int submesh = 0);
+	void draw(int sumbmesh = 0);
 public:
+	Mesh(const Mesh& other);
 	Mesh();
 	~Mesh();
-	std::vector<Vector3> getVertices(int submesh = 0);
-	std::vector<Vector2> getUVs(int submesh = 0);
-	std::vector<Vector3> getNormals(int submesh = 0);
-	std::vector<unsigned int> getIndices(int submesh = 0);
+	std::vector<Vector3> getVertices(int submesh = 0) const;
+	std::vector<Vector2> getUVs(int submesh = 0) const ;
+	std::vector<Vector3> getNormals(int submesh = 0) const;
+	std::vector<unsigned int> getIndices(int submesh = 0) const;
 	void setVertices(std::vector<Vector3>,int submesh = 0);
 	void setUVs(std::vector<Vector2>, int submesh = 0);
 	void setNormals(std::vector<Vector3>, int submesh = 0);
 	void setIndices(std::vector<unsigned int>, int submesh = 0);
-	int getSubMeshCount();
+	int getSubMeshCount() const;
 	void setSubMeshCount(int count);
+	void setVBOUsage(GLenum usage);
 	void clear();
 	std::string name;
 };
 
-inline int Mesh::getSubMeshCount()
+inline int Mesh::getSubMeshCount() const
 {
-	return submeshes.size();
+	return _submeshes.size();
 }
 
 inline void Mesh::setSubMeshCount(int count)
 {
-	if (submeshes.size() < count)
-		submeshes.resize(count, smart_pointer<SubMesh>(new SubMesh));
-	else
-		submeshes.resize(count);
-}
-
-inline std::vector<Vector3> Mesh::getVertices(int submesh)
-{
-	return submeshes[submesh]->vertices;
-}
-
-inline std::vector<Vector2> Mesh::getUVs(int submesh)
-{
-	return submeshes[submesh]->uvs;
-}
-
-inline std::vector<Vector3> Mesh::getNormals(int submesh)
-{
-	return submeshes[submesh]->normals;
-}
-
-inline std::vector<unsigned int> Mesh::getIndices(int submesh)
-{
-	return submeshes[submesh]->indices;
-}
-
-inline void Mesh::setVertices(std::vector<Vector3> vertices, int submesh)
-{
-	submeshes[submesh]->vertices = vertices;
-}
-
-inline void Mesh::setUVs(std::vector<Vector2> uvs, int submesh)
-{
-	submeshes[submesh]->uvs = uvs;
-}
-
-inline void Mesh::setNormals(std::vector<Vector3> normals, int submesh)
-{
-	submeshes[submesh]->normals = normals;
-}
-
-inline void Mesh::setIndices(std::vector<unsigned int> indices, int submesh)
-{
-	submeshes[submesh]->indices = indices;
-}
-
-inline void Mesh::clear()
-{
-	for (smart_pointer<SubMesh> m : submeshes)
+	if (count > _submeshes.size()) // adding new submeshes
+		_submeshes.resize(count, smart_pointer<SubMesh>(new SubMesh));
+	else 
 	{
-		m->vertices.clear();
-		m->uvs.clear();
-		m->normals.clear();
-		m->indices.clear();
+		//removing submeshes
+		while (count < _submeshes.size())
+		{
+			deleteAllBuffers(_submeshes.size() - 1);
+			_submeshes.pop_back();
+		}
 	}
+}
+
+inline void Mesh::setVBOUsage(GLenum usage)
+{
+	_vboUsage = usage;
 }
 
 #endif

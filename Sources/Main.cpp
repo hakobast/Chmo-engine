@@ -7,35 +7,14 @@
 #include <crtdbg.h>
 #include <memory>
 
+#include "CoreEngine/ChmoEngine.h"
 
-#include "Engine.h"
-#include "Input.h"
-#include "GameTime.h"
-#include "GameLogicSystem.h"
-#include "RenderSystem.h"
-#include "ScreenSystem.h"
-#include "Renderer.h"
-#include "SpriteRenderer.h"
-#include "TextureAnimator.h"
-#include "Terrain.h"
-#include "TextureAnimationClip.h"
-#include "TextureAtlas.h"
-#include "TextureTiled.h"
+#include "Testings/Ship.h"
+#include "Testings/FPSCounter.cpp"
+#include "Testings/GLTestComponent.cpp"
+#include "Testings/SecondComponent.cpp"
+#include "Testings/TestComponent.cpp"
 
-#include "TestComponent.cpp"
-#include "SecondComponent.cpp"
-#include "Ship.h"
-#include "GLTestComponent.cpp"
-#include "FPSCounter.cpp"
-#include "Utils.h"
-
-
-#include "Mesh.h"
-#include "Color.h"
-#include "MeshRenderer.h"
-#include "Camera.h"
-#include "AssetManager.h"
-#include "Light.h"
 
 #define TARGET_FPS 60
 

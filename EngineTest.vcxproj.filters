@@ -13,219 +13,249 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\CoreEngine">
+      <UniqueIdentifier>{aae2cc96-8591-44ff-aac6-011981188a7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CoreEngine">
+      <UniqueIdentifier>{a3528159-0d28-46cf-9943-f0605f4db3df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{868087f1-2d03-4df3-88bd-60cf329ecfcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{bac89007-d77a-4d62-a753-4d43f8986cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{b38b44e5-79fc-4e09-9a55-93d3e985552d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{48e4b95a-a14b-47f1-b378-78cb8bef0a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Extras">
+      <UniqueIdentifier>{61b2a414-e725-4872-ac02-23d60aaf70f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Extras">
+      <UniqueIdentifier>{3f164216-22ad-406b-b33b-f5ccc8ac705a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Testing">
+      <UniqueIdentifier>{5272994c-900e-419a-adbc-3a7d984e3b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Testing">
+      <UniqueIdentifier>{ea987e6d-e70c-4f2d-80e5-5eb01f9b0977}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\ActiveComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\ActiveComponent.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\AssetManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\AssetManager.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Color.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\ChmoEngine.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Component.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Component.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Engine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Engine.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\GameLogic.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\GameLogic.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\GameLogicSystem.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\GameObject.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Material.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\GameTime.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Mesh.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\imageloader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\ShaderProgram.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Input.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\System.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Libs.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Texture2D.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Material.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\TextureAnimationClip.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Matrix4.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\TextureAtlas.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Mesh.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\TextureRegion.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\MeshRenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\TextureTiled.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Renderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Transform.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\RenderSystem.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\Utils.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\smart_pointer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Systems\GameLogicSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\SpriteRenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Systems\GameTime.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\System.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Systems\Input.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Texture2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Systems\RenderSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\TextureAtlas.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Systems\ScreenSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\TextureRegion.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\Camera.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\TextureTiled.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\Light.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Transform.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\MeshRenderer.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\Renderer.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Vectors.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\SpriteRenderer.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\GL_LIBS.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\Terrain.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\TextureAnimator.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Components\TextureAnimator.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\TextureAnimationClip.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Extras\Color.h">
+      <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Terrain.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Extras\Vectors.h">
+      <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Extras\smart_pointer.h">
+      <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\ScreenSystem.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Extras\Matrix4.h">
+      <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Ship.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Testings\Ship.h">
+      <Filter>Header Files\Testing</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\ShaderProgram.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\Testings\imageloader.h">
+      <Filter>Header Files\Testing</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Light.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Sources\CoreEngine\LIBS.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\AssetManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\Utils.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Engine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\AssetManager.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\FPSCounter.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\Engine.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\GameLogicSystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\GameObject.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\Material.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\GameTime.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\Mesh.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\GLTestComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\ShaderProgram.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\imageloader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\Texture2D.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Input.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\CoreEngine\TextureAnimationClip.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\TextureAtlas.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\TextureTiled.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\Transform.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Systems\GameLogicSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Systems\GameTime.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Systems\Input.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Systems\RenderSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Systems\ScreenSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\Camera.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\Light.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\MeshRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\SpriteRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\Terrain.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\TextureAnimator.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\Color.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\Vectors.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\Matrix4.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\FPSCounter.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\TestComponent.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\Ship.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\SecondComponent.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\GLTestComponent.cpp">
+      <Filter>Source Files\Testing</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Matrix4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\MeshRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\RenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\SecondComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\SpriteRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\TestComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\TextureAtlas.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\TextureTiled.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\TextureAnimationClip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\TextureAnimator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\ScreenSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Ship.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\ShaderProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Vectors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Color.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sources\Testings\imageloader.cpp">
+      <Filter>Source Files\Testing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

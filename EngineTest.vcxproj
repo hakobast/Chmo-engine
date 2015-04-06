@@ -11,78 +11,78 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\ActiveComponent.h" />
-    <ClInclude Include="Sources\AssetManager.h" />
-    <ClInclude Include="Sources\Camera.h" />
-    <ClInclude Include="Sources\Color.h" />
-    <ClInclude Include="Sources\Component.h" />
-    <ClInclude Include="Sources\Engine.h" />
-    <ClInclude Include="Sources\GameLogic.h" />
-    <ClInclude Include="Sources\GameLogicSystem.h" />
-    <ClInclude Include="Sources\GameObject.h" />
-    <ClInclude Include="Sources\GameTime.h" />
-    <ClInclude Include="Sources\GL_LIBS.h" />
-    <ClInclude Include="Sources\imageloader.h" />
-    <ClInclude Include="Sources\Input.h" />
-    <ClInclude Include="Sources\Libs.h" />
-    <ClInclude Include="Sources\Light.h" />
-    <ClInclude Include="Sources\Material.h" />
-    <ClInclude Include="Sources\Matrix4.h" />
-    <ClInclude Include="Sources\Mesh.h" />
-    <ClInclude Include="Sources\MeshRenderer.h" />
-    <ClInclude Include="Sources\Renderer.h" />
-    <ClInclude Include="Sources\RenderSystem.h" />
-    <ClInclude Include="Sources\ScreenSystem.h" />
-    <ClInclude Include="Sources\ShaderProgram.h" />
-    <ClInclude Include="Sources\Ship.h" />
-    <ClInclude Include="Sources\smart_pointer.h" />
-    <ClInclude Include="Sources\SpriteRenderer.h" />
-    <ClInclude Include="Sources\System.h" />
-    <ClInclude Include="Sources\Terrain.h" />
-    <ClInclude Include="Sources\Texture2D.h" />
-    <ClInclude Include="Sources\TextureAnimationClip.h" />
-    <ClInclude Include="Sources\TextureAnimator.h" />
-    <ClInclude Include="Sources\TextureAtlas.h" />
-    <ClInclude Include="Sources\TextureRegion.h" />
-    <ClInclude Include="Sources\TextureTiled.h" />
-    <ClInclude Include="Sources\Transform.h" />
-    <ClInclude Include="Sources\Utils.h" />
-    <ClInclude Include="Sources\Vectors.h" />
+    <ClInclude Include="Sources\Components\Camera.h" />
+    <ClInclude Include="Sources\Components\Light.h" />
+    <ClInclude Include="Sources\Components\MeshRenderer.h" />
+    <ClInclude Include="Sources\Components\Renderer.h" />
+    <ClInclude Include="Sources\Components\SpriteRenderer.h" />
+    <ClInclude Include="Sources\Components\Terrain.h" />
+    <ClInclude Include="Sources\Components\TextureAnimator.h" />
+    <ClInclude Include="Sources\CoreEngine\ActiveComponent.h" />
+    <ClInclude Include="Sources\CoreEngine\AssetManager.h" />
+    <ClInclude Include="Sources\CoreEngine\ChmoEngine.h" />
+    <ClInclude Include="Sources\CoreEngine\Component.h" />
+    <ClInclude Include="Sources\CoreEngine\Engine.h" />
+    <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
+    <ClInclude Include="Sources\CoreEngine\GameObject.h" />
+    <ClInclude Include="Sources\CoreEngine\LIBS.h" />
+    <ClInclude Include="Sources\CoreEngine\Material.h" />
+    <ClInclude Include="Sources\CoreEngine\Mesh.h" />
+    <ClInclude Include="Sources\CoreEngine\ShaderProgram.h" />
+    <ClInclude Include="Sources\CoreEngine\System.h" />
+    <ClInclude Include="Sources\CoreEngine\Texture2D.h" />
+    <ClInclude Include="Sources\CoreEngine\TextureAnimationClip.h" />
+    <ClInclude Include="Sources\CoreEngine\TextureAtlas.h" />
+    <ClInclude Include="Sources\CoreEngine\TextureRegion.h" />
+    <ClInclude Include="Sources\CoreEngine\TextureTiled.h" />
+    <ClInclude Include="Sources\CoreEngine\Transform.h" />
+    <ClInclude Include="Sources\CoreEngine\Utils.h" />
+    <ClInclude Include="Sources\Extras\Color.h" />
+    <ClInclude Include="Sources\Extras\Matrix4.h" />
+    <ClInclude Include="Sources\Extras\smart_pointer.h" />
+    <ClInclude Include="Sources\Extras\Vectors.h" />
+    <ClInclude Include="Sources\Systems\GameLogicSystem.h" />
+    <ClInclude Include="Sources\Systems\GameTime.h" />
+    <ClInclude Include="Sources\Systems\Input.h" />
+    <ClInclude Include="Sources\Systems\RenderSystem.h" />
+    <ClInclude Include="Sources\Systems\ScreenSystem.h" />
+    <ClInclude Include="Sources\Testings\imageloader.h" />
+    <ClInclude Include="Sources\Testings\Ship.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\AssetManager.cpp" />
-    <ClCompile Include="Sources\Camera.cpp" />
-    <ClCompile Include="Sources\Color.cpp" />
-    <ClCompile Include="Sources\Engine.cpp" />
-    <ClCompile Include="Sources\FPSCounter.cpp" />
-    <ClCompile Include="Sources\GameLogicSystem.cpp" />
-    <ClCompile Include="Sources\GameObject.cpp" />
-    <ClCompile Include="Sources\GameTime.cpp" />
-    <ClCompile Include="Sources\GLTestComponent.cpp" />
-    <ClCompile Include="Sources\imageloader.cpp" />
-    <ClCompile Include="Sources\Input.cpp" />
-    <ClCompile Include="Sources\Light.cpp" />
+    <ClCompile Include="Sources\Components\Camera.cpp" />
+    <ClCompile Include="Sources\Components\Light.cpp" />
+    <ClCompile Include="Sources\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Sources\Components\SpriteRenderer.cpp" />
+    <ClCompile Include="Sources\Components\Terrain.cpp" />
+    <ClCompile Include="Sources\Components\TextureAnimator.cpp" />
+    <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
+    <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Material.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Mesh.cpp" />
+    <ClCompile Include="Sources\CoreEngine\ShaderProgram.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Texture2D.cpp" />
+    <ClCompile Include="Sources\CoreEngine\TextureAnimationClip.cpp" />
+    <ClCompile Include="Sources\CoreEngine\TextureAtlas.cpp" />
+    <ClCompile Include="Sources\CoreEngine\TextureTiled.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Transform.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Utils.cpp" />
+    <ClCompile Include="Sources\Extras\Color.cpp" />
+    <ClCompile Include="Sources\Extras\Matrix4.cpp" />
+    <ClCompile Include="Sources\Extras\Vectors.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
-    <ClCompile Include="Sources\Material.cpp" />
-    <ClCompile Include="Sources\Matrix4.cpp" />
-    <ClCompile Include="Sources\Mesh.cpp" />
-    <ClCompile Include="Sources\MeshRenderer.cpp" />
-    <ClCompile Include="Sources\RenderSystem.cpp" />
-    <ClCompile Include="Sources\ScreenSystem.cpp" />
-    <ClCompile Include="Sources\SecondComponent.cpp" />
-    <ClCompile Include="Sources\ShaderProgram.cpp" />
-    <ClCompile Include="Sources\Ship.cpp" />
-    <ClCompile Include="Sources\SpriteRenderer.cpp" />
-    <ClCompile Include="Sources\Terrain.cpp" />
-    <ClCompile Include="Sources\TestComponent.cpp" />
-    <ClCompile Include="Sources\Texture2D.cpp" />
-    <ClCompile Include="Sources\TextureAnimationClip.cpp" />
-    <ClCompile Include="Sources\TextureAnimator.cpp" />
-    <ClCompile Include="Sources\TextureAtlas.cpp" />
-    <ClCompile Include="Sources\TextureTiled.cpp" />
-    <ClCompile Include="Sources\Transform.cpp" />
-    <ClCompile Include="Sources\Utils.cpp" />
-    <ClCompile Include="Sources\Vectors.cpp" />
+    <ClCompile Include="Sources\Systems\GameLogicSystem.cpp" />
+    <ClCompile Include="Sources\Systems\GameTime.cpp" />
+    <ClCompile Include="Sources\Systems\Input.cpp" />
+    <ClCompile Include="Sources\Systems\RenderSystem.cpp" />
+    <ClCompile Include="Sources\Systems\ScreenSystem.cpp" />
+    <ClCompile Include="Sources\Testings\FPSCounter.cpp" />
+    <ClCompile Include="Sources\Testings\GLTestComponent.cpp" />
+    <ClCompile Include="Sources\Testings\imageloader.cpp" />
+    <ClCompile Include="Sources\Testings\SecondComponent.cpp" />
+    <ClCompile Include="Sources\Testings\Ship.cpp" />
+    <ClCompile Include="Sources\Testings\TestComponent.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{76D8E35A-6452-4569-82B0-C2AA3DAFE2E2}</ProjectGuid>
@@ -130,7 +130,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;C:\Users\user\Documents\ECSGameEngine\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

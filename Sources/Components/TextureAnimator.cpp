@@ -27,7 +27,7 @@ void TextureAnimator::addClip(smart_pointer<TextureAnimationClip> clip)
 
 void TextureAnimator::playClip(int index)
 {
-	if (index < clips.size())
+	if (index < (int)clips.size())
 	{
 		playingClip = clips[index];
 		timeSincePlayed = GameTime::TimeSinceGameStarted();

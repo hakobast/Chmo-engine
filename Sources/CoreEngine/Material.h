@@ -71,14 +71,14 @@ inline void Material::bind()
 {
 	//glEnable(GL_TEXTURE_2D);
 
-	if (!shader.isEmpty())
+ 	if (!shader.isEmpty())
 		shader->bind();
 
-	for (int i = 0; i < textures.size(); i++)
+	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
 	{
 		if (!textures[i].isEmpty())
 		{
-			glActiveTexture(GL_TEXTURE0+i);
+			glActiveTexture(GL_TEXTURE0 + i);
 			textures[i]->bindTexture();
 		}
 	}
@@ -91,7 +91,7 @@ inline void Material::bind()
 
 inline void Material::unbind()
 {
-	for (int i = 0; i < textures.size(); i++)
+	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
 	{
 		if (!textures[i].isEmpty())
 		{
@@ -105,7 +105,7 @@ inline void Material::unbind()
 
 inline void Material::setTexture(smart_pointer<Texture2D> texture, int index)
 {
-	if (index >= textures.size())
+	if (index >= (int)textures.size())
 	{
 		textures.push_back(texture);
 		index = textures.size()-1;
@@ -118,7 +118,7 @@ inline void Material::setTexture(smart_pointer<Texture2D> texture, int index)
 	if (!shader.isEmpty())
 	{
 		std::vector<UniformDesc> samplers = shader->getUniforms(GL_SAMPLER_2D);
-		if (index < samplers.size())
+		if (index < (int)samplers.size())
 		{
 			shader->setUniform1i(samplers[index].name, index);
 		}
@@ -149,7 +149,7 @@ inline void Material::addTexture(smart_pointer<Texture2D> texture, char* sampler
 
 inline smart_pointer<Texture2D>& Material::getTexture(int index)
 {
-	if (index < textures.size())
+	if (index < (int)textures.size())
 		return textures[index];
 
 	return smart_pointer<Texture2D>::null();

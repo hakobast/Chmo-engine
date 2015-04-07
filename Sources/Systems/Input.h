@@ -149,7 +149,7 @@ inline bool Input::IsKeyDownNow(int key)
 
 inline bool Input::IsMouseDown(int button)
 {
-	return instance->_mouseButtons[button];
+	return instance->_mouseButtons[button] != 0;
 }
 
 inline Vector2 Input::GetMousePosition()

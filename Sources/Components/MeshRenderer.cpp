@@ -51,9 +51,10 @@ void  MeshRenderer::Update()
 	std::vector<smart_pointer<Material>>& mats = getSharedMaterials();
 	int mats_count = mats.size();
 
+	//TODO implement multi materials
+	//TODO remove this shit
 	for (int i = 0; i < mesh->getSubMeshCount(); i++)
 	{
-		//TODO implement multi materials
 		if (i < mats_count)
 		{
 			mats[i]->bind();

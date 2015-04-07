@@ -74,12 +74,12 @@ inline int Mesh::getSubMeshCount() const
 
 inline void Mesh::setSubMeshCount(int count)
 {
-	if (count > _submeshes.size()) // adding new submeshes
+	if (count > (int)_submeshes.size()) // adding new submeshes
 		_submeshes.resize(count, smart_pointer<SubMesh>(new SubMesh));
 	else 
 	{
 		//removing submeshes
-		while (count < _submeshes.size())
+		while (count < (int)_submeshes.size())
 		{
 			deleteAllBuffers(_submeshes.size() - 1);
 			_submeshes.pop_back();

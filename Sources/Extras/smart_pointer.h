@@ -50,9 +50,9 @@ private:
     T* data;
 	static smart_pointer<T> emptyPtr;
 public:
-    smart_pointer():data(0)
+    smart_pointer():data(NULL)
 	{
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
+		static_assert(std::is_base_of<RemovableObject, T>::value, "smart_pointer illegal type of <T>");
 
 #ifdef ENABLE_LOG
 		std::cout << "smart_pointer() <" << typeid(T).name() << ">" << std::endl;
@@ -61,7 +61,7 @@ public:
     
     smart_pointer(const smart_pointer& other):data(other.data)
     {
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
+		static_assert(std::is_base_of<RemovableObject, T>::value, "smart_pointer illegal type of <T>");
 		if (data != NULL)
 		{
 			dynamic_cast<RemovableObject*>(data)->refs++;
@@ -76,7 +76,7 @@ public:
     
     explicit smart_pointer(T* ptr):data(ptr)
     {
-		static_assert(std::is_base_of<RemovableObject, T>::value > 0, "smart_pointer illegal type of <T>");
+		static_assert(std::is_base_of<RemovableObject, T>::value, "smart_pointer illegal type of <T>");
 
 		if (data != NULL)
 		{
@@ -156,6 +156,16 @@ public:
         return *this;
     }
     
+	inline bool operator == (const T*const other) const
+	{
+		return data == other;
+	}
+
+	inline bool operator != (const T*const other) const
+	{
+		return data != other;
+	}
+
     inline bool operator == (const smart_pointer& other ) const
     {
         return data == other.data;

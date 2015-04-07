@@ -67,8 +67,8 @@ public:
 	void setTextureEnviroment(GLenum enviroment);
 	void setAnisoFiltering(bool enabled);
 
-	TextureRegion&const getTextureRegion(int index = 0);
-	TextureRegion&const operator [](int index);
+	TextureRegion*const getTextureRegion(int index = 0);
+	TextureRegion*const operator [](int index);
 };
 
 inline void Texture2D::setFilterMode(GLenum minFilter, GLenum magFilter)
@@ -143,8 +143,11 @@ inline int Texture2D::getFrameCount()
 	return frameCount;
 }
 
-inline TextureRegion&const Texture2D::getTextureRegion(int index)
+inline TextureRegion*const Texture2D::getTextureRegion(int index)
 {
+	if (index >= frameCount)
+		return NULL;
+
 	if (textures == NULL)
 	{
 		textures = new TextureRegion;
@@ -161,10 +164,10 @@ inline TextureRegion&const Texture2D::getTextureRegion(int index)
 		textures->u_v[7] = 1.0f;
 	}
 
-	return textures[index];
+	return &textures[index];
 }
 
-inline TextureRegion&const Texture2D::operator [](int index)
+inline TextureRegion*const Texture2D::operator [](int index)
 {
 	return getTextureRegion(index);
 }

@@ -9,21 +9,24 @@
 #ifndef OOPTesting_ChmoEngine_h
 #define OOPTesting_ChmoEngine_h
 
-//TEMP
-#include "Systems/GameLogicSystem.h"
-#include "Systems/RenderSystem.h"
-#include "Systems/ScreenSystem.h"
-#include "CoreEngine/Engine.h"
-//
-
 #include "Systems/GameTime.h"
 #include "Systems/Input.h"
 
 #include "CoreEngine/LIBS.h"
+#include "CoreEngine/AssetManager.h"
 #include "CoreEngine/GameObject.h"
+#include "CoreEngine/Transform.h"
 #include "CoreEngine/Component.h"
 #include "CoreEngine/ActiveComponent.h"
 #include "CoreEngine/GameLogic.h"
+#include "CoreEngine/Material.h"
+#include "CoreEngine/Mesh.h"
+#include "CoreEngine/Texture2D.h"
+#include "CoreEngine/TextureAtlas.h"
+#include "CoreEngine/TextureTiled.h"
+#include "CoreEngine/TextureRegion.h"
+#include "CoreEngine/TextureAnimationClip.h"
+
 
 #include "Components/Camera.h"
 #include "Components/Light.h"

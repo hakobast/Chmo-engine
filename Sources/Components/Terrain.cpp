@@ -65,14 +65,14 @@ void Terrain::build(smart_pointer<Texture2D> heightMap, GLfloat height)
 	{
 		for (int x = 0; x < width; x++)
 		{
-			verts[index].set(x - width / 2, getHeight(x, z), z - length / 2);
+			verts[index].set(x - (GLfloat)width / 2, getHeight(x, z), z - (GLfloat)length / 2);
 			textures[index].set((GLfloat)x / width, (GLfloat)z / width);
 			norms[index] = normals[z][x];
 			index++;
 			if (z + 1 < length)
 			{
 				int z_plus = z + 1;
-				verts[index] = Vector3(x - width / 2, getHeight(x, z_plus), z_plus - length / 2);
+				verts[index] = Vector3(x - (GLfloat)width / 2, getHeight(x, z_plus), z_plus - (GLfloat)length / 2);
 				textures[index].set((GLfloat)x / width, (GLfloat)z_plus / width);
 				norms[index] = normals[z_plus][x];
 				index++;

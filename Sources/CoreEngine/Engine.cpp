@@ -7,11 +7,16 @@
 //
 
 #include <iostream>
-#include "LIBS.h"
 
-#include "Engine.h"
-#include "ActiveComponent.h"
-#include "Utils.h"
+#include "CoreEngine/Engine.h"
+#include "CoreEngine/LIBS.h"
+#include "CoreEngine/ActiveComponent.h"
+#include "CoreEngine/Utils.h"
+#include "Systems/GameLogicSystem.h"
+#include "Systems/RenderSystem.h"
+#include "Systems/ScreenSystem.h"
+#include "Systems/GameTime.h"
+#include "Systems/Input.h"
 
 
 bool pred_sortSystems(const System* lhs, const System* rhs)
@@ -47,6 +52,18 @@ void Engine::Init()
 #ifdef FREEIMAGE_LIB
 	FreeImage_Initialise();
 #endif
+
+	RenderSystem* renderSystem = new RenderSystem; //renderer system
+	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
+	ScreenSystem* screenSystem = new ScreenSystem;
+	Input* inputSystem = new Input;
+	GameTime* timeSystem = new GameTime;
+
+	Engine::getInstance().addSystem(*gameLogicSystem, 1);
+	Engine::getInstance().addSystem(*screenSystem, 2);
+	Engine::getInstance().addSystem(*renderSystem, 3);
+	Engine::getInstance().addSystem(*inputSystem, 4);
+	Engine::getInstance().addSystem(*timeSystem, 5);
 
 	std::cout << "Engine::Init()" << std::endl;
 }

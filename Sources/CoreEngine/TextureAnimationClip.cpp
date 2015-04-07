@@ -17,7 +17,7 @@ void TextureAnimationClip::Update(GLfloat t, GameObject& obj)
 {
 	GLfloat frameTime = 1.0f / baseFPS;
 	GLfloat framesTime = frameCount*frameTime;
-	GLint frame = t / frameTime;
+	GLint frame = (int)(t / frameTime);
 	 
 	switch (animType)
 	{

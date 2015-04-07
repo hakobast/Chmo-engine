@@ -109,7 +109,7 @@ T* GameObject::addComponent()
 template<class T>
 T* GameObject::getComponent(bool enabledOnly) const
 {
-	for (int i = 0; i < components.size(); i++)
+	for (size_t i = 0,len = components.size(); i < len; i++)
 	{
 		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
 		{

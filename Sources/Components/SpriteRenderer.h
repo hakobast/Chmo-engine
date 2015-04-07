@@ -11,6 +11,14 @@ class SpriteRenderer : public Renderer
 public:
 	SpriteRenderer()
 	{
+		_verts = new Vector2[4]
+		{
+			Vector2(-1.0f, -1.0f),
+			Vector2( 1.0f, -1.0f),
+			Vector2( 1.0f,  1.0f),
+			Vector2(-1.0f,  1.0f)
+		};
+
 		_normals = new Vector3[4]
 		{
 			Vector3(0.0f, 0.0f, 1.0f),

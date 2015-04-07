@@ -21,7 +21,7 @@ void Light::Update()
 		getTransform()->applyTransformation();
 		//glDisable(GL_LIGHTING);
 		glColor3f(1.0f, 0.0f, 1.0f);
-		glutSolidCone(0.1f, 0.2f, 10.0f, 10.0f);
+		glutSolidCone(0.1f, 0.2f, 10, 10);
 		//glEnable(GL_LIGHTING);
 		
 		switch (_type)

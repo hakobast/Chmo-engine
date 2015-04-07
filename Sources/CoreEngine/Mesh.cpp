@@ -199,7 +199,7 @@ void Mesh::draw(int submesh)
 
 std::vector<Vector3> Mesh::getVertices(int submesh) const
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return std::vector<Vector3>();
@@ -223,7 +223,7 @@ std::vector<Vector3> Mesh::getVertices(int submesh) const
 
 std::vector<Vector2> Mesh::getUVs(int submesh) const
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return std::vector<Vector2>();
@@ -247,7 +247,7 @@ std::vector<Vector2> Mesh::getUVs(int submesh) const
 
 std::vector<Vector3> Mesh::getNormals(int submesh) const
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return std::vector<Vector3>();
@@ -271,7 +271,7 @@ std::vector<Vector3> Mesh::getNormals(int submesh) const
 
 std::vector<unsigned int> Mesh::getIndices(int submesh)const
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return std::vector<unsigned int>();
@@ -295,7 +295,7 @@ std::vector<unsigned int> Mesh::getIndices(int submesh)const
 
 void Mesh::setVertices(std::vector<Vector3> vertices, int submesh)
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return;
@@ -314,7 +314,7 @@ void Mesh::setVertices(std::vector<Vector3> vertices, int submesh)
 
 void Mesh::setUVs(std::vector<Vector2> uvs, int submesh)
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return;
@@ -333,7 +333,7 @@ void Mesh::setUVs(std::vector<Vector2> uvs, int submesh)
 
 void Mesh::setNormals(std::vector<Vector3> normals, int submesh)
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return;
@@ -352,7 +352,7 @@ void Mesh::setNormals(std::vector<Vector3> normals, int submesh)
 
 void Mesh::setIndices(std::vector<unsigned int> indices, int submesh)
 {
-	if (submesh >= _submeshes.size())
+	if (submesh >= (int)_submeshes.size())
 	{
 		printf("There is no submesh at index %d\n", submesh);
 		return;
@@ -371,7 +371,7 @@ void Mesh::setIndices(std::vector<unsigned int> indices, int submesh)
 
 void Mesh::clear()
 {
-	for (int i = 0; i < _submeshes.size(); i++)
+	for (int i = 0; i < (int)_submeshes.size(); i++)
 	{
 		smart_pointer<SubMesh>& m = _submeshes[i];
 

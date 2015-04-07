@@ -47,7 +47,7 @@ void RenderSystem::Update()
 	Camera::main->ApplyTransformation();
 
 	Renderer* r = NULL;
-	for (int i = 0; i < components.size(); i++)
+	for (size_t i = 0, len = components.size(); i < len; i++)
 	{
 		if (r != NULL)
 		{

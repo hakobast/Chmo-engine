@@ -39,7 +39,7 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 		matQueue.push(mat);
 
 	GameObject* obj;
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0, len = meshes.size(); i < len; i++)
 	{
 		std::stringstream stream;
 		if (meshes[i]->getSubMeshCount() > 1)
@@ -266,7 +266,7 @@ std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor*
 				//verts, uvs, normals, verts + 1, uvs + 1, normals + 1, verts + 2, uvs + 2, normals + 2);
 			}
 
-			for (int i = 1; i < verts.size() - 1; i++)
+			for (size_t i = 1, len = verts.size() - 1; i < len; i++)
 			{
 				vertexIndices.push_back(verts[0]);
 				vertexIndices.push_back(verts[i]);
@@ -329,7 +329,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 
 	if (uIndices.size() > 0 && nIndices.size() > 0)
 	{
-		for (int i = 0; i < vIndices.size(); i++)
+		for (size_t i = 0, len = vIndices.size(); i < len; i++)
 		{
 			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
 			unsigned int index;
@@ -348,7 +348,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 	}
 	else if (uIndices.size() > 0)
 	{
-		for (int i = 0; i < vIndices.size(); i++)
+		for (size_t i = 0, len = vIndices.size(); i < len; i++)
 		{
 			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
 			unsigned int index;
@@ -366,7 +366,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 	}
 	else if (nIndices.size() > 0)
 	{
-		for (int i = 0; i < vIndices.size(); i++)
+		for (size_t i = 0, len = vIndices.size(); i < len; i++)
 		{
 			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
 			unsigned int index;
@@ -384,7 +384,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 	}
 	else
 	{
-		for (int i = 0; i < vIndices.size(); i++)
+		for (size_t i = 0, len = vIndices.size(); i < len; i++)
 		{
 			//std::cout << "V " << v.size() << " Index " << (vIndices[i] - 1) << std::endl;
 			unsigned int index;
@@ -410,7 +410,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t,unsigned int& index)
 {
-	for (int i = 0; i < verts.size(); i++)
+	for (size_t i = 0, len = verts.size(); i < len; i++)
 	{
 		if (verts[i].compare(p, 0.001f) && norms[i].compare(n, 0.001f) && texcoord[i].compare(t, 0.001f))
 		{
@@ -424,7 +424,7 @@ bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vector3& p, Vector3& n, unsigned int& index)
 {
-	for (int i = 0; i < verts.size(); i++)
+	for (size_t i = 0, len = verts.size(); i < len; i++)
 	{
 		if (verts[i].compare(p, 0.001f) && norms[i].compare(n, 0.001f))
 		{
@@ -438,7 +438,7 @@ bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vec
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector2>& texcoord, Vector3& p, Vector2& t, unsigned int& index)
 {
-	for (int i = 0; i < verts.size(); i++)
+	for (size_t i = 0, len = verts.size(); i < len; i++)
 	{
 		if (verts[i].compare(p, 0.001f) && texcoord[i].compare(t, 0.001f))
 		{
@@ -452,7 +452,7 @@ bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector2>& texcoord, 
 
 bool hasAttributes(std::vector<Vector3>& verts, Vector3& p, unsigned int& index)
 {
-	for (int i = 0; i < verts.size(); i++)
+	for (size_t i = 0, len = verts.size(); i < len; i++)
 	{
 		if (verts[i].compare(p, 0.001f))
 		{
@@ -703,7 +703,10 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 		fif = FreeImage_GetFIFFromFilename(filename);
 	//if still unkown, return failure
 	if (fif == FIF_UNKNOWN)
+	{
+		std::cout << "Unknown type of image file" << std::endl;
 		return smart_pointer<Texture2D>::null();
+	}
 
 	//check that the plugin has reading capabilities and load the file
 	if (FreeImage_FIFSupportsReading(fif))
@@ -711,7 +714,10 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 
 	//if the image failed to load, return failure
 	if (!dib)
+	{
+		std::cout << "Can't load image file at path: " << filename << std::endl;
 		return smart_pointer<Texture2D>::null();
+	}
 
 	//retrieve the image data
 	bits = FreeImage_GetBits(dib);
@@ -721,7 +727,10 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 
 	//if this somehow one of these failed (they shouldn't), return failure
 	if ((bits == 0) || (width == 0) || (height == 0))
+	{
+		std::cout << "Error occurred while loading imafe file " << filename << std::endl;
 		return smart_pointer<Texture2D>::null();
+	}
 
 	smart_pointer<Texture2D> texture;
 	if (custom)

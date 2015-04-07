@@ -88,7 +88,7 @@ void GameObject::destroy()
 
 	destroyState = true;
 
-	for (int i = 1; i < components.size(); i++)
+	for (size_t i = 1, len = components.size(); i < len; i++)
 	{
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components[i]);
 		if (activeComp != NULL)

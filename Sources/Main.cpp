@@ -155,18 +155,6 @@ int main(int argc, char **argv)
 	//creating engine
 	Engine::getInstance().Init();
 
-	RenderSystem* renderSystem = new RenderSystem; //renderer system
-	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
-	ScreenSystem* screenSystem = new ScreenSystem;
-	Input* inputSystem = new Input;
-	GameTime* timeSystem = new GameTime;
-
-	Engine::getInstance().addSystem(*gameLogicSystem, 1);
-	Engine::getInstance().addSystem(*screenSystem, 2);
-	Engine::getInstance().addSystem(*renderSystem, 3);
-	Engine::getInstance().addSystem(*inputSystem, 4);
-	Engine::getInstance().addSystem(*timeSystem, 5);
-
 	//creating game logics
 	GameObject* lightObj = new GameObject("FPSGameObject");
 	lightObj->addComponent<GLTestComponent>();
@@ -196,39 +184,36 @@ int main(int argc, char **argv)
 	//ship->addComponent<Ship>();
 
 	int regions[4] = { 0, 0, 128, 128 };
-// 	smart_pointer<Texture2D> texture = LoadTexture("bin/vtr.bmp");
-// 	//smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
-// 	//smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
-// 
-// 	//smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
-// 
-// 	srand(time(0));
-// 	for (int i = 0; i < 1; i++)
-// 	{
-// 		GameObject* obj = new GameObject("FirstGameObject");
-// 		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
-// 		//obj->getComponent<Terrain>()->build(texture, 20.0f);
-// 		//obj->addComponent<TextureAnimator>()->addClip(clip);
-// 		//obj->getComponent<TextureAnimator>()->playClip(0);
-// 		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
-// 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
-// 		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
-// 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
-// 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
-// 
-// 		float scale = 1.0f;
-// 		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
-// 		//obj->getTransform()->RotateX(90);
-// 		obj->getTransform()->ScaleLocal *= scale;
-// 	}
+ 	smart_pointer<Texture2D> texture = LoadTexture("Resources/vtr.bmp");
 
-	//char* mesh_path = "C:/Users/user/Desktop/untitled2.obj";
-	//char* mat_path = "C:/Users/user/Desktop/untitled2.mtl";
-	//char* mat_path = "C:/Users/user/Desktop/Luke_skywalkers_landspeeder/Luke Skywalkers landspeeder.mtl";
+// 	smart_pointer<Texture2D> texture = LoadTexture("bin/minimap.bmp");
+// 	smart_pointer<Texture2D> grassTexture = LoadTexture("bin/minimap.bmp");
+// 	smart_pointer<TextureAnimationClip> clip(new TextureAnimationClip("gagoAnim", texture, 10));
+//	srand(time(0));
 
-	char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
-	char* mat_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.mtl";
+ 	for (int i = 0; i < 1; i++)
+ 	{
+ 		GameObject* obj = new GameObject("FirstGameObject");
+ 		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
+ 		//obj->getComponent<Terrain>()->build(texture, 20.0f);
+ 		//obj->addComponent<TextureAnimator>()->addClip(clip);
+ 		//obj->getComponent<TextureAnimator>()->playClip(0);
+ 		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
+ 		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
+ 		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
+ 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
+ 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
+ 
+ 		float scale = 1.0f;
+ 		obj->getTransform()->Location.set(0.0f, 0.0f, -1.0f);
+ 		//obj->getTransform()->RotateX(90);
+ 		obj->getTransform()->ScaleLocal *= scale;
+ 	}
 
+	// **************** MODEL ****************
+// 	char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";
+// 	char* mat_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.mtl";
+// 
 // 	std::vector<GameObject*> objects = LoadModel(mesh_path, mat_path);
 // 
 // 	for (GameObject* obj : objects)
@@ -257,8 +242,10 @@ int main(int argc, char **argv)
 		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();
 		meshRend->setMesh(mesh);
 
-		obj->getTransform()->Location.set(-2.0f + 4*i, 0.0f, 5.0f);
+		obj->getTransform()->Location.set(-2.0f + 4 * i, 0.0f, 5.0f);
 	}
+
+
 	//obj->getTransform()->RotateX(25);
 	//obj->getTransform()->RotateY(25.0f);
 	//obj->getTransform()->RotateZ(75.0f);

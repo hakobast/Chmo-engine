@@ -34,7 +34,7 @@ protected:
 public:
 	virtual ~Renderer()
 	{
-		for (int i = 0; i < materials.size(); i++)
+		for (size_t i = 0, len = materials.size(); i < len; i++)
 			materials[i]->_sharesCount--;
 	};
 
@@ -86,7 +86,7 @@ inline std::vector<smart_pointer<Material>>& Renderer::getSharedMaterials()
 
 inline std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {
-	for (int i = 0; i < materials.size(); i++)
+	for (size_t i = 0, len = materials.size(); i < len; i++)
 	{
 		if (materials[i]->_sharesCount > 1)
 		{
@@ -101,7 +101,7 @@ inline std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 
 inline smart_pointer<Material>& Renderer::getSharedMaterial(int index)
 {
-	if (index < materials.size())
+	if (index < (int)materials.size())
 	{
 		return materials[index];
 	}
@@ -112,7 +112,7 @@ inline smart_pointer<Material>& Renderer::getSharedMaterial(int index)
 
 inline smart_pointer<Material>& Renderer::getMaterial(int index)
 {
-	if (index < materials.size())
+	if (index < (int)materials.size())
 	{
 		if (materials[index]->_sharesCount > 1)
 		{
@@ -142,7 +142,7 @@ inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index)
 	if (mat.isEmpty())
 		return;
 
-	if (index < materials.size())
+	if (index < (int)materials.size())
 	{
 		materials[index]->_sharesCount--;
 		materials[index] = mat;
@@ -163,7 +163,9 @@ inline void Renderer::setMainMaterial(smart_pointer<Material>& mat)
 inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
 {
 	if (texture.isEmpty())
+	{
 		return;
+	}
 
 	if (materials.size() > 0)
 	{

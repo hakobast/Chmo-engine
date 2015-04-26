@@ -52,14 +52,14 @@ void Mesh::genBuffers(int submesh)
 			{
 				if (vbo_id_n == 0)
 				{
-					glGenBuffersARB(1, &vbo_id_n);
-					glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_n);
-					glBufferDataARB(GL_ARRAY_BUFFER_ARB, normals.size() * sizeof(Vector3), &normals[0], _vboUsage);
+					glGenBuffers(1, &vbo_id_n);
+					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
+					glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vector3), &normals[0], _vboUsage);
 				}
 				else if (_submeshes[submesh]->_updateNormals)
 				{
-					glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_n);
-					glBufferSubData(GL_ARRAY_BUFFER_ARB, 0, normals.size() * sizeof(Vector3), &normals[0]);
+					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(Vector3), &normals[0]);
 				}
 
 				normals.clear();
@@ -71,12 +71,12 @@ void Mesh::genBuffers(int submesh)
 			{
 				if (vbo_id_t == 0)
 				{
-					glGenBuffersARB(1, &vbo_id_t);
+					glGenBuffers(1, &vbo_id_t);
 				}
 				else if (_submeshes[submesh]->_updateTexCoords)
 				{
-					glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_t);
-					glBufferSubData(GL_ARRAY_BUFFER_ARB, 0, uvs.size() * sizeof(Vector2), &uvs[0]);
+					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
+					glBufferSubData(GL_ARRAY_BUFFER, 0, uvs.size() * sizeof(Vector2), &uvs[0]);
 				}
 
 				uvs.clear();
@@ -86,14 +86,14 @@ void Mesh::genBuffers(int submesh)
 			//VERTICES
 			if (vbo_id_v == 0)
 			{
-				glGenBuffersARB(1, &vbo_id_v);
-				glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_v);
-				glBufferDataARB(GL_ARRAY_BUFFER_ARB, vertices.size() * sizeof(Vector3), &vertices[0], _vboUsage);
+				glGenBuffers(1, &vbo_id_v);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
+				glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], _vboUsage);
 			}
 			else
 			{
-				glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_v);
-				glBufferSubData(GL_ARRAY_BUFFER_ARB, 0, vertices.size() * sizeof(Vector3), &vertices[0]);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vector3), &vertices[0]);
 			}
 
 			vertices.clear();
@@ -102,14 +102,14 @@ void Mesh::genBuffers(int submesh)
 			//INDICES
 			if (vbo_id_i == 0)
 			{
-				glGenBuffersARB(1, &vbo_id_i);
-				glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id_i);
-				glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, indices.size() * sizeof(unsigned int), &indices[0], _vboUsage);
+				glGenBuffers(1, &vbo_id_i);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], _vboUsage);
 			}
 			else
 			{
-				glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id_i);
-				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER_ARB, 0, indices.size() * sizeof(unsigned int), &indices[0]);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
+				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
 			}
 
 			indices.clear();
@@ -127,18 +127,22 @@ void Mesh::deleteAllBuffers(int submesh)
 		GLuint& vbo_id_v = _submeshes[submesh]->vertex_buffer_id;
 		GLuint& vbo_id_i =  _submeshes[submesh]->index_buffer_id;
 
-		if (vbo_id_n > 0){glDeleteBuffersARB(1, &vbo_id_n);vbo_id_n = 0;}
-		if (vbo_id_t > 0){glDeleteBuffersARB(1, &vbo_id_t);vbo_id_t = 0;}
-		if (vbo_id_v > 0){glDeleteBuffersARB(1, &vbo_id_v);vbo_id_v = 0;}
-		if (vbo_id_i > 0){glDeleteBuffersARB(1, &vbo_id_i);vbo_id_i = 0;}
+		if (vbo_id_n > 0){glDeleteBuffers(1, &vbo_id_n);vbo_id_n = 0;}
+		if (vbo_id_t > 0){glDeleteBuffers(1, &vbo_id_t);vbo_id_t = 0;}
+		if (vbo_id_v > 0){glDeleteBuffers(1, &vbo_id_v);vbo_id_v = 0;}
+		if (vbo_id_i > 0){glDeleteBuffers(1, &vbo_id_i);vbo_id_i = 0;}
 	}
 }
 
 void Mesh::draw(int submesh)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+{	
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_NORMAL_ARRAY);
+	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	//if hardware supports VBOs
 	if (isVBOSupported())
@@ -155,46 +159,50 @@ void Mesh::draw(int submesh)
 		{
 			if (vbo_id_n > 0)
 			{
-				glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_n);
-				glNormalPointer(GL_FLOAT, 0, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			}
 			if (vbo_id_t > 0)
 			{
-				glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_t);
-				glTexCoordPointer(2, GL_FLOAT, 0, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
+				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 			}
 
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo_id_v);
-			glVertexPointer(3, GL_FLOAT, 0, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id_i);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
 			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
 	}
 	else
 	{
-		std::vector<Vector3>& vertices = getVertices(submesh);
-		std::vector<Vector2>& uvs = getUVs(submesh);
-		std::vector<Vector3>& normals = getNormals(submesh);
-		std::vector<unsigned int>& indices = getIndices(submesh);
+		std::vector<Vector3>& vertices = _submeshes[submesh]->vertices;
+		std::vector<Vector2>& uvs = _submeshes[submesh]->uvs;
+		std::vector<Vector3>& normals = _submeshes[submesh]->normals;
+		std::vector<unsigned int>& indices = _submeshes[submesh]->indices;
 
 		if (vertices.size() > 0 && indices.size() > 0)
 		{
-			if (uvs.size() > 0) glTexCoordPointer(2, GL_FLOAT, 0, &uvs[0]);
-			if (normals.size() > 0)	glNormalPointer(GL_FLOAT, 0, &normals[0]);
+			if (normals.size() > 0)	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, &normals[0]);
+			if (uvs.size() > 0)		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, &uvs[0]);
 
-			glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]);
 			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, &indices[0]);
 		}
 	}
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+
+	//glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 std::vector<Vector3> Mesh::getVertices(int submesh) const
@@ -210,9 +218,15 @@ std::vector<Vector3> Mesh::getVertices(int submesh) const
 	if (isVBOSupported())
 	{
 		std::vector<Vector3> data(subMesh->vertex_count);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, subMesh->vertex_buffer_id);
-		glGetBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, data.size()*sizeof(Vector3), data.data());
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, subMesh->vertex_buffer_id);
+
+// 		glGetVertexAttribPointerv(0, GL_VERTEX_ATTRIB_ARRAY_POINTER, );
+// 		std::cout << "DOUBLE POINTER " << data.size() << std::endl;
+		
+	//	glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector3), data.data());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
 		return data;
 	}
 	else
@@ -234,9 +248,9 @@ std::vector<Vector2> Mesh::getUVs(int submesh) const
 	if (isVBOSupported())
 	{
 		std::vector<Vector2> data(subMesh->uv_count);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, subMesh->uv_buffer_id);
-		glGetBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, data.size()*sizeof(Vector2), data.data());
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, subMesh->uv_buffer_id);
+		//glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector2), data.data());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return data;
 	}
 	else
@@ -258,9 +272,9 @@ std::vector<Vector3> Mesh::getNormals(int submesh) const
 	if (isVBOSupported())
 	{
 		std::vector<Vector3> data(subMesh->normal_count);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, subMesh->normal_buffer_id);
-		glGetBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, data.size()*sizeof(Vector3), data.data());
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, subMesh->normal_buffer_id);
+		//glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector3), data.data());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return data;
 	}
 	else
@@ -282,9 +296,9 @@ std::vector<unsigned int> Mesh::getIndices(int submesh)const
 	if (isVBOSupported())
 	{
 		std::vector<unsigned int> data(subMesh->index_count);
-		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, subMesh->index_buffer_id);
-		glGetBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0, data.size()*sizeof(unsigned int), data.data());
-		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subMesh->index_buffer_id);
+		//glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size()*sizeof(unsigned int), data.data());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		return data;
 	}
 	else
@@ -303,7 +317,7 @@ void Mesh::setVertices(std::vector<Vector3> vertices, int submesh)
 
 	if (_submeshes[submesh]->vertex_buffer_id != 0 && _submeshes[submesh]->vertices.size() != vertices.size())
 	{
-		glDeleteBuffersARB(1, &_submeshes[submesh]->vertex_buffer_id);
+		glDeleteBuffers(1, &_submeshes[submesh]->vertex_buffer_id);
 		_submeshes[submesh]->vertex_buffer_id = 0;
 	}
 
@@ -322,7 +336,7 @@ void Mesh::setUVs(std::vector<Vector2> uvs, int submesh)
 
 	if (_submeshes[submesh]->uv_buffer_id != 0 && _submeshes[submesh]->uvs.size() != uvs.size())
 	{
-		glDeleteBuffersARB(1, &_submeshes[submesh]->uv_buffer_id);
+		glDeleteBuffers(1, &_submeshes[submesh]->uv_buffer_id);
 		_submeshes[submesh]->uv_buffer_id = 0;
 	}
 
@@ -341,7 +355,7 @@ void Mesh::setNormals(std::vector<Vector3> normals, int submesh)
 	}
 	if (_submeshes[submesh]->normal_buffer_id != 0 && _submeshes[submesh]->normals.size() != normals.size())
 	{
-		glDeleteBuffersARB(1, &_submeshes[submesh]->normal_buffer_id);
+		glDeleteBuffers(1, &_submeshes[submesh]->normal_buffer_id);
 		_submeshes[submesh]->normal_buffer_id = 0;
 	}
 
@@ -360,7 +374,7 @@ void Mesh::setIndices(std::vector<unsigned int> indices, int submesh)
 
 	if (_submeshes[submesh]->index_buffer_id != 0 && _submeshes[submesh]->indices.size() != indices.size())
 	{
-		glDeleteBuffersARB(1, &_submeshes[submesh]->index_buffer_id);
+		glDeleteBuffers(1, &_submeshes[submesh]->index_buffer_id);
 		_submeshes[submesh]->index_buffer_id = 0;
 	}
 

@@ -1,8 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "CoreEngine/GameLogic.h"
-#include "CoreEngine/LIBS.h"
+#include "../CoreEngine/GameLogic.h"
+#include "../CoreEngine/LIBS.h"
 
 enum LightType
 {

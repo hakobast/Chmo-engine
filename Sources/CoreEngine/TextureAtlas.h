@@ -13,7 +13,7 @@ public:
 		int* regions, int textures_count,
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
-		GLenum format = GL_BGRA_EXT,
+		GLenum format = GL_RGBA,
 		GLenum dataType = GL_UNSIGNED_BYTE);
 	~TextureAtlas();
 	const int txt_count;

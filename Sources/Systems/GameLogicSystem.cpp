@@ -7,8 +7,10 @@
 //
 
 #include <iostream>
-#include "CoreEngine/System.h"
-#include "Systems/GameLogicSystem.h"
+#include <algorithm>
+
+#include "../CoreEngine/System.h"
+#include "GameLogicSystem.h"
 
 static bool sortComponents(const GameLogic* lhs, const GameLogic* rhs) { return lhs->priority < rhs->priority; }
 

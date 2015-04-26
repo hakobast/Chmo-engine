@@ -1,16 +1,10 @@
-//
-//  smart_pointer.h
-//  OOPTesting
-//
-//  Created by Hakob on 12/10/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef OOPTesting_smart_pointer_h
 #define OOPTesting_smart_pointer_h
 
-//#include <assert.h>
+#include <assert.h>
 #include <type_traits>
+#include <iostream>
 #include <map>
 
 //#define ENABLE_LOG
@@ -41,6 +35,14 @@ public:
     {
         return ref_map[ptr];
     }
+};
+
+class RemovableObject
+{
+	template<class T> friend class smart_pointer;
+private:
+	int refs = 0;
+
 };
 
 template<class T>
@@ -182,17 +184,8 @@ public:
 			delete data;
 	}
 };
-template<class T>
-smart_pointer<T>& smart_pointer<T>::null();
+
 
 template<class T>
 smart_pointer<T> smart_pointer<T>::emptyPtr;
-
-class RemovableObject
-{
-template<class T> friend class smart_pointer;
-private:
-	int refs = 0;
-
-};
 #endif

@@ -2,13 +2,15 @@
 #define EngineTesting_TextureRegion_h
 
 #include <iostream>
+#include <stdio.h>
+
 struct TextureRegion
 {
 public:
 	TextureRegion(){};
 	TextureRegion(const GLfloat* uv)
 	{
-		std::memcpy(u_v, uv, sizeof(GLfloat)* 8);
+		memcpy(u_v, uv, sizeof(GLfloat)* 8);
 	}
 	//float operator [](int index) const;
 	GLfloat* operator [](int index);

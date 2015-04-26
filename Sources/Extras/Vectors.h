@@ -1,15 +1,8 @@
-//
-//  Vector3.h
-//  OpenGLTesting
-//
-//  Created by Hakob on 11/7/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef OpenGLTesting_Vector3_h
 #define OpenGLTesting_Vector3_h
 
-#include "CoreEngine/LIBS.h"
+#include "../CoreEngine/LIBS.h"
 
 #include "Matrix4.h"
 #include <iostream>
@@ -34,6 +27,7 @@ public:
 	static const Vector2 UP;
 
 	void set(GLfloat x, GLfloat y);
+	void set(GLint x, GLint y);
 	Vector2 duplicate() const;
 	GLfloat magnitude() const;
 	GLfloat sqrmagnitude() const;
@@ -73,6 +67,11 @@ inline std::ostream& operator << (std::ostream& stream, const Vector2& v2)
 inline void Vector2::set(GLfloat x, GLfloat y)
 {
 	this->x = x; this->y = y;
+}
+
+inline void Vector2::set(GLint x, GLint y)
+{
+	this->x = (GLfloat)x; this->y = (GLfloat)y;
 }
 
 inline Vector2 Vector2::duplicate() const
@@ -429,5 +428,198 @@ inline bool Vector3:: operator !=(const Vector3& other) const
 {
     return fabs(x-other.x) > EPSILON && fabs(y-other.y) > EPSILON && fabs(z-other.z) > EPSILON;
 }
+
+#pragma region VECTOR_4
+
+struct Vector4
+{
+	GLfloat x, y, z, w;
+	Vector4() :x(0.0f), y(0.0f), z(0.0f) , w(0.0f){}
+	Vector4(GLfloat x, GLfloat y, GLfloat z, GLfloat w) :x(x), y(y), z(z), w(w){}
+
+public:
+	void set(GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+	Vector4 duplicate() const;
+	GLfloat magnitude() const;
+	GLfloat sqrmagnitude() const;
+	Vector4& normalize();
+	Vector4 normalized() const;
+	float distance(const Vector4& other) const;
+	float dot(const Vector4& other) const;
+	bool compare(const Vector4& other, GLfloat epsilon) const;
+	GLfloat* getPointer();
+
+	Vector4 operator +(const Vector4& other);
+	Vector4 operator -(const Vector4& other);
+	Vector4 operator *(const Vector4& other);
+	Vector4 operator *(const GLfloat scale);
+	Vector4 operator /(const Vector4& other);
+	Vector4 operator /(const GLfloat scale);
+	Vector4& operator +=(const Vector4& other);
+	Vector4& operator -=(const Vector4& other);
+	Vector4& operator *=(const Vector4& other);
+	Vector4& operator *=(const GLfloat scale);
+	Vector4& operator /=(const Vector4& other);
+	Vector4& operator /=(const GLfloat scale);
+	GLfloat operator [](int index) const;
+	GLfloat& operator [](int index);
+	bool operator ==(const Vector4& other) const;
+	bool operator !=(const Vector4& other) const;
+	friend std::ostream& operator <<(std::ostream& stream, const Vector4& v3);
+};
+
+inline std::ostream& operator <<(std::ostream& stream, const Vector4& v4)
+{
+	return stream << "V4(" << v4.x << "," << v4.y << "," << v4.z  << "," << v4.w << ")";
+}
+
+inline void Vector4::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+{
+	this->x = x; this->y = y; this->z = z; this->w = w;
+}
+
+inline Vector4 Vector4::duplicate() const
+{
+	return Vector4(x, y, z, w);
+}
+
+inline GLfloat Vector4::magnitude() const
+{
+	return sqrtf(x*x + y*y + z*z + w*w);
+}
+
+inline GLfloat Vector4::sqrmagnitude() const
+{
+	return x*x + y*y + z*z + w*w;
+}
+
+inline Vector4& Vector4::normalize()
+{
+	GLfloat m = sqrtf(x*x + y*y + z*z + w*w);
+	if (m < EPSILON)
+		return *this;
+
+	x /= m;
+	y /= m;
+	z /= m;
+	w /= m;
+
+	return *this;
+}
+
+inline Vector4 Vector4::normalized() const
+{
+	GLfloat m = sqrtf(x*x + y*y + z*z + w*w);
+	if (m < EPSILON)
+		return *this;
+
+	return Vector4(x / m, y / m, z / m, w/m);
+}
+
+inline GLfloat Vector4::distance(const Vector4& other) const
+{
+	return sqrtf((other.x - x)*(other.x - x) +
+		(other.y - y)*(other.y - y) +
+		(other.z - z)*(other.z - z) + 
+		(other.w-w)*(other.w-w));
+}
+
+inline GLfloat Vector4::dot(const Vector4& other) const
+{
+	return x*other.x + y*other.y + z*other.z + w*other.w;
+}
+
+inline GLfloat* Vector4::getPointer()
+{
+	return (&x);
+}
+
+inline bool Vector4::compare(const Vector4& other, GLfloat epsilon) const
+{
+	return fabs(x - other.x) <= epsilon && fabs(y - other.y) <= epsilon && fabs(z - other.z) <= epsilon && fabs(w - other.w) <= epsilon;
+}
+
+inline GLfloat Vector4:: operator [](int index) const
+{
+	return (&x)[index];
+}
+
+inline GLfloat& Vector4:: operator [](int index)
+{
+	return (&x)[index];
+}
+
+inline Vector4 Vector4:: operator+(const Vector4& other)
+{
+	return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
+}
+
+inline Vector4 Vector4:: operator-(const Vector4& other)
+{
+	return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
+}
+
+inline Vector4 Vector4:: operator*(const Vector4& other)
+{
+	return Vector4(x*other.x, y*other.y, z*other.z, w*other.w);
+}
+
+inline Vector4 Vector4:: operator*(const GLfloat scale)
+{
+	return Vector4(x*scale, y*scale, z*scale, w*scale);
+}
+
+inline Vector4 Vector4:: operator/(const Vector4& other)
+{
+	return Vector4(x / other.x, y / other.y, z / other.z, w / other.w);
+}
+
+inline Vector4 Vector4:: operator/(const GLfloat scale)
+{
+	return Vector4(x / scale, y / scale, z / scale, w / scale);
+}
+
+inline Vector4& Vector4:: operator +=(const Vector4& other)
+{
+	x += other.x; y += other.y; z += other.z; return *this;
+}
+
+inline Vector4& Vector4:: operator -=(const Vector4& other)
+{
+	x -= other.x; y -= other.y; z -= other.z; return *this;
+}
+
+inline Vector4& Vector4:: operator *=(const Vector4& other)
+{
+	x *= other.x; y *= other.y; z *= other.z; return *this;
+}
+
+inline Vector4& Vector4:: operator /=(const Vector4& other)
+{
+	x /= other.x; y /= other.y; z /= other.z; return *this;
+}
+
+inline Vector4& Vector4:: operator *=(const GLfloat scale)
+{
+	x *= scale; y *= scale; z *= scale; return *this;
+}
+
+inline Vector4& Vector4:: operator /=(const GLfloat scale)
+{
+	x /= scale; y /= scale; z /= scale; return *this;
+}
+
+inline bool Vector4:: operator ==(const Vector4& other) const
+{
+	return fabs(x - other.x) <= EPSILON && fabs(y - other.y) <= EPSILON && fabs(z - other.z) <= EPSILON;
+}
+
+inline bool Vector4:: operator !=(const Vector4& other) const
+{
+	return fabs(x - other.x) > EPSILON && fabs(y - other.y) > EPSILON && fabs(z - other.z) > EPSILON;
+}
+
+#pragma endregion VECTOR_4
+
 
 #endif

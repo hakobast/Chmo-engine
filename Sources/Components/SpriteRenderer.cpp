@@ -3,11 +3,13 @@
 
 #include <iostream>
 #include "SpriteRenderer.h"
-#include "CoreEngine/Transform.h"
-#include "Systems/ScreenSystem.h"
-#include "CoreEngine/ShaderProgram.h"
-#include "Systems/Input.h"
-#include "Systems/GameTime.h"
+#include "../CoreEngine/Transform.h"
+#include "../CoreEngine/Component.h"
+#include "../Systems/ScreenSystem.h"
+#include "../CoreEngine/GameObject.h"
+#include "../CoreEngine/ShaderProgram.h"
+#include "../Systems/Input.h"
+#include "../Systems/GameTime.h"
 
 
 SpriteRenderer::~SpriteRenderer()
@@ -26,6 +28,8 @@ void SpriteRenderer::Create()
 
 void SpriteRenderer::Init()
 {
+	std::cout << "SpriteRenderer: Init() " << getGameObject()->name << std::endl;
+
 	_tangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("tangent");
 	_bitangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("bitangent");
 
@@ -50,8 +54,8 @@ void SpriteRenderer::Update()
 		glNormalPointer(GL_FLOAT, 0, _normals);
 		if (hasTexture) glTexCoordPointer(2, GL_FLOAT, 0, _texcoords);
 
-		glVertexAttribPointerARB(_tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
-		glVertexAttribPointerARB(_bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
+		glVertexAttribPointer(_tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
+		glVertexAttribPointer(_bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
 
 		glDrawArrays(GL_QUADS, 0, 4);
 

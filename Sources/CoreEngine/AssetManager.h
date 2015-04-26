@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 
-#include "FreeImage.h"
+#include "../../Dependencies/freeimage/FreeImage.h"
 
 #include "Mesh.h"
 #include "Material.h"
@@ -14,7 +14,7 @@
 #include "Texture2D.h"
 #include "TextureAtlas.h"
 #include "TextureTiled.h"
-#include "Extras/smart_pointer.h"
+#include "../Extras/smart_pointer.h"
 
 struct ModelDescriptor
 {
@@ -39,7 +39,7 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 									bool generateMipmaps = false,
 									bool custom = false,
 									GLenum internalFormat = GL_RGB,
-									GLenum format = GL_BGR_EXT,
+									GLenum format = GL_RGB,
 									GLenum dataType = GL_UNSIGNED_BYTE);
 
 smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
@@ -47,7 +47,7 @@ smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
 											bool generateMipmaps = false,
 											bool custom = false,
 											GLenum internalFormat = GL_RGB,
-											GLenum format = GL_BGR_EXT,
+											GLenum format = GL_RGB,
 											GLenum dataType = GL_UNSIGNED_BYTE);
 
 smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
@@ -55,7 +55,7 @@ smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
 											bool generateMipmaps = false,
 											bool custom = false,
 											GLenum internalFormat = GL_RGB,
-											GLenum format = GL_BGR_EXT,
+											GLenum format = GL_RGB,
 											GLenum dataType = GL_UNSIGNED_BYTE);
 
 void LoadTextureData(const char* filename, FIBITMAP* fibitmap, FREE_IMAGE_FORMAT* format);

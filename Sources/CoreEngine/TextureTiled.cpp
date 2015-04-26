@@ -16,7 +16,7 @@ TextureTiled::TextureTiled(const GLvoid*pixels,
 
 	float tile_w = (float)width / columns;
 	float tile_h = (float)height / rows;
-	float r = 0, c = 0;
+	int r = 0, c = 0;
 
 	for (int i = 0; i < tilesCount; i++)
 	{

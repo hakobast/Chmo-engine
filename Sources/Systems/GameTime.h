@@ -1,10 +1,8 @@
 #ifndef EngineTesting_GameTime_h
 #define EngineTesting_GameTime_h
 
-#include <map>
-
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/System.h"
+#include "../CoreEngine/LIBS.h"
+#include "../CoreEngine/System.h"
 
 class GameTime :public System
 {

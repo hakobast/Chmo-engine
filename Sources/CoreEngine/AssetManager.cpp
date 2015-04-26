@@ -5,10 +5,10 @@
 #include <memory>
 
 #include "LIBS.h"
-#include "Extras/Vectors.h"
-#include "Extras/smart_pointer.h"
+#include "../Extras/Vectors.h"
+#include "../Extras/smart_pointer.h"
+#include "../Components/MeshRenderer.h"
 #include "AssetManager.h"
-#include "Components/MeshRenderer.h"
 
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);
@@ -29,11 +29,11 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 	vector<GameObject*> gameObjects;
 
 	//ModelDescriptor descriptor;
-	std::vector<smart_pointer<Mesh>>& meshes = LoadMesh(modelfile);
+	std::vector<smart_pointer<Mesh>> meshes = LoadMesh(modelfile);
 	/*for (std::string mesh : descriptor.meshNames)
 		std::cout << "g " << mesh << " mat " << descriptor.meshMaterials[mesh] << std::endl;*/
 
-	std::vector<smart_pointer<Material>>& materials = LoadMtl(materialfile);
+	std::vector<smart_pointer<Material>> materials = LoadMtl(materialfile);
 	std::queue<smart_pointer<Material>> matQueue;
 	for (smart_pointer<Material> mat : materials)
 		matQueue.push(mat);
@@ -55,8 +55,6 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 		for (int j = 0; j < meshes[i]->getSubMeshCount() && matQueue.size() > 0; j++)
 		{
 			meshRenderer->addMaterial(matQueue.front());
-			std::cout << "Material ambient" << matQueue.front()->color_ambient << std::endl;
-			std::cout << "Material diffuse" << matQueue.front()->color_diffuse << std::endl;
 			matQueue.pop();
 		}
 
@@ -150,7 +148,7 @@ std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor*
 		{
 			if (descriptor != NULL)
 			{
-				fscanf(file, "%s\n", descriptor->matfile);
+				fscanf(file, "%s\n", &descriptor->matfile[0]);
 			}
 		}
 		else if (strcmp(lineHeader, "usemtl") == 0) //TODO support material for faces
@@ -568,30 +566,34 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 		}
 		else if (strcmp(lineHeader, "d") == 0)
 		{
-			float tr = 1.0f;
-			fscanf(file, "%f\n", &tr);
-			mat->color_diffuse.setA(tr);
+// 			float tr = 1.0f;
+// 			fscanf(file, "%f\n", &tr);
+// 			mat->color_diffuse.setA(tr);
+
+
 			//std::cout << "Transparency: " << transparency << std::endl;
 		}
 		else if (strcmp(lineHeader, "Ka") == 0)
 		{
 			fscanf(file, "%f %f %f\n", ambient, ambient + 1, ambient + 2);
-			mat->color_ambient.set(ambient[0], ambient[1], ambient[2]);
+			Color c(ambient[0], ambient[1], ambient[2], ambient[3]);
+			mat->setColor(c, "Ambient");
 
 			//printf("Ka\t%f, %f, %f\n", ambient[0], ambient[1], ambient[2]);
 		}
 		else if (strcmp(lineHeader, "Kd") == 0)
 		{
 			fscanf(file, "%f %f %f\n", diffuse, diffuse + 1, diffuse + 2);
-			mat->color_diffuse.set(diffuse[0], diffuse[1], diffuse[2]);
+			Color c(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+			mat->setColor(c, "Diffuse");
 
 			//printf("Kd\t%f, %f, %f\n", diffuse[0], diffuse[1], diffuse[2]);
 		}
 		else if (strcmp(lineHeader, "Ks") == 0)
 		{
 			fscanf(file, "%f %f %f\n", specular, specular + 1, specular + 2);
-			mat->color_specular.set(specular[0], specular[1], specular[2]);
-
+			Color c(specular[0], specular[1], specular[2], specular[3]);
+			mat->setColor(c, "Specular");
 			//printf("Ks\t%f, %f, %f\n", specular[0], specular[1], specular[2]);
 		}
 	}
@@ -744,12 +746,14 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 		case FIF_UNKNOWN:
 			break;
 		case FIF_BMP:
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
 			break;
 		case FIF_ICO:
 			break;
 		case FIF_JPEG:
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
 			break;
 		case FIF_JNG:
 			break;
@@ -772,7 +776,8 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 		case FIF_PGMRAW:
 			break;
 		case FIF_PNG:
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_BGRA_EXT, GL_UNSIGNED_BYTE));
+			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_BGRA_EXT, GL_UNSIGNED_BYTE));
+			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE));
 			break;
 		case FIF_PPM:
 			break;

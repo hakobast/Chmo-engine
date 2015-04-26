@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "Utils.h"
-#include "Extras/Vectors.h"
-#include "Extras/smart_pointer.h"
+#include "../Extras/Vectors.h"
+#include "../Extras/smart_pointer.h"
 
 class Mesh:public RemovableObject
 {
@@ -42,7 +42,7 @@ friend class MeshRenderer;
 	};
 
 private:
-	GLenum _vboUsage = GL_STATIC_DRAW_ARB;
+	GLenum _vboUsage = GL_STATIC_DRAW;
 	int _sharesCount = 0;
 	std::vector<smart_pointer<SubMesh>> _submeshes;
 	void genBuffers(int submesh = 0);

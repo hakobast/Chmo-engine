@@ -1,18 +1,13 @@
-//
-//  Component.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef EngineTesting_Component_h
 #define EngineTesting_Component_h
 
+#include <typeinfo>
 #include <iostream>
 
-class GameObject;
 class Transform;
+class GameObject;
+class System;
 
 class Component
 {
@@ -30,7 +25,7 @@ public:
 protected:
 	virtual ~Component()
 	{
-		std::cout << "Component: ~~~~~~~~~~~~~" << std::endl;
+		std::cout << "~~~~~~~~~~~~~ Component: " << std::endl;
 	};
 	System* system;
 private:

@@ -14,7 +14,7 @@ public:
 		int rows, int columns, int tilesCount,
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
-		GLenum format = GL_BGRA_EXT,
+		GLenum format = GL_RGBA,
 		GLenum dataType = GL_UNSIGNED_BYTE);
 	
 	~TextureTiled();

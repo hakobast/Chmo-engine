@@ -1,16 +1,9 @@
-//
-//  RenderSystem.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef EngineTesting_RenderSystem_h
 #define EngineTesting_RenderSystem_h
 
 #include <vector>
-#include "CoreEngine/System.h"
+#include "../CoreEngine/System.h"
 
 class Renderer;
 class RenderSystem :public System

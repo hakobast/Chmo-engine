@@ -257,5 +257,8 @@
     <ClCompile Include="Sources\Testings\imageloader.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

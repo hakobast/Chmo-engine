@@ -4,8 +4,9 @@
 #include <string>
 #include <map>
 
-#include "CoreEngine/LIBS.h"
-#include "Extras/smart_pointer.h"
+#include "LIBS.h"
+#include "../Extras/smart_pointer.h"
+#include "Utils.h"
 #include "TextureRegion.h"
 
 class Texture2D:public RemovableObject
@@ -16,7 +17,6 @@ private:
 	GLenum texture_mag_filter;
 	GLenum texture_wrap_s = GL_REPEAT;
 	GLenum texture_wrap_t = GL_REPEAT;
-	GLenum texture_enviroment = GL_MODULATE;
 	GLfloat anisotroplevel = 1.0f;
 
 protected:
@@ -35,14 +35,14 @@ public:
 	Texture2D(int width, int height, 
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
-		GLenum format = GL_BGR_EXT,
+		GLenum format = GL_RGB,
 		GLenum dataType = GL_UNSIGNED_BYTE );
 
 	Texture2D(const GLvoid*pixels,
 		int width, int height,
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
-		GLenum format = GL_BGR_EXT,
+		GLenum format = GL_RGB,
 		GLenum dataType = GL_UNSIGNED_BYTE);
 
 	Texture2D(const GLvoid*pixels,
@@ -50,7 +50,7 @@ public:
 		int width, int height,
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
-		GLenum format = GL_BGR_EXT,
+		GLenum format = GL_RGB,
 		GLenum dataType = GL_UNSIGNED_BYTE);
 
 //	Texture2D(const char*filename, bool generateMipmaps = false);
@@ -64,7 +64,6 @@ public:
 	void unbindTexture();
 	void setFilterMode(GLenum minFilter, GLenum magFilter);
 	void setWrapmode(GLenum wrap_s, GLenum wrap_t);
-	void setTextureEnviroment(GLenum enviroment);
 	void setAnisoFiltering(bool enabled);
 
 	TextureRegion*const getTextureRegion(int index = 0);
@@ -93,20 +92,12 @@ inline void Texture2D::setWrapmode(GLenum wrap_s, GLenum wrap_t)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-inline void Texture2D::setTextureEnviroment(GLenum enviroment)
-{
-	texture_enviroment = enviroment;
-
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texture_enviroment);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 inline void Texture2D::setAnisoFiltering(bool enable)
 {
-	if (glewGetExtension("GL_EXT_texture_filter_anisotropic"))
+	if (isExtensionSupported("GL_EXT_texture_filter_anisotropic"))
 	{
 		glBindTexture(GL_TEXTURE_2D, texture_id);
+#if defined(_WIN32) || defined (__APPLE__)
 		if (enable)
 		{
 			GLfloat max;
@@ -117,8 +108,10 @@ inline void Texture2D::setAnisoFiltering(bool enable)
 		{
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
 		}
+#endif
 	}
 }
+
 
 inline void Texture2D::bindTexture()
 {

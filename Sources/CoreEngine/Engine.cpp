@@ -8,19 +8,22 @@
 
 #include <iostream>
 
-#include "CoreEngine/Engine.h"
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/ActiveComponent.h"
-#include "CoreEngine/Utils.h"
-#include "Systems/GameLogicSystem.h"
-#include "Systems/RenderSystem.h"
-#include "Systems/ScreenSystem.h"
-#include "Systems/GameTime.h"
-#include "Systems/Input.h"
+#include "Engine.h"
+#include "LIBS.h"
+#include "ActiveComponent.h"
+#include "Utils.h"
+#include "GameObject.h"
+#include "System.h"
+#include "Component.h"
 
+#include "../Systems/GameLogicSystem.h"
+#include "../Systems/RenderSystem.h"
+#include "../Systems/ScreenSystem.h"
+#include "../Systems/GameTime.h"
+#include "../Systems/Input.h"
 
 bool pred_sortSystems(const System* lhs, const System* rhs)
-{ 
+{
 	return lhs->priority < rhs->priority;
 }
 
@@ -37,6 +40,11 @@ bool pred_initComponents(Component* c)
 	return false;
 }
 
+void f_Destroy()
+{
+	Engine::getInstance().Cleanup();
+}
+
 Engine::~Engine()
 {
 #ifdef FREEIMAGE_LIB
@@ -46,8 +54,11 @@ Engine::~Engine()
 
 void Engine::Init()
 {
+#if defined(_WIN32) || defined(__APPLE__)
+	atexit(f_Destroy);
 	if (glewInit() == GLEW_OK)
 		printf("GLEW Inited!\n");
+#endif
 
 #ifdef FREEIMAGE_LIB
 	FreeImage_Initialise();
@@ -70,7 +81,8 @@ void Engine::Init()
 
 void Engine::Update()
 {
-	vectorRemove(_compInitList, pred_initComponents);
+	if(_compInitList.size() > 0)
+		vectorRemove(_compInitList, pred_initComponents);
 
 	for (System* s : _systems)
 		s->Update();
@@ -88,7 +100,7 @@ void Engine::Update()
 		delete comp;
 	}
 
-	for (GameObject* gmObj : _gmObjDestroyList)
+	for (GameObject* gmObj : _gmObjDestroyList) //TODO find more effective solution
 	{
 		for (Component* comp : gmObj->components)
 		{
@@ -98,8 +110,30 @@ void Engine::Update()
 		delete gmObj;
 	}
 
+
+	if (_compInitQueue.size() > 0)
+	{
+		_compInitList.insert(_compInitList.end(), _compInitQueue.begin(), _compInitQueue.end());
+		_compInitQueue.clear();
+	}
+
 	_compDestroyList.clear();
 	_gmObjDestroyList.clear();
+}
+
+void Engine::ScreenChange(int width, int height)
+{
+	ScreenSystem::s_instance->ScreenResize(width, height);
+}
+
+void Engine::Resume()
+{
+
+}
+
+void Engine::Pause()
+{
+
 }
 
 void Engine::addSystem(System &s, int priority)
@@ -118,7 +152,7 @@ void Engine::addComponent(Component &comp, int priority)
 {
     comp.priority = priority;
     _components.push_back(&comp);
-	_compInitList.push_back(&comp);
+	_compInitQueue.push_back(&comp);
 
 	for (System* s : _systems)
 		if (s->isSystemComponent(comp))
@@ -128,11 +162,6 @@ void Engine::addComponent(Component &comp, int priority)
 	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(&comp);
 	if (activeComp != NULL && activeComp->isEnabled())
 		activeComp->OnEnable();
-}
-
-void Engine::removeSystem(System &s)
-{
-	vectorRemove<System>(_systems, &s);
 }
 
 void Engine::removeGameObject(GameObject &obj)
@@ -145,6 +174,7 @@ void Engine::removeComponent(Component &comp)
 {
 	vectorRemove<Component>(_components, &comp);
 	vectorRemove<Component>(_compInitList, &comp);
+	vectorRemove<Component>(_compInitQueue, &comp);
 	_compDestroyList.push_back(&comp);
 }
 
@@ -155,4 +185,37 @@ GameObject* Engine::FindGameObjectByName(std::string name) const
 			return obj;
 
 	return NULL;
+}
+
+void Engine::Cleanup()
+{
+	for (GameObject* gmObj : _gameObjects)
+	{
+		std::cout << "<<<<<<DELETING GAMEOBJECT>>>>>>>>> -------- " << gmObj->name << std::endl;
+
+		for (Component* comp : gmObj->components)
+		{
+			std::cout << "<<<<<<DELETING COMPONENT>>>>>>>>> " << std::endl;
+			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+			if (activeComp != NULL)
+			{
+				if (activeComp->isEnabled())
+					activeComp->OnDisable();
+				activeComp->OnDestroy();
+			}
+
+			delete comp;
+		}
+
+		delete gmObj;
+	}
+
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+	{
+		delete _systems[i];
+	}
+
+	_gameObjects.clear();
+	_components.clear();
+	_systems.clear();
 }

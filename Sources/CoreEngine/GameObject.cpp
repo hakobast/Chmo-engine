@@ -9,15 +9,13 @@
 #include <iostream>
 
 #include "GameObject.h"
-#include "ActiveComponent.h"
 #include "GameLogic.h"
-#include "Engine.h"
 
 using namespace std;
 
 GameObject::GameObject(string name)
 {
-	GameObject::name = name;
+	this->name = name;
 
 	//cout << "GameObject: " << name << " GameObject()" << endl;
 
@@ -28,6 +26,8 @@ GameObject::GameObject(string name)
 
 	transform = trComp;
 	components.push_back(trComp);
+
+	std::cout << "GameObject() " << name << std::endl;
 
 	Engine::getInstance().addComponent(*trComp, trComp->priority);
 	Engine::getInstance().addGameObject(*this);

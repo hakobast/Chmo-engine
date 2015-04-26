@@ -1,10 +1,3 @@
-//
-//  Behaviour.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef EngineTesting_GameLogic_h
 #define EngineTesting_GameLogic_h
@@ -14,7 +7,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "ActiveComponent.h"
-#include "Components/Renderer.h"
+#include "../Components/Renderer.h"
 
 class GameLogic :public ActiveComponent
 {

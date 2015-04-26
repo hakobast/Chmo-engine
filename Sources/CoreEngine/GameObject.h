@@ -1,20 +1,16 @@
-//
-//  GameObject.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
+
 
 #ifndef EngineTesting_GameObject_h
 #define EngineTesting_GameObject_h
 
-
 #include <vector>
 #include <string>
-#include "Component.h"
-#include "Transform.h"
+
 #include "Engine.h"
+#include "Transform.h"
+#include "ActiveComponent.h"
+
+class Transform;
 
 class GameObject
 {
@@ -38,10 +34,8 @@ public:
 
 	//statics
 	static GameObject* FindGameObjectByName(std::string name);
-	template<class T>
-	static T* FindComponent();
-	template<class T>
-	static std::vector<T*> FindComponents();
+	template<class T> static T* FindComponent();
+	template<class T> static std::vector<T*> FindComponents();
 
 	void sendAction(std::string action, void*const data);
 	void sendMessage(std::string function, void *data);

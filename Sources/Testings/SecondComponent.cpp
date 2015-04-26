@@ -7,14 +7,14 @@
 //
 
 #include <iostream>
-#include "CoreEngine/Engine.h"
-#include "CoreEngine/GameLogic.h"
+#include "../CoreEngine/Engine.h"
+#include "../CoreEngine/GameLogic.h"
 
 using namespace std;
 
 class SecondComponent: public Renderer
 {
-public:
+/*public:
     
     void Init()
     {
@@ -49,5 +49,5 @@ public:
 		glVertexPointer(3, GL_FLOAT, 0, vertices);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDisableClientState(GL_VERTEX_ARRAY);
-    }
+    }*/
 };

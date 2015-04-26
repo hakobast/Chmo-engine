@@ -2,34 +2,34 @@
 #include <iostream>
 #include <vector>
 
-#include "Utils.h"
 #include "ShaderProgram.h"
+#include "Utils.h"
 
 ShaderProgram::ShaderProgram()
 {
 	_nShaders = 0;
 	_shaders[VERTEX_SHADER] = 0;
 	_shaders[FRAGMENT_SHADER] = 0;
-	_shaders[GEOMETRY_SHADER] = 0;
+	//_shaders[GEOMETRY_SHADER] = 0;
 }
 
 ShaderProgram::~ShaderProgram()
 {
 	deleteProgram();
 	if (_shaders[VERTEX_SHADER] != 0)
-		glDeleteObjectARB(_shaders[VERTEX_SHADER]);
+		glDeleteShader(_shaders[VERTEX_SHADER]);
 	if (_shaders[FRAGMENT_SHADER] != 0)
-		glDeleteObjectARB(_shaders[FRAGMENT_SHADER]);
-	if (_shaders[GEOMETRY_SHADER] != 0)
-		glDeleteObjectARB(_shaders[GEOMETRY_SHADER]);
+		glDeleteShader(_shaders[FRAGMENT_SHADER]);
+// 	if (_shaders[GEOMETRY_SHADER] != 0)
+// 		glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
 
 void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source)
 {
-	GLuint shader = glCreateShaderObjectARB(shader_type);
-	glShaderSourceARB(shader, 1, &source, NULL);
+	GLuint shader = glCreateShader(shader_type);
+	glShaderSource(shader, 1, &source, NULL);
 
-	glCompileShaderARB(shader);
+	glCompileShader(shader);
 
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -38,19 +38,19 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source)
 		GLint infoLogLength;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infoLog = new GLchar[infoLogLength];
-		glGetInfoLogARB(shader, infoLogLength, NULL, infoLog);
+		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
 		std::cerr << "Shader compile log: " << infoLog << std::endl;
 		delete[] infoLog;
 		return;
 	}
 	_nShaders++;
 
-	if (shader_type == GL_VERTEX_SHADER_ARB)
+	if (shader_type == GL_VERTEX_SHADER)
 		_shaders[VERTEX_SHADER] = shader;
-	else if (shader_type == GL_FRAGMENT_SHADER_ARB)
+	else if (shader_type == GL_FRAGMENT_SHADER)
 		_shaders[FRAGMENT_SHADER] = shader;
-	else if (shader_type == GL_GEOMETRY_SHADER_ARB)
-		_shaders[GEOMETRY_SHADER] = shader;
+// 	else if (shader_type == GL_GEOMETRY_SHADER)
+// 		_shaders[GEOMETRY_SHADER] = shader;
 	else
 	{
 		std::cerr << "Unknown type of shader";
@@ -65,16 +65,16 @@ void ShaderProgram::loadShaderFromFile(GLenum shader_type, const char* filename)
 
 void ShaderProgram::createAndLinkProgram()
 {
-	_program = glCreateProgramObjectARB();
+	_program = glCreateProgram();
 
 	if (_shaders[VERTEX_SHADER] != 0)
-		glAttachObjectARB(_program, _shaders[VERTEX_SHADER]);
+		glAttachShader(_program, _shaders[VERTEX_SHADER]);
 	if (_shaders[FRAGMENT_SHADER] != 0)
-		glAttachObjectARB(_program, _shaders[FRAGMENT_SHADER]);
-	if (_shaders[GEOMETRY_SHADER] != 0)
-		glAttachObjectARB(_program, _shaders[GEOMETRY_SHADER]);
+		glAttachShader(_program, _shaders[FRAGMENT_SHADER]);
+// 	if (_shaders[GEOMETRY_SHADER] != 0)
+// 		glAttachShader(_program, _shaders[GEOMETRY_SHADER]);
 
-	glLinkProgramARB(_program);
+	glLinkProgram(_program);
 
 	GLint status;
 	glGetShaderiv(_program, GL_COMPILE_STATUS, &status);
@@ -83,14 +83,14 @@ void ShaderProgram::createAndLinkProgram()
 		GLint infoLogLength;
 		glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infoLog = new GLchar[infoLogLength];
-		glGetInfoLogARB(_program, infoLogLength, NULL, infoLog);
+		glGetProgramInfoLog(_program, infoLogLength, NULL, infoLog);
 		std::cerr << "Program link log: " << infoLog << std::endl;
 		delete[] infoLog;
 	}
 
-	glDeleteObjectARB(_shaders[VERTEX_SHADER]);
-	glDeleteObjectARB(_shaders[FRAGMENT_SHADER]);
-	glDeleteObjectARB(_shaders[GEOMETRY_SHADER]);
+	glDeleteShader(_shaders[VERTEX_SHADER]);
+	glDeleteShader(_shaders[FRAGMENT_SHADER]);
+	//glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
 
 

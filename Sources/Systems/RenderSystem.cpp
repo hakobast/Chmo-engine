@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 Haksist. All rights reserved.
 //
 
+#include <algorithm>
 #include <iostream>
+
 #include "RenderSystem.h"
-#include "Components/Renderer.h"
-#include "Components/Camera.h"
+#include "../Components/Renderer.h"
+#include "../Components/Camera.h"
 
 static bool sortRenderers(const Renderer* lhs, const Renderer* rhs)
 {

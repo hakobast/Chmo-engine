@@ -7,8 +7,8 @@
 //
 #include <iostream>  
 
-#include "CoreEngine/Engine.h"
-#include "CoreEngine/ActiveComponent.h"
+#include "../CoreEngine/GameObject.h"
+#include "../CoreEngine/ActiveComponent.h"
 
 using namespace std;
 

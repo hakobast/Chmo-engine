@@ -1,15 +1,15 @@
 #ifndef FPSCOUNTER_CPP
 #define FPSCOUNTER_CPP
 
-#include "CoreEngine/GameLogic.h"
-#include "Systems/GameTime.h"
+#include "../CoreEngine/GameLogic.h"
+#include "../Systems/GameTime.h"
 
 #include <iostream>
 
 class FPSCounter : public GameLogic
 {
 	GLfloat time = 0;
-	int frames;
+	int frames = 0;
 public:
 	void Update()
 	{

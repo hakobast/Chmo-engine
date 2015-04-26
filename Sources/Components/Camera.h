@@ -1,8 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/ActiveComponent.h"
+#include "../CoreEngine/LIBS.h"
+#include "../Extras/Matrix4.h"
+#include "../CoreEngine/ActiveComponent.h"
+#include "../CoreEngine/Component.h"
+
 
 enum ProjectionMode
 {
@@ -25,6 +28,9 @@ private:
 	void Update();
 	void ApplyCameraChanges();
 	void OnEnable();
+	Matrix4 projectionMatrix;
+	Matrix4 viewMatrix;
+
 public:
 	static Camera* main;
 	void ApplyTransformation();

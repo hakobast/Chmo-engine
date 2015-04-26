@@ -3,7 +3,7 @@
 
 
 #include "Renderer.h"
-#include "CoreEngine/Mesh.h"
+#include "../CoreEngine/Mesh.h"
 
 class MeshRenderer : public Renderer
 {

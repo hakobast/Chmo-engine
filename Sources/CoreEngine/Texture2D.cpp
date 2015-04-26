@@ -33,8 +33,6 @@ Texture2D::Texture2D(int width, int height,
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
 
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texture_enviroment);
-
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -121,20 +119,20 @@ Texture2D::~Texture2D()
 void Texture2D::setPixels(const GLvoid* pixels)
 {
 	glBindTexture(GL_TEXTURE_2D, texture_id);
-	if (generateMipmaps)
-	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 4, this->width, this->height, format, dataType, pixels);
-	}
+	if (pixelsSet)
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->width, this->height, format, dataType, pixels);
 	else
 	{
-		if (pixelsSet)
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->width, this->height, format, dataType, pixels);
-		else
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, this->width, this->height, 0, format, dataType, pixels);
-			pixelsSet = true;
-		}
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, this->width, this->height, 0, format, dataType, pixels);
+		pixelsSet = true;
 	}
+
+	if (generateMipmaps)
+	{
+		//gluBuild2DMipmaps(GL_TEXTURE_2D, 4, this->width, this->height, format, dataType, pixels);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -148,25 +146,35 @@ char* Texture2D::getPixels(GLint x, GLint y, GLint _width, GLint _height)
 	int color_componens;
 	switch (format)
 	{
+#if defined(_WIN32) || defined (__APPLE__)
 	case GL_RED: case GL_GREEN: case GL_BLUE: case GL_ALPHA: case GL_LUMINANCE:
 		color_componens = 1;
 		break;
-	case GL_RGB: case GL_BGR_EXT:
+	case GL_RGB: case GL_BGR:
 		color_componens = 3;
-	case GL_RGBA: case GL_BGRA_EXT:
+		break;
+	case GL_RGBA: case GL_BGRA:
 		color_componens = 4;
 		break;
+#else
+	case GL_RGB:
+		color_componens = 3;
+		break;
+	case GL_RGBA:
+		color_componens = 4;
+		break;
+#endif
 	default:
 		color_componens = 3;
 		break;
 	}
 
 	char* pixels = new char[width*height*color_componens];
-	glGetTexImage(GL_TEXTURE_2D, 0, format, dataType, pixels);
+	//glGetTexImage(GL_TEXTURE_2D, 0, format, dataType, pixels);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	return pixels;
+	return pixels; 
 }
 
 char* Texture2D::getPixels()

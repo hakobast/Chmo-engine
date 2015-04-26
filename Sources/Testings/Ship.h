@@ -1,8 +1,8 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/GameLogic.h"
+#include "../CoreEngine/LIBS.h"
+#include "../CoreEngine/GameLogic.h"
 
 class Ship : public GameLogic
 {

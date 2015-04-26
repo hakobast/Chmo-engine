@@ -56,6 +56,7 @@
     <ClCompile Include="Sources\Components\SpriteRenderer.cpp" />
     <ClCompile Include="Sources\Components\Terrain.cpp" />
     <ClCompile Include="Sources\Components\TextureAnimator.cpp" />
+    <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp" />
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />

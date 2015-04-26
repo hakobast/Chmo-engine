@@ -1,12 +1,40 @@
-//
-//  Matrix4.cpp
-//  OpenGLTesting
-//
-//  Created by Hakob on 11/7/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #include "Matrix4.h"
+
+Matrix4 Matrix4::setOrthoFrustum(float l, float r, float b, float t, float n, float f)
+{
+	Matrix4 mat;
+	mat[0] = 2 / (r - l);
+	mat[5] = 2 / (t - b);
+	mat[10] = -2 / (f - n);
+	mat[12] = -(r + l) / (r - l);
+	mat[13] = -(t + b) / (t - b);
+	mat[14] = -(f + n) / (f - n);
+	return mat;
+}
+
+Matrix4 Matrix4::setFrustum(float l, float r, float b, float t, float n, float f)
+{
+	Matrix4 mat;
+	mat[0] = 2 * n / (r - l);
+	mat[5] = 2 * n / (t - b);
+	mat[8] = (r + l) / (r - l);
+	mat[9] = (t + b) / (t - b);
+	mat[10] = -(f + n) / (f - n);
+	mat[11] = -1;
+	mat[14] = -(2 * f * n) / (f - n);
+	mat[15] = 0;
+	return mat;
+}
+
+Matrix4 Matrix4::setFrustum(float fovY, float aspect, float n, float f)
+{
+	float tangent = tanf(fovY / 2 * DEG_TO_RAD);
+	float height = f * tangent;
+	float width = height * aspect;
+
+	return setFrustum(-width, width, -height, height, f, n);
+}
 
 Matrix4& Matrix4::setScale(GLfloat x, GLfloat y, GLfloat z)
 {

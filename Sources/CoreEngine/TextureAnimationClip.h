@@ -3,10 +3,10 @@
 
 #include <string>
 
-#include "Components/TextureAnimator.h"
-#include "Extras/smart_pointer.h"
-#include "CoreEngine/Texture2D.h"
-#include "CoreEngine/GameObject.h"
+#include "../Components/TextureAnimator.h"
+#include "../Extras/smart_pointer.h"
+#include "Texture2D.h"
+#include "GameObject.h"
 
 enum AnimationType
 {

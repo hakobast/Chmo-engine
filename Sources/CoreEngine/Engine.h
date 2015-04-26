@@ -1,10 +1,3 @@
-//
-//  Engine.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef EngineTesting_Engine_h
 #define EngineTesting_Engine_h
@@ -12,10 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include "System.h"
-#include "GameObject.h"
-#include "Component.h"
 
+class System;
+class Component;
+class GameObject;
 
 class Engine
 {
@@ -23,28 +16,28 @@ friend class GameObject;
 public:
 	~Engine();
     void Init();
-    void Update();
+	void Update();
+	void Resume();
+	void Pause();
+	void ScreenChange(int width, int height);
     void addSystem(System &s, int priority);
     void addGameObject(GameObject &obj);
     void addComponent(Component &comp, int priority);
-	void removeSystem(System &s);
 	void removeGameObject(GameObject &obj);
 	void removeComponent(Component &comp);
-	void print();
-
 	GameObject* FindGameObjectByName(std::string name) const;
-	template<class T>
-	T* FindComponent() const;
-	template<class T>
-	std::vector<T*> FindComponents() const;
+	template<class T> T* FindComponent() const;
+	template<class T> std::vector<T*> FindComponents() const;
 
-	static inline Engine& getInstance()
+	static Engine& getInstance()
 	{
 		static Engine engine;
 		return engine;
 	}
+
 private:
-	std::vector<Component*> _compInitList;
+	std::vector<Component*> _compInitList; 
+	std::vector<Component*> _compInitQueue;
 	std::vector<Component*> _compDestroyList;
 	std::vector<GameObject*> _gmObjDestroyList;
 
@@ -57,6 +50,9 @@ private:
 		std::cout << "ENGINE created" << std::endl;
 	}
 
+	void Cleanup();
+
+	friend void f_Destroy();
 	friend bool pred_initComponents(Component* c);
 };
 

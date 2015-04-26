@@ -49,7 +49,7 @@ char* loadFile(const char* filename)
 // calculates tangents for simple Triangle rendering
 void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, std::vector<Vector3>&normals, Vector3* tangent, Vector3* bitangent)
 {
-	for (int t = 0; t < verts.size() / 3; t++)
+	for (size_t t = 0, len = verts.size()/3; t < len; t++)
 	{
 		Vector3& V0 = verts[t]; // (verts[t * 3], verts[t * 3 + 1], verts[t * 3 + 2]);
 		Vector3& V1 = verts[t + 1]; // (verts[t * 3 + 3], verts[t * 3 + 4], verts[t * 3 + 5]);
@@ -90,13 +90,30 @@ void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, s
 	}
 }
 
-bool isVBOSupported()
+GLboolean isExtensionSupported(const char* extension)
+{
+	int numb_exts;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &numb_exts);
+
+	for (int i = 0; i < numb_exts; i++)
+	{
+		char* ext = (char*)glGetStringi(GL_EXTENSIONS, i);
+		int res = strcmp(ext, extension);
+
+		if (res == 0)
+			return true;
+	}
+
+	return false;
+}
+
+GLboolean isVBOSupported()
 {
 	static bool first = true;
 	static GLboolean hasVBO;
 	if (first)
 	{
-		hasVBO = glewGetExtension("GL_ARB_vertex_buffer_object");
+		hasVBO = isExtensionSupported("GL_ARB_vertex_buffer_object");
 		first = false;
 	}
 

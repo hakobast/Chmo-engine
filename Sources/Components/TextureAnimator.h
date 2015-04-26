@@ -1,11 +1,11 @@
 #ifndef TEXTURE_ANIMATOR_H
 #define TEXTURE_ANIMATOR_H
 
-#include "CoreEngine/GameLogic.h"
-#include "CoreEngine/Texture2D.h"
-#include "CoreEngine/TextureAnimationClip.h"
-#include "Extras/smart_pointer.h"
-#include "Systems/GameTime.h"
+#include "../CoreEngine/GameLogic.h"
+#include "../CoreEngine/Texture2D.h"
+#include "../CoreEngine/TextureAnimationClip.h"
+#include "../Extras/smart_pointer.h"
+#include "../Systems/GameTime.h"
 #include "SpriteRenderer.h"
 
 class TextureAnimationClip;

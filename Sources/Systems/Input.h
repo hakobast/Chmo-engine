@@ -4,13 +4,13 @@
 
 #include <map>
 
-#include "CoreEngine/System.h"
+#include "../CoreEngine/System.h"
 #include "GameTime.h"
 
-#define KeyCodes_Count 256 //Temp size
+#define KeyCodes_Count 256
 #define Special_Keys_Count 28
 
-enum KeyCode // implement All symbols
+enum KeyCode
 {
 	TAB = 9,
 	MINUS = 45,
@@ -77,7 +77,7 @@ enum KeyCode // implement All symbols
 	x = 120,
 	y = 121,
 	z = 122,
-	F1 =			GLUT_KEY_F1			+ Special_Keys_Count,
+	/*F1 =			GLUT_KEY_F1			+ Special_Keys_Count,
 	F2 =			GLUT_KEY_F2			+ Special_Keys_Count,
 	F3 =			GLUT_KEY_F3			+ Special_Keys_Count,
 	F4 =			GLUT_KEY_F4			+ Special_Keys_Count,
@@ -97,7 +97,7 @@ enum KeyCode // implement All symbols
 	PAGE_DOWN =		GLUT_KEY_PAGE_DOWN	+ Special_Keys_Count,
 	HOME =			GLUT_KEY_HOME		+ Special_Keys_Count,
 	END =			GLUT_KEY_END		+ Special_Keys_Count,
-	INSERT =		GLUT_KEY_INSERT		+ Special_Keys_Count,
+	INSERT =		GLUT_KEY_INSERT		+ Special_Keys_Count,*/
 	LEFT_SHIFT	=	112					+ Special_Keys_Count,
 	RIGHT_SHIFT =	113					+ Special_Keys_Count,
 	LEFT_CTRL =		114					+ Special_Keys_Count,

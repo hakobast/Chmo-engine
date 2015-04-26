@@ -2,8 +2,9 @@
 #include <vector>
 
 #include "MeshRenderer.h"
-#include "Systems/Input.h"
-#include "Systems/GameTime.h"
+#include "../Systems/Input.h"
+#include "../Systems/GameTime.h"
+#include "../CoreEngine/Transform.h"
 
 MeshRenderer::~MeshRenderer()
 {

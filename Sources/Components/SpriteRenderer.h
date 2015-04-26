@@ -2,9 +2,10 @@
 #define EngineTesting_SpriteRenderer_h
 
 
-#include "Components/Renderer.h"
-#include "CoreEngine/Texture2D.h"
-#include "Extras/Color.h"
+#include "../Components/Renderer.h"
+#include "../CoreEngine/Texture2D.h"
+#include "../CoreEngine/Material.h"
+#include "../Extras/Color.h"
 
 class SpriteRenderer : public Renderer
 {
@@ -21,10 +22,10 @@ public:
 
 		_normals = new Vector3[4]
 		{
-			Vector3(0.0f, 0.0f, 1.0f),
-			Vector3(0.0f, 0.0f, 1.0f),
-			Vector3(0.0f, 0.0f, 1.0f),
-			Vector3(0.0f, 0.0f, 1.0f)
+			Vector3(0.0f, 0.0f, -1.0f),
+			Vector3(0.0f, 0.0f, -1.0f),
+			Vector3(0.0f, 0.0f, -1.0f),
+			Vector3(0.0f, 0.0f, -1.0f)
 		};
 
 		_tangent = new Vector3[4]
@@ -43,7 +44,8 @@ public:
 			Vector3::UP
 		};
 
-		setMainMaterial(Material::Unlit());
+		smart_pointer<Material> mat = Material::Unlit();
+		setMainMaterial(mat);
 	}
 
 	~SpriteRenderer();
@@ -71,12 +73,12 @@ private:
 
 inline void SpriteRenderer::setColor(Color c)
 {
-	getMaterial()->color_diffuse = c;
+	getSharedMaterial()->setColor(c);
 }
 
 inline Color SpriteRenderer::getColor()
 {
-	return getSharedMaterial()->color_diffuse;
+	return getSharedMaterial()->getColor();
 }
 
 #endif

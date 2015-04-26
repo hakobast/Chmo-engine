@@ -1,6 +1,11 @@
 
 #include "Terrain.h"
 
+#include "../CoreEngine/Texture2D.h"
+#include "../Extras/smart_pointer.h"
+#include "../CoreEngine/Component.h"
+#include "../CoreEngine/Transform.h"
+
 Terrain::~Terrain()
 {
 	//for (int i = 0; i < length; i++)

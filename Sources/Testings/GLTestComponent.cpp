@@ -1,10 +1,4 @@
-//
-//  TestComponent.h
-//  EngineTesting
-//
-//  Created by Hakob on 11/13/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
+
 #include <iostream>
 
 #include "CoreEngine/Engine.h"
@@ -21,22 +15,22 @@ class GLTestComponent : public GameLogic
 {
 public:
 	~GLTestComponent()
-    {
-       cout << "GLTestComponent:: ~~~deleted~~~" << endl; 
-    }
-    
+	{
+		cout << "GLTestComponent:: ~~~deleted~~~" << endl;
+	}
+
 	void Create()
 	{
 		cout << "GLTestComponent:: Create" << endl;
 	}
 
 	void Init()
-	{	
+	{
 		std::cout << "GL TEST INITED" << std::endl;
 	}
-    
-    void Update()
-    {
+
+	void Update()
+	{
 		if (Input::IsKeyDownNow(KeyCode::RIGHT_ALT))
 		{
 			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
@@ -65,7 +59,7 @@ public:
 			{
 				smart_pointer<Mesh> mesh = meshRend->getSharedMesh();
 
-				std::vector<unsigned int> indices{ 3,0,2 };
+				std::vector<unsigned int> indices{ 3, 0, 2 };
 				std::vector<Vector3> verts{ Vector3(-1.0f, -3.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
 				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
 
@@ -99,9 +93,11 @@ public:
 		float speed = 15.0f;
 		float rotationSpeed = 100.0f;
 		if (Input::IsKeyDown(KeyCode::a))
-			getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
+			//getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
+			getTransform()->TranslateRight(-speed*GameTime::DeltaTime());
 		if (Input::IsKeyDown(KeyCode::d))
-			getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
+			//getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
+			getTransform()->TranslateRight(speed*GameTime::DeltaTime());
 		if (Input::IsKeyDown(KeyCode::w))
 			getTransform()->TranslateForward(-speed*GameTime::DeltaTime());
 		if (Input::IsKeyDown(KeyCode::s))
@@ -115,7 +111,7 @@ public:
 		{
 			getTransform()->RotateX(-rotationSpeed*GameTime::DeltaTime());
 		}
-    }
+	}
 
 	void OnAction(string action, void*const data)
 	{
@@ -137,4 +133,3 @@ public:
 		std::cout << "GLTestComponent: OnDestroy" << std::endl;
 	}
 };
-

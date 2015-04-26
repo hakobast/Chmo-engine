@@ -11,11 +11,11 @@
 
 #include <assert.h>
 
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/ActiveComponent.h"
-#include "Systems/RenderSystem.h"
-#include "CoreEngine/Material.h"
-#include "Extras/smart_pointer.h"
+#include "../CoreEngine/LIBS.h"
+#include "../CoreEngine/ActiveComponent.h"
+#include "../Systems/RenderSystem.h"
+#include "../CoreEngine/Material.h"
+#include "../Extras/smart_pointer.h"
 
 enum SortingLayer
 {

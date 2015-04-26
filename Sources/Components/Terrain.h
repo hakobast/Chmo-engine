@@ -1,11 +1,9 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/Texture2D.h"
-#include "Extras/smart_pointer.h"
-#include "Extras/Vectors.h"
-#include "Components/Renderer.h"
+#include "../Extras/Vectors.h"
+#include "../CoreEngine/LIBS.h"
+#include "Renderer.h"
 
 class Terrain : public Renderer
 {

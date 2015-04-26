@@ -1,5 +1,5 @@
 
-#include "CoreEngine/LIBS.h"
+#include "../CoreEngine/LIBS.h"
 #include "ScreenSystem.h"
 
 ScreenSystem* ScreenSystem::s_instance = NULL;
@@ -8,7 +8,7 @@ ScreenSystem::ScreenSystem()
 {
 	s_instance = this;
 
-	glutReshapeFunc(fr_ScreenResize);
+	//glutReshapeFunc(fr_ScreenResize);
 }
 
 ScreenSystem::~ScreenSystem()

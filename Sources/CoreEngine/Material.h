@@ -3,42 +3,29 @@
 
 #include <vector>
 
-#include "CoreEngine/LIBS.h"
-#include "CoreEngine/Texture2D.h"
-#include "CoreEngine/ShaderProgram.h"
-#include "Extras/smart_pointer.h"
-#include "Extras/Color.h"
+#include "LIBS.h"
+#include "Texture2D.h"
+#include "ShaderProgram.h"
+#include "../Extras/smart_pointer.h"
+#include "../Extras/Color.h"
 
 
 class Material :public RemovableObject
 {
 friend class Renderer;
-
 private:
 	std::vector<smart_pointer<Texture2D>> textures;
 	int _sharesCount = 0;
 public:
-	/* FEW STANDART MATERIALS */
-	static const smart_pointer<Material> diffuse;
-	static const smart_pointer<Material> unlitTexture;
-	/*END*/
 	std::string name;
 	smart_pointer<ShaderProgram> shader;
-
-	Color color_ambient;
-	Color color_diffuse;
-	Color color_specular;
-	Color color_emmission;
 
 	GLint illum = 1;
 	GLfloat shininess = 128.0f;
 
 	Material(std::string name) :name(name)
 	{
-		color_ambient.  set(0.3f, 0.3f, 0.3f, 1.0f);
-		color_diffuse.  set(0.6f, 0.6f, 0.6f, 1.0f);
-		color_specular. set(0.0f, 0.0f, 0.0f, 1.0f);
-		color_emmission.set(0.0f, 0.0f, 0.0f, 1.0f);
+		
 	}
 
 	Material(std::string name, smart_pointer<ShaderProgram>& shader) : Material(name)
@@ -49,14 +36,11 @@ public:
 	Material(std::string name, const char* vertexShaderSource,const char* fragmentShaderSource) : Material(name)
 	{
 		shader = smart_pointer<ShaderProgram>(new ShaderProgram());
-		shader->loadShaderFromString(GL_VERTEX_SHADER_ARB, vertexShaderSource);
-		shader->loadShaderFromString(GL_FRAGMENT_SHADER_ARB, fragmentShaderSource);
+		shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource);
+		shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource);
 		shader->createAndLinkProgram();
 	}
 
-	static smart_pointer<Material> createMaterial(std::string name, const char* vertexShaderFilename, const char* fragmentShaderFilename);
-	static smart_pointer<Material> Diffuse();
-	static smart_pointer<Material> Unlit();
 
 	void bind();
 	void unbind();
@@ -65,6 +49,12 @@ public:
 	void addTexture(smart_pointer<Texture2D> texture, char* samplerName = NULL);
 	smart_pointer<Texture2D>& getTexture(int index);
 	smart_pointer<Texture2D>& getMainTexture();
+	void setColor(Color c, const char* propertyName = "Color");
+	Color getColor(const char* propertyName = "Color");
+
+	static smart_pointer<Material> createMaterial(std::string name, const char* vertexShaderFilename, const char* fragmentShaderFilename);
+	static smart_pointer<Material> Diffuse();
+	static smart_pointer<Material> Unlit();
 };
 
 inline void Material::bind()
@@ -82,11 +72,6 @@ inline void Material::bind()
 			textures[i]->bindTexture();
 		}
 	}
-
-	glMaterialfv(GL_FRONT, GL_AMBIENT, color_ambient[0]);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, color_diffuse[0]);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, color_specular[0]);
-	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 }
 
 inline void Material::unbind()
@@ -171,6 +156,34 @@ inline void Material::setMainTexture(smart_pointer<Texture2D> texture)
 	{
 		textures.push_back(texture);
 	}
+}
+
+inline void Material::setColor(Color c, const char* propertyName)
+{
+	if (!shader.isEmpty())
+	{
+		shader->setUniform4f(propertyName, c.getR(),c.getG(),c.getB(),c.getA());
+	}
+}
+
+inline Color Material::getColor(const char* propertyName)
+{
+	// implement Uniform reads
+
+	if (!shader.isEmpty())
+	{
+		GLfloat* colorData = new GLfloat[4];
+
+		GLuint loc = shader->getUniformLocation(propertyName);
+		glGetUniformfv(shader->getProgram(),loc,colorData);
+
+		Color c(colorData[0], colorData[1], colorData[2], colorData[3]);
+		delete[] colorData;
+
+		return c;
+	}
+
+	return Color::BLACK;
 }
 
 #endif

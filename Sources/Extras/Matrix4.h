@@ -1,10 +1,3 @@
-//
-//  Matrix4.h
-//  OpenGLTesting
-//
-//  Created by Hakob on 11/7/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
 
 #ifndef OpenGLTesting_Matrix4_h
 #define OpenGLTesting_Matrix4_h
@@ -12,8 +5,9 @@
 #include <iostream>
 #include <math.h>
 
-#include "CoreEngine/LIBS.h"
+#include "../CoreEngine/LIBS.h"
 
+#define DEG_TO_RAD 0.017453292519943296f
 #define Sign(v) (v == 0.0f ? 0.0f : (v > 0.0f ? 1.0f : -1.0f))
 
 using namespace std;
@@ -55,6 +49,10 @@ public:
 	Matrix4& operator*= (const Matrix4& n);
 	GLfloat& operator[] (int index);
 	GLfloat operator[] (int index) const;
+
+	static Matrix4 setOrthoFrustum(float left, float right, float bottom, float top, float near, float far);
+	static Matrix4 setFrustum(float left, float right, float bottom, float top, float near, float far);
+	static Matrix4 setFrustum(float fovy, float aspect, float near, float far);
 };
 
 inline void Matrix4::makeIdentity()
@@ -113,4 +111,5 @@ inline GLfloat Matrix4:: operator[] (int index) const
 {
 	return m[index];
 }
+
 #endif

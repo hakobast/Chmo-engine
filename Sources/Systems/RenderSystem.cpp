@@ -51,9 +51,10 @@ void RenderSystem::Update()
 	if (Camera::main == NULL)
 		return;
 
-	Matrix4 ProjectionMatrix = Camera::main->getProjectionMatrix();
-	Matrix4 ViewMatrix = Camera::main->getViewMatrix();
-	static Matrix4 ModelMatrix,ModelViewMatrix,ModelViewProjectionMatrix;
+	static Matrix4 ModelMatrix, ViewMatrix, ModelViewMatrix, ModelViewProjectionMatrix;
+
+	Matrix4& ProjectionMatrix = Camera::main->getProjectionMatrix();
+	Camera::main->getViewMatrix(ViewMatrix);
 
 	//std::cout << "MATERIALS " << Material::allMaterials.size() << std::endl;
 

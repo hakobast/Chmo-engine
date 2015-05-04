@@ -699,7 +699,7 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 	unsigned int width(0), height(0);
 
 	//check the file signature and deduce its format
-	fif = FreeImage_GetFileType(filename, 0);
+	fif = FreeImage_GetFileType(filename, 0); 
 	//if still unknown, try to guess the file format from the file extension
 	if (fif == FIF_UNKNOWN)
 		fif = FreeImage_GetFIFFromFilename(filename);

@@ -32,7 +32,6 @@ private:
 	void OnEnable();
 	Matrix4 rotationMatrix; 
 	Matrix4 translationMatrix;
-	Matrix4 viewMatrix;
 	Matrix4 projectionMatrix;
 
 public:
@@ -43,8 +42,8 @@ public:
 	void setFOVY(GLfloat fovy);
 	GLfloat getOrthoSize();
 	void setOrthoSize(GLfloat size);
-	Matrix4 getProjectionMatrix();
-	Matrix4 getViewMatrix();
+	Matrix4& getProjectionMatrix();
+	void getViewMatrix(Matrix4& viewMatrix);
 };
 
 inline ProjectionMode Camera::getProjectionMode()
@@ -89,12 +88,12 @@ inline void Camera::setOrthoSize(GLfloat size)
 	}
 }
 
-inline Matrix4 Camera::getProjectionMatrix()
+inline Matrix4& Camera::getProjectionMatrix()
 {
 	return projectionMatrix;
 }
 
-inline Matrix4 Camera::getViewMatrix()
+inline void Camera::getViewMatrix(Matrix4& viewMatrix)
 {
 	Transform* tr = getTransform();
 	tr->getMatrix(rotationMatrix,true);
@@ -107,7 +106,7 @@ inline Matrix4 Camera::getViewMatrix()
 
 	translationMatrix.setColumn(3, new GLfloat[3]{-tr->Location[0], -tr->Location[1], -tr->Location[2]}, 3);
 
-	return Matrix4::MultiplyMatrices(rotationMatrix, translationMatrix, viewMatrix);
+	Matrix4::MultiplyMatrices(rotationMatrix, translationMatrix, viewMatrix);
 }
 
 #endif

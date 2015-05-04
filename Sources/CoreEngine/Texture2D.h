@@ -31,7 +31,6 @@ public:
 	const GLenum format;
 	const GLenum dataType;
 
-	//TODO add image format parameter
 	Texture2D(int width, int height, 
 		bool generateMipmaps = false,
 		GLenum internalFormat = GL_RGB,
@@ -52,8 +51,6 @@ public:
 		GLenum internalFormat = GL_RGB,
 		GLenum format = GL_RGB,
 		GLenum dataType = GL_UNSIGNED_BYTE);
-
-//	Texture2D(const char*filename, bool generateMipmaps = false);
 
 	virtual ~Texture2D();
 	int getFrameCount();

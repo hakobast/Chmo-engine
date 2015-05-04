@@ -1,8 +1,9 @@
 ﻿
-#include "CoreEngine/LIBS.h"
 
 #include <iostream>
 #include "SpriteRenderer.h"
+
+#include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/Transform.h"
 #include "../CoreEngine/Component.h"
 #include "../Systems/ScreenSystem.h"
@@ -19,6 +20,7 @@ SpriteRenderer::~SpriteRenderer()
 	delete[] _normals;
 	delete[] _tangent;
 	delete[] _bitangent;
+	delete[] indices;
 }
 
 void SpriteRenderer::Create()
@@ -28,64 +30,65 @@ void SpriteRenderer::Create()
 
 void SpriteRenderer::Init()
 {
-	std::cout << "SpriteRenderer: Init() " << getGameObject()->name << std::endl;
+	Component::Init();
 
-	_tangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("tangent");
-	_bitangAttribLocation = getSharedMaterial()->shader->getAttributeLocation("bitangent");
+	//std::cout << "SpriteRenderer: Init() " << getGameObject()->name << std::endl;
 
 	setTextureFrame(_frame);
 }
 
 bool hasTexture;
-void SpriteRenderer::Update()
+
+void SpriteRenderer::Update(){}
+
+/*void SpriteRenderer::Render(int material)
 {
-	getTransform()->applyTransformation();
-	
-	smart_pointer<Material>& mat = getSharedMaterial();
+	smart_pointer<Material>& mat = getSharedMaterial(material);
 	hasTexture = !mat->getMainTexture().isEmpty();
 
-	mat->bind();
-	{
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		if (hasTexture) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	if (hasTexture) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glVertexPointer(2, GL_FLOAT, 0, _verts);
-		glNormalPointer(GL_FLOAT, 0, _normals);
-		if (hasTexture) glTexCoordPointer(2, GL_FLOAT, 0, _texcoords);
+	glVertexPointer(2, GL_FLOAT, 0, _verts);
+	glNormalPointer(GL_FLOAT, 0, _normals);
+	if (hasTexture) glTexCoordPointer(2, GL_FLOAT, 0, _texcoords);
 
-		glVertexAttribPointer(_tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
-		glVertexAttribPointer(_bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
+	glDrawArrays(GL_QUADS, 0, 4);
 
-		glDrawArrays(GL_QUADS, 0, 4);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	if (hasTexture) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+*/
 
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		if (hasTexture) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
-	mat->unbind();
+void SpriteRenderer::Render(int material)
+{
+//	getTransform()->applyTransformation();
+ 	smart_pointer<Material>& mat = getSharedMaterial(material);
+ 	hasTexture = !mat->getMainTexture().isEmpty();
 
-	/*glBegin(GL_QUADS);
-	{
-		glNormal3f(0.0f, 0.0f, 1.0f);
+	//std::cout << "RENDER ME " << getGameObject()->name << " SUB " << material << " Has Texture " << hasTexture << std::endl;
 
-		glTexCoord2fv((*mainTexture)[_frame][0]); glVertex3f(-_wRange, -_hRange, 0.0f);
-		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
-		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
+	glEnableVertexAttribArray(vertexAttribLocation);
+	if(hasTexture)glEnableVertexAttribArray(texCoordAttribLocation);
+	glEnableVertexAttribArray(normalAttribLocation);
+	glEnableVertexAttribArray(tangAttribLocation);
+	glEnableVertexAttribArray(bitangAttribLocation);
 
-		glTexCoord2fv((*mainTexture)[_frame][2]); glVertex3f(_wRange, -_hRange, 0.0f);
-		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
-		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
+	glVertexAttribPointer(vertexAttribLocation, 2, GL_FLOAT, false, 0, _verts);
+	if (hasTexture)glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, _texcoords);
+	glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, true,  0, _normals);
+ 	glVertexAttribPointer(tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
+ 	glVertexAttribPointer(bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
 
-		glTexCoord2fv((*mainTexture)[_frame][4]); glVertex3f(_wRange, _hRange, 0.0f);
-		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
-		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
-		glTexCoord2fv((*mainTexture)[_frame][6]); glVertex3f(-_wRange, _hRange, 0.0f);		
-		//mat->shader->setVertexAttrib3fv("tangent", _tangent.getPointer());
-		//mat->shader->setVertexAttrib3fv("bitangent", _bitangent.getPointer());
-	}
-	glEnd();*/
+	glDisableVertexAttribArray(vertexAttribLocation);
+	if (hasTexture)glDisableVertexAttribArray(texCoordAttribLocation);
+	glDisableVertexAttribArray(normalAttribLocation);
+	glDisableVertexAttribArray(tangAttribLocation);
+	glDisableVertexAttribArray(bitangAttribLocation);
 
 	float rotationSpeed = 100.0f;
 

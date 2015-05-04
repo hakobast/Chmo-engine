@@ -260,5 +260,8 @@
     <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Components\Renderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

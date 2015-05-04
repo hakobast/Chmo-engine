@@ -17,10 +17,11 @@ Terrain::~Terrain()
 	//delete[] map;
 	//delete[] normals;
 
-	if (verts != NULL)
-		delete[] verts;
-	if (norms != NULL)
-		delete[] verts;
+// 	if (!isVBOSupported())
+// 	{
+// 		delete[] verts;
+// 		delete[] norms;
+// 	}
 }
 
 void Terrain::build(smart_pointer<Texture2D> heightMap, GLfloat height)
@@ -87,19 +88,19 @@ void Terrain::build(smart_pointer<Texture2D> heightMap, GLfloat height)
 
 	if (isVBOSupported())
 	{
-		glGenBuffersARB(1, &vertex_vbo_id);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_vbo_id);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(Vector3)*getVertsCount(), verts, GL_STATIC_DRAW_ARB);
+		glGenBuffers(1, &vertex_vbo_id);
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*getVertsCount(), verts, GL_STATIC_DRAW);
 		delete[] verts;
 
-		glGenBuffersARB(1, &normal_vbo_id);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, normal_vbo_id);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(Vector3)*getVertsCount(), norms, GL_STATIC_DRAW_ARB);
+		glGenBuffers(1, &normal_vbo_id);
+		glBindBuffer(GL_ARRAY_BUFFER, normal_vbo_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*getVertsCount(), norms, GL_STATIC_DRAW);
 		delete[] norms;
 
-		glGenBuffersARB(1, &texture_vbo_id);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, texture_vbo_id);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(Vector2)*getVertsCount(), textures, GL_STATIC_DRAW_ARB);
+		glGenBuffers(1, &texture_vbo_id);
+		glBindBuffer(GL_ARRAY_BUFFER, texture_vbo_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vector2)*getVertsCount(), textures, GL_STATIC_DRAW);
 		delete[] textures;
 	}
 
@@ -111,7 +112,6 @@ void Terrain::build(smart_pointer<Texture2D> heightMap, GLfloat height)
 
 	delete[] map;
 	delete[] normals;
-
 }
 
 void Terrain::computeNormals()
@@ -202,52 +202,44 @@ void Terrain::Create()
 
 void Terrain::Init()
 {
-
+	Component::Init();
 }
 
-void Terrain::Update()
+void Terrain::Update(){}
+
+void Terrain::Render(int materialIndex)
 {
-	getTransform()->applyTransformation();
-
-	smart_pointer<Texture2D>& mainTexture = getMainTexture();
-	if (!mainTexture.isEmpty())
-		getMaterial()->bind();
-
-	//glColor3f(0.3f, 0.9f, 1.0f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ 	glEnableVertexAttribArray(vertexAttribLocation);
+ 	glEnableVertexAttribArray(texCoordAttribLocation);
+ 	glEnableVertexAttribArray(normalAttribLocation);
 
 	if (isVBOSupported())
 	{
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_vbo_id);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
+		glVertexAttribPointer(vertexAttribLocation, 3, GL_FLOAT, false, 0, 0);
 
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, normal_vbo_id);
-		glNormalPointer(GL_FLOAT, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, texture_vbo_id);
+		glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, 0);
 
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, texture_vbo_id);
-		glTexCoordPointer(2, GL_FLOAT, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, normal_vbo_id);
+		glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, false, 0, 0);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	else
 	{
-		glVertexPointer(3, GL_FLOAT, 0, verts);
-		glNormalPointer(GL_FLOAT, 0, norms);
-		glTexCoordPointer(2, GL_FLOAT, 0, textures);
+		glVertexAttribPointer(texCoordAttribLocation, 3, GL_FLOAT, false, 0,    verts);
+		glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, textures);
+		glVertexAttribPointer(normalAttribLocation,   3, GL_FLOAT, false, 0,	norms);
+
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 	}
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	if (!mainTexture.isEmpty())
-		getMaterial()->unbind();
+	glDisableVertexAttribArray(vertexAttribLocation);
+	glDisableVertexAttribArray(texCoordAttribLocation);
+	glDisableVertexAttribArray(normalAttribLocation);
 
 	/*glBegin(GL_TRIANGLE_STRIP);
 	for (int z = 0; z < length - 1; z++)

@@ -35,6 +35,7 @@ public:
 	void Create();
 	void Init();
 	void Update();
+	void Render(int materialIndex = 0);
 };
 
 inline GLint Terrain::getWidth()

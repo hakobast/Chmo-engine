@@ -21,10 +21,12 @@ void MeshRenderer::Create()
 
 void MeshRenderer::Init()
 {
-
+	Component::Init();
 }
 
-void  MeshRenderer::Update()
+void MeshRenderer::Update(){}
+
+void  MeshRenderer::Render(int materialIndex)
 {
 // 	GLfloat rotation = 180.0f;
 // 
@@ -44,36 +46,11 @@ void  MeshRenderer::Update()
 // 		getTransform()->RotateX(-rotation*GameTime::DeltaTime());
 // 	}
 
-	getTransform()->applyTransformation();
+	//getTransform()->applyTransformation();
 
 	if (mesh.isEmpty())
 		return;
 
-	std::vector<smart_pointer<Material>>& mats = getSharedMaterials();
-	int mats_count = mats.size();
-
-	//TODO implement multi materials
-	//TODO remove this shit
-	for (int i = 0; i < mesh->getSubMeshCount(); i++)
-	{
-		if (i < mats_count)
-		{
-			mats[i]->bind();
-			mesh->draw(i);
-			mats[i]->unbind();
-		}
-		else
-		{
-			if (mats_count > 0)
-			{
-				mats.back()->bind();
-				mesh->draw(i);
-				mats.back()->unbind();
-			}
-			else
-			{
-				mesh->draw(i);
-			}
-		}
-	}
+	materialIndex = materialIndex < mesh->getSubMeshCount() ? materialIndex : (mesh->getSubMeshCount() - 1);
+	mesh->draw(materialIndex);
 }

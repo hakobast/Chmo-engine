@@ -13,7 +13,7 @@ ScreenSystem::ScreenSystem()
 
 ScreenSystem::~ScreenSystem()
 {
-
+	std::cout << "ScreenSystem:: ~~~deleted~~~" << std::endl;
 }
 
 void ScreenSystem::Init()

@@ -71,6 +71,15 @@ public:
 				std::cout << "CAN'T FIND\n";
 		}
 
+		if (Input::IsKeyDownNow(KeyCode::F))
+		{
+			SpriteRenderer* spRend = GameObject::FindComponent<SpriteRenderer>();
+			if (spRend != NULL)
+			{
+				spRend->destroy();
+			}
+		}
+
 		//glMaterialfv(GL_FRONT, GL_DIFFUSE, new float[4]{ 1.0f, 0.0f, 0.0f, 1.0f });
 		//glBegin(GL_LINES);
 		//{

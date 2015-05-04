@@ -1,6 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#ifndef __ANDROID__
+
 #include "../CoreEngine/GameLogic.h"
 #include "../CoreEngine/LIBS.h"
 
@@ -128,5 +130,7 @@ inline void Light::setQuadraticAttenuation(float value)
 	_quadraticAttenuation = value;
 	glLightf(GL_LIGHT0 + _light, GL_QUADRATIC_ATTENUATION, _quadraticAttenuation);
 }
+
+#endif
 
 #endif

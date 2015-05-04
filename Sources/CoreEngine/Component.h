@@ -9,6 +9,14 @@ class Transform;
 class GameObject;
 class System;
 
+enum ComponentState
+{
+	Enabled,
+	Disabled,
+	ParentDisabled,
+	Destroying,
+};
+
 class Component
 {
 	friend class GameObject;
@@ -17,7 +25,7 @@ class Component
 public:
     int priority;
 	virtual void Create(){};
-	virtual void Init(){};
+	virtual void Init(){ inited_ = true; };
 	virtual void Update(){};
 	virtual bool isEnabled() const;
 	GameObject*const getGameObject() const;
@@ -27,10 +35,13 @@ protected:
 	{
 		std::cout << "~~~~~~~~~~~~~ Component: " << std::endl;
 	};
+	bool isInited();
 	System* system;
 private:
-	GameObject* gameObject;
-	Transform* transform;
+	bool inited_ = false;
+	ComponentState state_ = ComponentState::Disabled;
+	GameObject* gameObject_;
+	Transform* transform_;
 
 friend std::ostream& operator << (std::ostream& stream, const Component& obj);
 };
@@ -45,14 +56,19 @@ inline bool Component::isEnabled() const
 	return true; 
 }
 
+inline bool Component::isInited()
+{
+	return inited_;
+}
+
 inline GameObject*const Component::getGameObject() const
 {
-	return gameObject;
+	return gameObject_;
 }
 
 inline Transform*const Component::getTransform() const
 {
-	return transform;
+	return transform_;
 }
 
 #endif

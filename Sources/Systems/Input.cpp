@@ -1,8 +1,8 @@
 
-#include "CoreEngine/LIBS.h"
-
 #include <iostream>
 #include "Input.h"
+
+#include "../CoreEngine/LIBS.h"
 
 using namespace std;
 
@@ -62,6 +62,7 @@ Input::Input()
 {
 	instance = this;
 
+#ifndef __ANDROID__
 	glutKeyboardFunc(OnKeyDown);
 	glutKeyboardUpFunc(OnKeyUp);
 	glutSpecialFunc(OnSpecialKeyDown);
@@ -69,6 +70,7 @@ Input::Input()
 	glutMouseFunc(MouseFunc);
 	glutMotionFunc(MouseMotionFunc);
 	glutPassiveMotionFunc(MousePassiveMotionFunc);
+#endif
 
 	for (int i = 0; i < KeyCodes_Count; i++)
 		_keypressed[i] = 0;

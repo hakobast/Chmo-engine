@@ -35,7 +35,7 @@ void SetupRendering(void)
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
@@ -133,24 +133,32 @@ void CreateGame()
 	camera->setFOVY(60.0f);
 
 	int regions[4] = { 0, 0, 128, 128 };
-	smart_pointer<Texture2D> texture = LoadTexture("Resources/vtr.bmp");
+	smart_pointer<Texture2D> texture = LoadTexture("Resources/heightmap2.bmp");
+	smart_pointer<Texture2D> textureTransparent = LoadTexture("Resources/vtr.bmp");
+
+	smart_pointer<Material> mat = Material::Unlit();
+	mat->addTexture(textureTransparent);
+	mat->setColor(Color::GREEN);
 
 	for (int i = 0; i < 1; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
-		//obj->addComponent<Terrain>()->setMainTexture(grassTexture);
-		//obj->getComponent<Terrain>()->build(texture, 20.0f);
-		//obj->addComponent<TextureAnimator>()->addClip(clip);
+// 		obj->addComponent<Terrain>();
+// 		obj->getComponent<Terrain>()->setMainMaterial(mat);
+// 		obj->getComponent<Terrain>()->build(texture, 1.0f);
+		//obj->addComponent<TextureAnimator>()->addClip(clip); 
 		//obj->getComponent<TextureAnimator>()->playClip(0);
 		//obj->addComponent<GLTestComponent>();
-		obj->addComponent<SpriteRenderer>();// ->setMainMaterial(spriteMat);
-		obj->getComponent<SpriteRenderer>()->setMainTexture(texture);
+		obj->addComponent<SpriteRenderer>()->setMainMaterial(mat);
+		//obj->getComponent<SpriteRenderer>()->addMaterial(mat);
+		//obj->getComponent<SpriteRenderer>()->setMainTexture(textureTransparent);
+	//	obj->getComponent<SpriteRenderer>()->setColor(Color(1.0f,1.0f,1.0f,0.5f));
 		//obj->getComponent<SpriteRenderer>()->setTextureFrame(rand() % 6);
 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
 
 		float scale = 1.0f;
-		obj->getTransform()->Location.set(0.0f, 0.0f, -5.0f);
+		obj->getTransform()->Location.set(0.0f, 0.0f, -2.0f);
 		//obj->getTransform()->RotateX(90);
 		obj->getTransform()->ScaleLocal *= scale;
 	}
@@ -171,22 +179,23 @@ void CreateGame()
 	// 
 	// 	smart_pointer<Mesh>& mesh = objects[0]->getComponent<MeshRenderer>()->getSharedMesh();
 
-	/*smart_pointer<Mesh> mesh(new Mesh);
-
-	mesh->setSubMeshCount(1);
-
 	std::vector<unsigned int> indices{ 0, 1, 2, 3, 0, 2 };
 	std::vector<Vector3> verts{ Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
+	std::vector<Vector2> texcoords{ Vector2(0.0f, 0.0f), Vector2(1.0f, 0.0f), Vector2(1.0f, 1.0f), Vector2(0.0f, 1.0f) };
 
+	smart_pointer<Mesh> mesh(new Mesh);
+	mesh->setSubMeshCount(1);
 	mesh->setVertices(verts);
+	mesh->setUVs(texcoords);
 	mesh->setIndices(indices);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		GameObject* obj = new GameObject("MY OBJ");
 		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();
+		meshRend->setMainMaterial(mat);
 		meshRend->setMesh(mesh);
 
-		obj->getTransform()->Location.set(-2.0f + 4 * i, 0.0f, 5.0f);
-	}*/
+		obj->getTransform()->Location.set(0.0f, 0.0f, -2.0f);
+	}
 }

@@ -92,16 +92,17 @@ void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, s
 
 GLboolean isExtensionSupported(const char* extension)
 {
-	int numb_exts;
-	glGetIntegerv(GL_NUM_EXTENSIONS, &numb_exts);
+	const GLubyte* exts = glGetString(GL_EXTENSIONS);
+	char* extToken = strtok((char*)exts, " ");
 
-	for (int i = 0; i < numb_exts; i++)
+	while (extToken != NULL)
 	{
-		char* ext = (char*)glGetStringi(GL_EXTENSIONS, i);
-		int res = strcmp(ext, extension);
+		int res = strcmp(extToken, extension);
 
 		if (res == 0)
 			return true;
+
+		extToken = strtok(NULL, " ");
 	}
 
 	return false;

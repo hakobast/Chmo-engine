@@ -76,8 +76,8 @@ T* GameObject::addComponent()
 	{
 		T *t = new T();
 		Component* baseType = t;
-		baseType->gameObject = this;
-		baseType->transform = dynamic_cast<Transform*>(components[0]); // first component of each gameobject is GameTransform
+		baseType->gameObject_ = this;
+		baseType->transform_ = dynamic_cast<Transform*>(components[0]); // first component of each gameobject is GameTransform
 
 		components.push_back(baseType);
 		Engine::getInstance().addComponent(*baseType, baseType->priority);

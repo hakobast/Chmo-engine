@@ -30,14 +30,31 @@ friend class RenderSystem;
 protected:
 	int sortingLayer = Default;
 	int layerOrder = 0;
+
+	/* SHADER ATTRIBUTES */
+	GLint vertexAttribLocation = 0;
+	GLint texCoordAttribLocation = 1;
+	GLint normalAttribLocation = 2;
+	GLint tangAttribLocation = 3;
+	GLint bitangAttribLocation = 4;
+	const char* vertexAttribName = "InVertex";
+	const char* texCoordAttribName = "InTexCoord0";
+	const char* normalAttribName = "InNormal";
+	const char* tangentAttribName = "InTangent";
+	const char* bitangentAttribName = "InBitangent";
+	/* */
+
 	std::vector<smart_pointer<Material>> materials;
+	void bindShaderAttributes(int materialIndex);
+	RenderSystem* getRenderSystem();
 public:
 	virtual ~Renderer()
 	{
 		for (size_t i = 0, len = materials.size(); i < len; i++)
-			materials[i]->_sharesCount--;
+			getRenderSystem()->removeMaterialForRenderer(materials[i], this, i);
 	};
 
+	virtual void Render(int materialIndex = 0) = 0;
 	int getSortingLayer() const;
 	int getLayerOrder() const;
 	void setSortingLayer(int layer, int order = 0);
@@ -48,11 +65,18 @@ public:
 	smart_pointer<Material>& getSharedMaterial(int index = 0);
 	smart_pointer<Texture2D>& getMainTexture();
 
-	void addMaterial(smart_pointer<Material>& mat);
-	void setMaterial(smart_pointer<Material>& mat, int index);
-	void setMainMaterial(smart_pointer<Material>& mat);
-	void setMainTexture(smart_pointer<Texture2D>& texture); 
+	void addMaterial(smart_pointer<Material> mat);
+	void setMaterial(smart_pointer<Material> mat, int index);
+	void setMainMaterial(smart_pointer<Material> mat);
+	void setMainTexture(smart_pointer<Texture2D> texture); 
 };
+
+inline RenderSystem* Renderer::getRenderSystem()
+{
+	static RenderSystem* rendSystem = dynamic_cast<RenderSystem*>(system);
+
+	return rendSystem;
+}
 
 inline int Renderer::getLayerOrder() const
 {
@@ -82,106 +106,6 @@ inline void Renderer::setLayerOrder(int order)
 inline std::vector<smart_pointer<Material>>& Renderer::getSharedMaterials()
 {
 	return materials;
-}
-
-inline std::vector<smart_pointer<Material>>& Renderer::getMaterials()
-{
-	for (size_t i = 0, len = materials.size(); i < len; i++)
-	{
-		if (materials[i]->_sharesCount > 1)
-		{
-			printf("get AllMaterials:: unsharing material\n");
-			materials[i] = materials[i].clone();
-			materials[i]->_sharesCount = 1;
-		}
-	}
-
-	return materials;
-}
-
-inline smart_pointer<Material>& Renderer::getSharedMaterial(int index)
-{
-	if (index < (int)materials.size())
-	{
-		return materials[index];
-	}
-
-	std::cout << "There is no material at index: " << index << std::endl;
-	return smart_pointer<Material>::null();
-}
-
-inline smart_pointer<Material>& Renderer::getMaterial(int index)
-{
-	if (index < (int)materials.size())
-	{
-		if (materials[index]->_sharesCount > 1)
-		{
-			printf("getMaterial:: unsharing material\n");
-			materials[index] = materials[index].clone();
-			materials[index]->_sharesCount = 1;
-		}
-
-		return materials[index];
-	}
-
-	std::cout << "There is no material at index: " << index << std::endl;
-	return smart_pointer<Material>::null();
-}
-
-inline void Renderer::addMaterial(smart_pointer<Material>& mat)
-{
-	if (mat.isEmpty())
-		return;
-
-	materials.push_back(mat);
-	mat->_sharesCount++;
-}
-
-inline void Renderer::setMaterial(smart_pointer<Material>& mat, int index)
-{
-	if (mat.isEmpty())
-		return;
-
-	if (index < (int)materials.size())
-	{
-		materials[index]->_sharesCount--;
-		materials[index] = mat;
-	}
-	else
-	{
-		materials.push_back(mat);
-	}
-
-	mat->_sharesCount++;
-}
-
-inline void Renderer::setMainMaterial(smart_pointer<Material>& mat)
-{
-	setMaterial(mat, 0);
-}
-
-inline void Renderer::setMainTexture(smart_pointer<Texture2D>& texture)
-{
-	if (texture.isEmpty())
-	{
-		return;
-	}
-
-	if (materials.size() > 0)
-	{
-		materials[0]->setMainTexture(texture);
-		return;
-	}
-	
-	std::cout << "There is no material to set texture: " << std::endl;
-}
-
-inline smart_pointer<Texture2D>& Renderer::getMainTexture()
-{
-	if (materials.size() > 0)
-		return materials[0]->getMainTexture();
-
-	return smart_pointer<Texture2D>::null();
 }
 
 #endif

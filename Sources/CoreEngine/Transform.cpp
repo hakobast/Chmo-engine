@@ -17,7 +17,7 @@ Transform::~Transform()
 	cout << "~Transform()" << endl;
 }
 
-Matrix4 Transform::getMatrix(bool calcScale)
+void Transform::getMatrix(Matrix4& matrix, bool calcScale)
 {
 	Vector3 _Right = Right();
 	matrix[0] = _Right[0];
@@ -54,14 +54,6 @@ Matrix4 Transform::getMatrix(bool calcScale)
 		matrix[9] *= ScaleLocal[2];
 		matrix[10] *= ScaleLocal[2];
 	}
-
-	return matrix;
-}
-
-void Transform::applyTransformation()
-{
-	getMatrix(true);
-	glMultMatrixf(&matrix[0]);
 }
 
 void Transform::TranslateForward(GLfloat step)
@@ -109,7 +101,7 @@ void Transform::RotateX(GLfloat Angle)
 
 void Transform::Translate(GLfloat x, GLfloat y, GLfloat z)
 {
-	getMatrix();
+	getMatrix(matrix);
 	matrix.TranslateMatrix(x, y, z);
 
 	memcpy(&Location[0], &matrix[12], sizeof(GLfloat)* 3);

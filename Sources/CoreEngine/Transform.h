@@ -30,9 +30,8 @@ public:
 	Vector3 Right();
 	Vector3 Up();
 	Vector3 Forward();
-	Matrix4 getMatrix(bool calcScale = false);
+	void getMatrix(Matrix4& matrix, bool calcScale = false);
 
-	void applyTransformation();
 	void Translate(GLfloat x, GLfloat y, GLfloat z);
 	void TranslateForward(GLfloat step);
 	void TranslateUp(GLfloat step);

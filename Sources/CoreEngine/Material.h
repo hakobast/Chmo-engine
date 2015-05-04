@@ -2,48 +2,45 @@
 #define EngineTesting_Material_h
 
 #include <vector>
+#include <string>
 
 #include "LIBS.h"
 #include "Texture2D.h"
 #include "ShaderProgram.h"
+#include "../Systems/RenderSystem.h"
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Color.h"
 
+class Renderer;
 
 class Material :public RemovableObject
 {
-friend class Renderer;
+friend class RenderSystem;
 private:
+	static std::vector<Material*> allMaterials;
 	std::vector<smart_pointer<Texture2D>> textures;
-	int _sharesCount = 0;
+	std::vector<MaterialShareInfo> sharingInfo;
+	smart_pointer<ShaderProgram> shader;
+
+	int getSharesCount();
+	void share(MaterialShareInfo shareInfo);
+	void unshare(MaterialShareInfo shareInfo);
+
 public:
 	std::string name;
-	smart_pointer<ShaderProgram> shader;
 
 	GLint illum = 1;
 	GLfloat shininess = 128.0f;
 
-	Material(std::string name) :name(name)
-	{
-		
-	}
-
-	Material(std::string name, smart_pointer<ShaderProgram>& shader) : Material(name)
-	{
-		this->shader = shader;
-	}
-
-	Material(std::string name, const char* vertexShaderSource,const char* fragmentShaderSource) : Material(name)
-	{
-		shader = smart_pointer<ShaderProgram>(new ShaderProgram());
-		shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource);
-		shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource);
-		shader->createAndLinkProgram();
-	}
-
+	Material(const Material& other);
+	Material(std::string name);
+	Material(std::string name, smart_pointer<ShaderProgram>& shader);
+	Material(std::string name, const char* vertexShaderSource, const char* fragmentShaderSource);
+	~Material();
 
 	void bind();
 	void unbind();
+	smart_pointer<ShaderProgram>& getShader();
 	void setMainTexture(smart_pointer<Texture2D> texture);
 	void setTexture(smart_pointer<Texture2D> texture, int index);
 	void addTexture(smart_pointer<Texture2D> texture, char* samplerName = NULL);
@@ -57,79 +54,9 @@ public:
 	static smart_pointer<Material> Unlit();
 };
 
-inline void Material::bind()
+inline smart_pointer<ShaderProgram>& Material::getShader()
 {
-	//glEnable(GL_TEXTURE_2D);
-
- 	if (!shader.isEmpty())
-		shader->bind();
-
-	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
-	{
-		if (!textures[i].isEmpty())
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			textures[i]->bindTexture();
-		}
-	}
-}
-
-inline void Material::unbind()
-{
-	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
-	{
-		if (!textures[i].isEmpty())
-		{
-			textures[i]->unbindTexture();
-		}
-	}
-
-	if (!shader.isEmpty())
-		shader->unbind();
-}
-
-inline void Material::setTexture(smart_pointer<Texture2D> texture, int index)
-{
-	if (index >= (int)textures.size())
-	{
-		textures.push_back(texture);
-		index = textures.size()-1;
-	}
-	else
-	{
-		textures[index] = texture;
-	}
-
-	if (!shader.isEmpty())
-	{
-		std::vector<UniformDesc> samplers = shader->getUniforms(GL_SAMPLER_2D);
-		if (index < (int)samplers.size())
-		{
-			shader->setUniform1i(samplers[index].name, index);
-		}
-	}
-}
-
-inline void Material::addTexture(smart_pointer<Texture2D> texture, char* samplerName)
-{
-	textures.push_back(texture);
-
-	if (!shader.isEmpty())
-	{
-		if (samplerName != NULL)
-		{
-			shader->setUniform1i(samplerName, textures.size()-1);
-		}
-		else
-		{
-			std::vector<UniformDesc> samplers = shader->getUniforms(GL_SAMPLER_2D);
-			if (textures.size() <= samplers.size())
-			{
-				//printf("Sampler %s\n", samplers[textures.size() - 1].name);
-				shader->setUniform1i(samplers[textures.size()-1].name, textures.size()-1);
-			}
-		}
-	}
+	return shader;
 }
 
 inline smart_pointer<Texture2D>& Material::getTexture(int index)
@@ -156,34 +83,6 @@ inline void Material::setMainTexture(smart_pointer<Texture2D> texture)
 	{
 		textures.push_back(texture);
 	}
-}
-
-inline void Material::setColor(Color c, const char* propertyName)
-{
-	if (!shader.isEmpty())
-	{
-		shader->setUniform4f(propertyName, c.getR(),c.getG(),c.getB(),c.getA());
-	}
-}
-
-inline Color Material::getColor(const char* propertyName)
-{
-	// implement Uniform reads
-
-	if (!shader.isEmpty())
-	{
-		GLfloat* colorData = new GLfloat[4];
-
-		GLuint loc = shader->getUniformLocation(propertyName);
-		glGetUniformfv(shader->getProgram(),loc,colorData);
-
-		Color c(colorData[0], colorData[1], colorData[2], colorData[3]);
-		delete[] colorData;
-
-		return c;
-	}
-
-	return Color::BLACK;
 }
 
 #endif

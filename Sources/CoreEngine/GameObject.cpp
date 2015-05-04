@@ -21,13 +21,13 @@ GameObject::GameObject(string name)
 
 	//adding Transform component to all gameobjects
 	Transform* trComp = new Transform();
-	trComp->gameObject = this;
-	trComp->transform = trComp;
+	trComp->gameObject_ = this;
+	trComp->transform_ = trComp;
 
 	transform = trComp;
 	components.push_back(trComp);
 
-	std::cout << "GameObject() " << name << std::endl;
+	//std::cout << "GameObject() " << name << std::endl;
 
 	Engine::getInstance().addComponent(*trComp, trComp->priority);
 	Engine::getInstance().addGameObject(*this);

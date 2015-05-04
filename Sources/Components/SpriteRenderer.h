@@ -22,10 +22,10 @@ public:
 
 		_normals = new Vector3[4]
 		{
-			Vector3(0.0f, 0.0f, -1.0f),
-			Vector3(0.0f, 0.0f, -1.0f),
-			Vector3(0.0f, 0.0f, -1.0f),
-			Vector3(0.0f, 0.0f, -1.0f)
+			Vector3(0.0f, 0.0f, 1.0f),
+			Vector3(0.0f, 0.0f, 1.0f),
+			Vector3(0.0f, 0.0f, 1.0f),
+			Vector3(0.0f, 0.0f, 1.0f)
 		};
 
 		_tangent = new Vector3[4]
@@ -44,14 +44,14 @@ public:
 			Vector3::UP
 		};
 
-		smart_pointer<Material> mat = Material::Unlit();
-		setMainMaterial(mat);
+		indices = new unsigned int[6]{ 0, 1, 2, 3, 0, 2 };
 	}
 
 	~SpriteRenderer();
 	void Create();
 	void Init();
 	void Update();
+	void Render(int subRenderers = 0);
 
 	void setTextureFrame(int frame);
 	void setColor(Color c);
@@ -67,8 +67,7 @@ private:
 	GLfloat* _texcoords;
 	Vector3* _tangent;
 	Vector3* _bitangent;
-	GLuint _tangAttribLocation;
-	GLuint _bitangAttribLocation;
+	unsigned int* indices;
 };
 
 inline void SpriteRenderer::setColor(Color c)

@@ -1,4 +1,6 @@
 
+#ifndef __ANDROID__ //TODO implement lighting without using fixed function pipeline
+
 #include "Light.h"
 
 void Light::Create()
@@ -17,40 +19,34 @@ void Light::Init()
 
 void Light::Update()
 {	
-	glPushMatrix();
-		getTransform()->applyTransformation();
-		//glDisable(GL_LIGHTING);
-		glColor3f(1.0f, 0.0f, 1.0f);
-		glutSolidCone(0.1f, 0.2f, 10, 10);
-		//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 		
-		switch (_type)
-		{
-		case DIRECTIONAL:
-		{
-			Vector3 dir = getTransform()->Forward();
-			v[0] = dir.x; v[1] = dir.y; v[2] = dir.z; v[3] = 0.0f;
-			glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
-			break;
-		}
-		case POSITIONAL:
-		{
-			v[0] = 0.0f; v[1] = 0.0f; v[2] = 0.0f; v[3] = 1.0f;
-			glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
-			break;
-		}
-		case SPOT:
-		{
-			v[0] = 0.0f; v[1] = 0.0f; v[2] = 0.0f; v[3] = 1.0f;
-			glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
+	switch (_type)
+	{
+	case DIRECTIONAL:
+	{
+		Vector3 dir = getTransform()->Forward();
+		v[0] = dir.x; v[1] = dir.y; v[2] = dir.z; v[3] = 0.0f;
+		glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
+		break;
+	}
+	case POSITIONAL:
+	{
+		v[0] = 0.0f; v[1] = 0.0f; v[2] = 0.0f; v[3] = 1.0f;
+		glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
+		break;
+	}
+	case SPOT:
+	{
+		v[0] = 0.0f; v[1] = 0.0f; v[2] = 0.0f; v[3] = 1.0f;
+		glLightfv(GL_LIGHT0 + _light, GL_POSITION, v);
 
-			Vector3 dir = getTransform()->Forward();
-			v[0] = -dir.x; v[1] = -dir.y; v[2] = -dir.z; v[3] = 0.0f;
-			glLightfv(GL_LIGHT0 + _light, GL_SPOT_DIRECTION, v);
-		}
-			break;
-		}
-	glPopMatrix();
+		Vector3 dir = getTransform()->Forward();
+		v[0] = -dir.x; v[1] = -dir.y; v[2] = -dir.z; v[3] = 0.0f;
+		glLightfv(GL_LIGHT0 + _light, GL_SPOT_DIRECTION, v);
+	}
+		break;
+	}
 }
 
 void Light::OnEnable()
@@ -67,3 +63,5 @@ void Light::OnDestroy()
 {
 	delete[] v;
 }
+
+#endif

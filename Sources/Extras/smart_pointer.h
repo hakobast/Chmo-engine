@@ -100,7 +100,9 @@ public:
             {
 				delete data;
             }
-			//std::cout << "Pointer to : " << data << " removed, " << dynamic_cast<RemovableObject*>(data)->refs << " left" << std::endl;
+#ifdef ENABLE_LOG
+			std::cout << "Pointer to : " << data << " removed, " << dynamic_cast<RemovableObject*>(data)->refs << " left" << std::endl;
+#endif
         }
 #ifdef ENABLE_LOG
 		std::cout << "~~~~smart_pointer() <" << typeid(T).name() << ">" << std::endl;

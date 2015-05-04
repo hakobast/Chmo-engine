@@ -45,45 +45,50 @@ void Mesh::genBuffers(int submesh)
 		std::vector<Vector3>& normals = _submeshes[submesh]->normals;
 		std::vector<unsigned int>& indices = _submeshes[submesh]->indices;
 
-		if (indices.size() > 0 && vertices.size() > 0)
+		//NORMALS
+		if (_submeshes[submesh]->_updateNormals && _submeshes[submesh]->normals.size() > 0)
 		{
-			//NORMALS
-			if (_submeshes[submesh]->normals.size() > 0)
+			printf("UPDATING NORMALS\n");
+			if (vbo_id_n == 0)
 			{
-				if (vbo_id_n == 0)
-				{
-					glGenBuffers(1, &vbo_id_n);
-					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
-					glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vector3), &normals[0], _vboUsage);
-				}
-				else if (_submeshes[submesh]->_updateNormals)
-				{
-					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(Vector3), &normals[0]);
-				}
-
-				normals.clear();
-				_submeshes[submesh]->_updateNormals = false;
+				glGenBuffers(1, &vbo_id_n);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
+				glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vector3), &normals[0], _vboUsage);
+			}
+			else
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(Vector3), &normals[0]);
 			}
 
-			// TEX COORDS
-			if (_submeshes[submesh]->uvs.size() > 0)
-			{
-				if (vbo_id_t == 0)
-				{
-					glGenBuffers(1, &vbo_id_t);
-				}
-				else if (_submeshes[submesh]->_updateTexCoords)
-				{
-					glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, uvs.size() * sizeof(Vector2), &uvs[0]);
-				}
+			normals.clear();
+			_submeshes[submesh]->_updateNormals = false;
+		}
 
-				uvs.clear();
-				_submeshes[submesh]->_updateTexCoords = false;
+		// TEX COORDS
+		if (_submeshes[submesh]->_updateTexCoords && _submeshes[submesh]->uvs.size() > 0)
+		{
+			printf("UPDATING UVS\n");
+			if (vbo_id_t == 0)
+			{
+				glGenBuffers(1, &vbo_id_t);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
+				glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(Vector2), &uvs[0], _vboUsage);
+			}
+			else
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, uvs.size() * sizeof(Vector2), &uvs[0]);
 			}
 
-			//VERTICES
+			uvs.clear();
+			_submeshes[submesh]->_updateTexCoords = false;
+		}
+
+		//VERTICES
+		if (_submeshes[submesh]->_updateVertices && _submeshes[submesh]->indices.size() > 0)
+		{
+			printf("UPDATING VERTICES\n");
 			if (vbo_id_v == 0)
 			{
 				glGenBuffers(1, &vbo_id_v);
@@ -98,8 +103,12 @@ void Mesh::genBuffers(int submesh)
 
 			vertices.clear();
 			_submeshes[submesh]->_updateVertices = false;
+		}
 
-			//INDICES
+		//INDICES
+		if (_submeshes[submesh]->_updateIndices && _submeshes[submesh]->indices.size() > 0)
+		{
+			printf("UPDATING INDICES\n");
 			if (vbo_id_i == 0)
 			{
 				glGenBuffers(1, &vbo_id_i);
@@ -136,73 +145,78 @@ void Mesh::deleteAllBuffers(int submesh)
 
 void Mesh::draw(int submesh)
 {	
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_NORMAL_ARRAY);
-	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//TEMP read fields from material;
+	GLuint vertexAttrib = 0;
+	GLuint texCoordAttrib = 1;
+	GLuint normalAttrib = 2;
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+	GLuint vertex_count = _submeshes[submesh]->vertex_count;
+	GLuint uv_count = _submeshes[submesh]->uv_count;
+	GLuint normal_count = _submeshes[submesh]->normal_count;
+	GLuint index_count = _submeshes[submesh]->index_count;
+
+	if (vertex_count > 0)	glEnableVertexAttribArray(vertexAttrib);
+	if (uv_count > 0)		glEnableVertexAttribArray(texCoordAttrib);
+	if (normal_count > 0)	glEnableVertexAttribArray(normalAttrib);
 
 	//if hardware supports VBOs
 	if (isVBOSupported())
 	{
-		GLuint& vbo_id_n = _submeshes[submesh]->normal_buffer_id;
-		GLuint& vbo_id_t = _submeshes[submesh]->uv_buffer_id;
-		GLuint& vbo_id_v = _submeshes[submesh]->vertex_buffer_id;
-		GLuint& vbo_id_i = _submeshes[submesh]->index_buffer_id;
+		//std::cout << "***Draw using VBO***" << std::endl;
 
 		if (_submeshes[submesh]->_updateVBO())
 			genBuffers(submesh);
 
-		if (vbo_id_i > 0 && vbo_id_v > 0)
+		if (vertex_count > 0 && index_count > 0)
 		{
-			if (vbo_id_n > 0)
+			if (uv_count > 0)
 			{
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			}
-			if (vbo_id_t > 0)
-			{
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
-				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+				//std::cout << "BIND TEXCOORD BUFFER: " << _submeshes[submesh]->uv_count << std::endl;
+				glBindBuffer(GL_ARRAY_BUFFER, _submeshes[submesh]->uv_buffer_id);
+				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, 0, 0);
 			}
 
-			glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			if (normal_count > 0)
+			{
+				//std::cout << "BIND NORMAL BUFFER: " << _submeshes[submesh]->normal_count << std::endl;
+				glBindBuffer(GL_ARRAY_BUFFER, _submeshes[submesh]->normal_buffer_id);
+				glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, false, 0, 0);
+			}
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+			//std::cout << "BIND VERTEX BUFFER: " << _submeshes[submesh]->vertex_count << std::endl;
+			glBindBuffer(GL_ARRAY_BUFFER, _submeshes[submesh]->vertex_buffer_id);
+			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, false, 0, 0);
+
+			//std::cout << "BIND INDEX BUFFER: " << _submeshes[submesh]->index_count << std::endl;
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _submeshes[submesh]->index_buffer_id);
+			glDrawElements(GL_TRIANGLES, _submeshes[submesh]->index_count, GL_UNSIGNED_INT, 0);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
-
 	}
 	else
 	{
+		std::cout << "***Draw using VERTEX ARRAYS***" << std::endl;
+
 		std::vector<Vector3>& vertices = _submeshes[submesh]->vertices;
 		std::vector<Vector2>& uvs = _submeshes[submesh]->uvs;
 		std::vector<Vector3>& normals = _submeshes[submesh]->normals;
 		std::vector<unsigned int>& indices = _submeshes[submesh]->indices;
 
-		if (vertices.size() > 0 && indices.size() > 0)
+		if (vertex_count > 0 && index_count > 0)
 		{
-			if (normals.size() > 0)	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, &normals[0]);
-			if (uvs.size() > 0)		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, &uvs[0]);
+			if (uv_count > 0)		glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, 0, &uvs[0]);
+			if (normal_count > 0)	glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, false, 0, &normals[0]);
 
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]);
-			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, &indices[0]);
+			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, false, 0, &vertices[0]);
+			glDrawElements(GL_TRIANGLES, _submeshes[submesh]->index_count, GL_UNSIGNED_INT, &indices[0]);
 		}
 	}
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
-
-	//glDisableClientState(GL_NORMAL_ARRAY);
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	if (vertex_count)		glDisableVertexAttribArray(vertexAttrib);
+	if (uv_count)		glDisableVertexAttribArray(texCoordAttrib);
+	if (normal_count)	glDisableVertexAttribArray(normalAttrib);
 }
 
 std::vector<Vector3> Mesh::getVertices(int submesh) const

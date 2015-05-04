@@ -53,6 +53,7 @@
     <ClCompile Include="Sources\Components\Camera.cpp" />
     <ClCompile Include="Sources\Components\Light.cpp" />
     <ClCompile Include="Sources\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Sources\Components\Renderer.cpp" />
     <ClCompile Include="Sources\Components\SpriteRenderer.cpp" />
     <ClCompile Include="Sources\Components\Terrain.cpp" />
     <ClCompile Include="Sources\Components\TextureAnimator.cpp" />

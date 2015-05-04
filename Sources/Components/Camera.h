@@ -5,6 +5,8 @@
 #include "../Extras/Matrix4.h"
 #include "../CoreEngine/ActiveComponent.h"
 #include "../CoreEngine/Component.h"
+#include "../Extras/Vectors.h"
+#include "../CoreEngine/Transform.h"
 
 
 enum ProjectionMode
@@ -28,18 +30,21 @@ private:
 	void Update();
 	void ApplyCameraChanges();
 	void OnEnable();
-	Matrix4 projectionMatrix;
+	Matrix4 rotationMatrix; 
+	Matrix4 translationMatrix;
 	Matrix4 viewMatrix;
+	Matrix4 projectionMatrix;
 
 public:
 	static Camera* main;
-	void ApplyTransformation();
 	ProjectionMode getProjectionMode();
 	void setProjectionMode(ProjectionMode mode);
 	GLfloat getFOVY();
 	void setFOVY(GLfloat fovy);
 	GLfloat getOrthoSize();
 	void setOrthoSize(GLfloat size);
+	Matrix4 getProjectionMatrix();
+	Matrix4 getViewMatrix();
 };
 
 inline ProjectionMode Camera::getProjectionMode()
@@ -84,5 +89,25 @@ inline void Camera::setOrthoSize(GLfloat size)
 	}
 }
 
+inline Matrix4 Camera::getProjectionMatrix()
+{
+	return projectionMatrix;
+}
+
+inline Matrix4 Camera::getViewMatrix()
+{
+	Transform* tr = getTransform();
+	tr->getMatrix(rotationMatrix,true);
+
+	rotationMatrix.makeTranspose();
+	rotationMatrix[3] = 0.0f;
+	rotationMatrix[7] = 0.0f;
+	rotationMatrix[11] = 0.0f;
+	rotationMatrix[15] = 1.0f;
+
+	translationMatrix.setColumn(3, new GLfloat[3]{-tr->Location[0], -tr->Location[1], -tr->Location[2]}, 3);
+
+	return Matrix4::MultiplyMatrices(rotationMatrix, translationMatrix, viewMatrix);
+}
 
 #endif

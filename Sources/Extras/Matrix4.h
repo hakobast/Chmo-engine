@@ -3,6 +3,7 @@
 #define OpenGLTesting_Matrix4_h
 
 #include <iostream>
+#include <algorithm>
 #include <math.h>
 
 #include "../CoreEngine/LIBS.h"
@@ -34,6 +35,7 @@ public:
 	}
 
 	void makeIdentity();
+	Matrix4& makeTranspose();
 	void setRow(int row, const GLfloat arr[], int size);
 	void setColumn(int column,const GLfloat arr[], int size);
 	void print() const;
@@ -53,6 +55,7 @@ public:
 	static Matrix4 setOrthoFrustum(float left, float right, float bottom, float top, float near, float far);
 	static Matrix4 setFrustum(float left, float right, float bottom, float top, float near, float far);
 	static Matrix4 setFrustum(float fovy, float aspect, float near, float far);
+	static Matrix4& MultiplyMatrices(Matrix4& m1, Matrix4& m2, Matrix4& result);
 };
 
 inline void Matrix4::makeIdentity()
@@ -63,6 +66,17 @@ inline void Matrix4::makeIdentity()
 	m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f; m[15] = 1.0f;
 }
 
+inline Matrix4& Matrix4::makeTranspose()
+{
+	std::swap(m[1], m[4]);
+	std::swap(m[2], m[8]);
+	std::swap(m[3], m[12]);
+	std::swap(m[6], m[9]);
+	std::swap(m[7], m[13]);
+	std::swap(m[11], m[14]);
+
+	return *this;
+}
 /*
 row = [0,3]
 size = [1,4]

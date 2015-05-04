@@ -12,6 +12,7 @@ public:
 	void Create();
 	void Init();
 	void Update();
+	void Render(int subRenderer = 0);
 	void setMesh(smart_pointer<Mesh>& m);
 	smart_pointer<Mesh>& getMesh();
 	smart_pointer<Mesh>& getSharedMesh();

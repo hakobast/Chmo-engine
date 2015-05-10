@@ -1,6 +1,8 @@
 #ifndef EngineTesting_GameTime_h
 #define EngineTesting_GameTime_h
 
+#include <inttypes.h>
+
 #include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/System.h"
 
@@ -20,27 +22,27 @@ protected:
 	void removeComponent(Component &c);
 	bool isSystemComponent(Component &c);
 private:
-	static GameTime* instance;
-	unsigned long long lastTime;
-	GLfloat deltaTime = 0;
-	GLfloat timeSinceGameStarted = 0;
-	GLuint frame = 1;
+	static GameTime* instance_;
+	uint64_t lastTime_;
+	GLfloat deltaTime_ = 0;
+	GLfloat timeSinceGameStarted_ = 0;
+	GLuint frame_ = 1;
 };
 
 //static functions
 inline GLfloat GameTime::DeltaTime()
 {
-	return instance->deltaTime;
+	return instance_->deltaTime_;
 }
 
 inline GLfloat GameTime::TimeSinceGameStarted()
 {
-	return instance->timeSinceGameStarted;
+	return instance_->timeSinceGameStarted_;
 }
 
 inline GLuint GameTime::GetFrame()
 {
-	return instance->frame;
+	return instance_->frame_;
 }
 
 //end

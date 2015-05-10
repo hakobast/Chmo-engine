@@ -38,6 +38,7 @@
 #include "../Extras/Matrix4.h"
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Vectors.h"
+#include "../Extras/TimeUtils.h"
 
 #include "../Debug/Logger.h"
 

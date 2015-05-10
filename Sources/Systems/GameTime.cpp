@@ -2,19 +2,17 @@
 #include <chrono>
 #include <iostream>
 
+#include "../Extras/TimeUtils.h"
 #include "GameTime.h"
 
 //static variable initialization
-GameTime* GameTime::instance = NULL;
+GameTime* GameTime::instance_ = NULL;
 //end
-
-unsigned long long timeInMills;
 
 GameTime::GameTime()
 {
-	instance = this;
-	auto duration = std::chrono::system_clock::now().time_since_epoch();
-	lastTime = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+	instance_ = this;
+	lastTime_ = TimeUtils::Now_Ms();
 }
 
 GameTime::~GameTime()
@@ -29,13 +27,12 @@ void GameTime::Init()
 
 void GameTime::Update()
 {
-	auto duration = std::chrono::system_clock::now().time_since_epoch();
-	timeInMills = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+	uint64_t time = TimeUtils::Now_Ms();
 
-	deltaTime = (timeInMills - lastTime) / 1000.0f;
-	timeSinceGameStarted += deltaTime;
-	frame++;
-	lastTime = timeInMills;
+	deltaTime_ = (time - lastTime_) / 1000.0f;
+	timeSinceGameStarted_ += deltaTime_;
+	frame_++;
+	lastTime_ = time;
 }
 
 void GameTime::addComponent(Component &c){}

@@ -98,9 +98,13 @@ int main(int argc, char **argv)
 	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 
 	auto time = t2.time_since_epoch();
-	long long t = duration_cast<seconds>(time).count();
+	long long t = duration_cast<milliseconds>(time).count();
+	int64_t time_int = duration_cast<milliseconds>(time).count();
 
 	std::cout << "\n" << t << std::endl;
+	std::cout << "\n" << time_int << std::endl;
+	std::cout << "\n" << TimeUtils::Now_Ms() << std::endl;
+	Logger::Print("TIME %f", (double)TimeUtils::Now_Ms());
 
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	glutInit(&argc, argv);

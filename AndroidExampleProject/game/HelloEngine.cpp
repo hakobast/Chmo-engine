@@ -1,44 +1,37 @@
 
 #include <iostream>
 
-#include <android/log.h>
-#include <time.h>
 #include "../../Sources/CoreEngine/ChmoEngine.h"
-
-#define APPNAME "MyApp"
-
-static double now_ms(void)
-{
-	struct timespec res;
-	clock_gettime(CLOCK_REALTIME, &res);
-	return 1000.0 * res.tv_sec + (double)res.tv_nsec / 1e6;
-}
 
 class HelloEngine : public GameLogic
 {
 public:
 	void Init()
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "HelloEngine: Init()");
-		lastTime = now_ms();
+
 	}
 
 	void Update()
 	{
 		frames++;
-		time += (now_ms() - lastTime);
-		if (time >= 1000)
+		time += GameTime::DeltaTime();
+
+		if (time >= 1.0f)
 		{
-			__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "HelloEngine: FPS %d",frames);
+			Logger::Print("FPS %d", frames);
+			Logger::PrintWarning("WARNING FPS %d", frames);
+			Logger::PrintError("ERROR FPS %d", frames);
+
+			Logger::Print("TIME %f", (double)TimeUtils::Now_Ms());
+			Logger::Print("DELTA TIME %f", GameTime::DeltaTime());
+			Logger::Print("TIME SINCE STARTED %f", GameTime::TimeSinceGameStarted());
+
 			time = 0;
 			frames = 0;
 		}
-
-		lastTime = now_ms();
 	}
 
 private:
 	int frames = 0;
-	double time;
-	double lastTime = 0;
+	GLfloat time;
 };

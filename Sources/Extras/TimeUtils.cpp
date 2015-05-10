@@ -1,29 +1,21 @@
+
+#include <chrono>
+
 #include "TimeUtils.h"
 
-long TimeUtils::Now_Ms()
+using namespace std::chrono;
+
+uint64_t TimeUtils::Now_Ms()
 {
-#if defined(_WIN32)
-	return Now_Ms_Win();
-#elif defined(__APPLE__)
-	return Now_Ms_OSX();
-#elif defined(__ANDROID__)
-	return Now_Ms_Android();
-#else
-	return 0;
-#endif
+	auto time = high_resolution_clock::now().time_since_epoch();
+	return duration_cast<milliseconds>(time).count();
 }
 
-long TimeUtils::Now_Ms_Win()
+/*#if defined(__APPLE__)
+
+int64_t TimeUtils::Now_Ms()
 {
 	return 0;
 }
 
-long TimeUtils::Now_Ms_OSX()
-{
-	return 0;
-}
-
-long TimeUtils::Now_Ms_Android()
-{
-	return 0;
-}
+#endif*/

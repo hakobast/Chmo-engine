@@ -2,14 +2,12 @@
 #ifndef TIME_UTILS_H
 #define TIME_UTILS_H
 
+#include <stdint.h>
+
 class TimeUtils
 {
 public:
-	static long Now_Ms();
-private:
-	static long Now_Ms_Android();
-	static long Now_Ms_Win();
-	static long Now_Ms_OSX();
+	static uint64_t Now_Ms();
 };
 
 #endif

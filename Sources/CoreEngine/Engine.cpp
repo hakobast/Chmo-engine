@@ -102,7 +102,7 @@ void Engine::Update()
 
 	for (GameObject* gmObj : _gmObjDestroyList) //TODO find more effective solution
 	{
-		for (Component* comp : gmObj->components)
+		for (Component* comp : gmObj->components_)
 		{
 			delete comp;
 		}
@@ -193,7 +193,7 @@ void Engine::Cleanup()
 	{
 		std::cout << "<<<<<<DELETING GAMEOBJECT>>>>>>>>> -------- " << gmObj->name << std::endl;
 
-		for (Component* comp : gmObj->components)
+		for (Component* comp : gmObj->components_)
 		{
 			std::cout << "<<<<<<DELETING COMPONENT>>>>>>>>> " << std::endl;
 			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);

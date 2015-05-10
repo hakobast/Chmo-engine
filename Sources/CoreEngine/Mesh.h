@@ -42,9 +42,9 @@ friend class MeshRenderer;
 	};
 
 private:
-	GLenum _vboUsage = GL_STATIC_DRAW;
-	int _sharesCount = 0;
-	std::vector<smart_pointer<SubMesh>> _submeshes;
+	GLenum vboUsage_ = GL_STATIC_DRAW;
+	int sharesCount_ = 0;
+	std::vector<smart_pointer<SubMesh>> submeshes_;
 	void genBuffers(int submesh = 0);
 	void deleteAllBuffers(int submesh = 0);
 	void draw(int sumbmesh = 0);
@@ -69,27 +69,27 @@ public:
 
 inline int Mesh::getSubMeshCount() const
 {
-	return _submeshes.size();
+	return submeshes_.size();
 }
 
 inline void Mesh::setSubMeshCount(int count)
 {
-	if (count > (int)_submeshes.size()) // adding new submeshes
-		_submeshes.resize(count, smart_pointer<SubMesh>(new SubMesh));
+	if (count > (int)submeshes_.size()) // adding new submeshes
+		submeshes_.resize(count, smart_pointer<SubMesh>(new SubMesh));
 	else 
 	{
 		//removing submeshes
-		while (count < (int)_submeshes.size())
+		while (count < (int)submeshes_.size())
 		{
-			deleteAllBuffers(_submeshes.size() - 1);
-			_submeshes.pop_back();
+			deleteAllBuffers(submeshes_.size() - 1);
+			submeshes_.pop_back();
 		}
 	}
 }
 
 inline void Mesh::setVBOUsage(GLenum usage)
 {
-	_vboUsage = usage;
+	vboUsage_ = usage;
 }
 
 #endif

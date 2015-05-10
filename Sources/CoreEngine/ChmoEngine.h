@@ -39,5 +39,6 @@
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Vectors.h"
 
+#include "../Debug/Logger.h"
 
 #endif

@@ -16,16 +16,16 @@
 SpriteRenderer::~SpriteRenderer()
 {
 	cout << "SpriteRenderer:: ~~~deleted~~~ " << endl;
-	delete[] _verts;
-	delete[] _normals;
-	delete[] _tangent;
-	delete[] _bitangent;
-	delete[] indices;
+	delete[] verts_;
+	delete[] normals_;
+	delete[] tangent_;
+	delete[] bitangent_;
+	delete[] indices_;
 }
 
 void SpriteRenderer::Create()
 {
-	_meterPerPixel = 1.0f/100.0f;
+	meterPerPixel_ = 1.0f/100.0f;
 }
 
 void SpriteRenderer::Init()
@@ -34,7 +34,7 @@ void SpriteRenderer::Init()
 
 	//std::cout << "SpriteRenderer: Init() " << getGameObject()->name << std::endl;
 
-	setTextureFrame(_frame);
+	setTextureFrame(frame_);
 }
 
 bool hasTexture;
@@ -76,13 +76,13 @@ void SpriteRenderer::Render(int material)
 	glEnableVertexAttribArray(tangAttribLocation);
 	glEnableVertexAttribArray(bitangAttribLocation);
 
-	glVertexAttribPointer(vertexAttribLocation, 2, GL_FLOAT, false, 0, _verts);
-	if (hasTexture)glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, _texcoords);
-	glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, true,  0, _normals);
- 	glVertexAttribPointer(tangAttribLocation, 3, GL_FLOAT, true, 0, _tangent);
- 	glVertexAttribPointer(bitangAttribLocation, 3, GL_FLOAT, true, 0, _bitangent);
+	glVertexAttribPointer(vertexAttribLocation, 2, GL_FLOAT, false, 0, verts_);
+	if (hasTexture)glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, texcoords_);
+	glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, true,  0, normals_);
+ 	glVertexAttribPointer(tangAttribLocation, 3, GL_FLOAT, true, 0, tangent_);
+ 	glVertexAttribPointer(bitangAttribLocation, 3, GL_FLOAT, true, 0, bitangent_);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices_);
 
 	glDisableVertexAttribArray(vertexAttribLocation);
 	if (hasTexture)glDisableVertexAttribArray(texCoordAttribLocation);
@@ -109,25 +109,25 @@ void SpriteRenderer::setTextureFrame(int frame)
 
 	if (region != NULL)
 	{
-		this->_frame = frame;
+		this->frame_ = frame;
 
 		float width = (region->u_v[2] - region->u_v[0])*txt->width;
 		float height = (region->u_v[5] - region->u_v[1])*txt->height;
 	
-		_wRange = _meterPerPixel*width;
-		_hRange = _meterPerPixel*height;
+		wRange_ = meterPerPixel_*width;
+		hRange_ = meterPerPixel_*height;
 
-		if (_verts != NULL)
-			delete[] _verts;
+		if (verts_ != NULL)
+			delete[] verts_;
 
-		_verts = new Vector2[4]
+		verts_ = new Vector2[4]
 		{
-			Vector2(-_wRange, -_hRange),
-			Vector2(_wRange, -_hRange),
-			Vector2(_wRange, _hRange),
-			Vector2(-_wRange, _hRange)
+			Vector2(-wRange_, -hRange_),
+			Vector2(wRange_, -hRange_),
+			Vector2(wRange_, hRange_),
+			Vector2(-wRange_, hRange_)
 		};
 
-		 _texcoords = region->u_v;
+		 texcoords_ = region->u_v;
 	}
 }

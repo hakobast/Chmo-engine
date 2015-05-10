@@ -10,8 +10,8 @@ MeshRenderer::~MeshRenderer()
 {
 	cout << "MeshRenderer:: ~~~deleted~~~ " << endl;
 
-	if (!mesh.isEmpty())
-		mesh->_sharesCount--;
+	if (!mesh_.isEmpty())
+		mesh_->sharesCount_--;
 }
 
 void MeshRenderer::Create()
@@ -48,9 +48,9 @@ void  MeshRenderer::Render(int materialIndex)
 
 	//getTransform()->applyTransformation();
 
-	if (mesh.isEmpty())
+	if (mesh_.isEmpty())
 		return;
 
-	materialIndex = materialIndex < mesh->getSubMeshCount() ? materialIndex : (mesh->getSubMeshCount() - 1);
-	mesh->draw(materialIndex);
+	materialIndex = materialIndex < mesh_->getSubMeshCount() ? materialIndex : (mesh_->getSubMeshCount() - 1);
+	mesh_->draw(materialIndex);
 }

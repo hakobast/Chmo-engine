@@ -1,5 +1,6 @@
 
 
+#include <iostream>
 #include <chrono>
 
 #define _CRTDBG_MAP_ALLOC
@@ -84,11 +85,24 @@ void TimerFunc(int value)
 	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
 }
 
-
 int main(int argc, char **argv)
 {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	using namespace std::chrono;
 
+	typedef high_resolution_clock Clock;
+	high_resolution_clock::time_point t1 = Clock::now();
+	for (int i = 0; i < 1000; i++)
+		printf("*");
+	high_resolution_clock::time_point t2 = Clock::now();
+
+	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+	auto time = t2.time_since_epoch();
+	long long t = duration_cast<seconds>(time).count();
+
+	std::cout << "\n" << t << std::endl;
+
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
@@ -162,6 +176,10 @@ void CreateGame()
 		//obj->getTransform()->RotateX(90);
 		obj->getTransform()->ScaleLocal *= scale;
 	}
+
+	Logger::Print("mer gagona %d %s\n", 12, "HAKOB");
+	Logger::PrintError("mer gagona %d %s\n", 12, "HAKOB");
+	Logger::PrintWarning("mer gagona %d %s\n", 12, "HAKOB");
 
 	// **************** MODEL ****************
 	// 	char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";

@@ -45,10 +45,10 @@ public:
     void destroy();
     
 private:
-	bool destroyState = false;
-    bool _isActive = true;
-	Transform* transform;
-    std::vector<Component*> components;
+	bool destroyState_ = false;
+    bool isActive_ = true;
+	Transform* transform_;
+    std::vector<Component*> components_;
 	void removeComponent(Component *);
 
 	friend std::ostream& operator << (std::ostream& stream, const GameObject& obj);
@@ -56,17 +56,17 @@ private:
 
 inline std::ostream& operator << (std::ostream& stream, const GameObject& obj)
 {
-	return stream << obj.name << " GameObject(" << obj.components.size() << ")" << std::endl;
+	return stream << obj.name << " GameObject(" << obj.components_.size() << ")" << std::endl;
 }
 
 inline bool GameObject::isActive()const
 {
-    return _isActive;
+    return isActive_;
 }
 
 inline Transform*const GameObject::getTransform()
 {
-	return transform;
+	return transform_;
 }
 
 template<class T>
@@ -77,13 +77,13 @@ T* GameObject::addComponent()
 		T *t = new T();
 		Component* baseType = t;
 		baseType->gameObject_ = this;
-		baseType->transform_ = dynamic_cast<Transform*>(components[0]); // first component of each gameobject is GameTransform
+		baseType->transform_ = dynamic_cast<Transform*>(components_[0]); // first component of each gameobject is GameTransform
 
-		components.push_back(baseType);
+		components_.push_back(baseType);
 		Engine::getInstance().addComponent(*baseType, baseType->priority);
 
 		//if the gameobject is in destroy state added component must be destroyed
-		if (destroyState)
+		if (destroyState_)
 		{
 			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(baseType);
 			if (activeComp != NULL)
@@ -103,11 +103,11 @@ T* GameObject::addComponent()
 template<class T>
 T* GameObject::getComponent(bool enabledOnly) const
 {
-	for (size_t i = 0,len = components.size(); i < len; i++)
+	for (size_t i = 0,len = components_.size(); i < len; i++)
 	{
-		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
+		if (dynamic_cast<T*>(components_[i]) && (!enabledOnly || components_[i]->isEnabled()))
 		{
-			return (T*)components[i];
+			return (T*)components_[i];
 		}
 	}
 
@@ -118,11 +118,11 @@ template<class T>
 std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
 {
 	std::vector<T*const> comps;
-	for (int i = 0; i < components.size(); i++)
+	for (int i = 0; i < components_.size(); i++)
 	{
-		if (dynamic_cast<T*>(components[i]) && (!enabledOnly || components[i]->isEnabled()))
+		if (dynamic_cast<T*>(components_[i]) && (!enabledOnly || components_[i]->isEnabled()))
 		{
-			comps.push_back((T*)components[i]);
+			comps.push_back((T*)components_[i]);
 		}
 	}
 

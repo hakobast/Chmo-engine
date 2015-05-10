@@ -12,7 +12,7 @@ class SpriteRenderer : public Renderer
 public:
 	SpriteRenderer()
 	{
-		_verts = new Vector2[4]
+		verts_ = new Vector2[4]
 		{
 			Vector2(-1.0f, -1.0f),
 			Vector2( 1.0f, -1.0f),
@@ -20,7 +20,7 @@ public:
 			Vector2(-1.0f,  1.0f)
 		};
 
-		_normals = new Vector3[4]
+		normals_ = new Vector3[4]
 		{
 			Vector3(0.0f, 0.0f, 1.0f),
 			Vector3(0.0f, 0.0f, 1.0f),
@@ -28,7 +28,7 @@ public:
 			Vector3(0.0f, 0.0f, 1.0f)
 		};
 
-		_tangent = new Vector3[4]
+		tangent_ = new Vector3[4]
 		{
 			Vector3::RIGHT,
 			Vector3::RIGHT,
@@ -36,7 +36,7 @@ public:
 			Vector3::RIGHT
 		};
 
-		_bitangent = new Vector3[4]
+		bitangent_ = new Vector3[4]
 		{
 			Vector3::UP,
 			Vector3::UP,
@@ -44,7 +44,7 @@ public:
 			Vector3::UP
 		};
 
-		indices = new unsigned int[6]{ 0, 1, 2, 3, 0, 2 };
+		indices_ = new unsigned int[6]{ 0, 1, 2, 3, 0, 2 };
 	}
 
 	~SpriteRenderer();
@@ -57,17 +57,17 @@ public:
 	void setColor(Color c);
 	Color getColor();
 private:
-	int _frame = 0;
-	GLfloat _meterPerPixel;
-	GLfloat _wRange = 1;
-	GLfloat _hRange = 1;
+	int frame_ = 0;
+	GLfloat meterPerPixel_;
+	GLfloat wRange_ = 1;
+	GLfloat hRange_ = 1;
 
-	Vector2* _verts;
-	Vector3* _normals;
-	GLfloat* _texcoords;
-	Vector3* _tangent;
-	Vector3* _bitangent;
-	unsigned int* indices;
+	Vector2* verts_;
+	Vector3* normals_;
+	GLfloat* texcoords_;
+	Vector3* tangent_;
+	Vector3* bitangent_;
+	unsigned int* indices_;
 };
 
 inline void SpriteRenderer::setColor(Color c)

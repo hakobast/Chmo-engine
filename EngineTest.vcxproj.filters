@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Testing">
       <UniqueIdentifier>{ea987e6d-e70c-4f2d-80e5-5eb01f9b0977}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Debug">
+      <UniqueIdentifier>{6e9e457d-c0ef-48e7-bf9b-fd8289e84f44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{110c1d8c-65d4-4885-a373-911e8aa369ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\CoreEngine\ActiveComponent.h">
@@ -156,6 +162,21 @@
     <ClInclude Include="Sources\CoreEngine\LIBS.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\Debug\Log.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Debug\StandaloneLog.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Debug\AndroidLog.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Debug\Logger.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Extras\TimeUtils.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -262,6 +283,18 @@
     </ClCompile>
     <ClCompile Include="Sources\Components\Renderer.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Debug\StandaloneLog.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Debug\AndroidLog.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Debug\Logger.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\TimeUtils.cpp">
+      <Filter>Source Files\Extras</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

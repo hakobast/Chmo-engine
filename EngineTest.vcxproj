@@ -37,9 +37,14 @@
     <ClInclude Include="Sources\CoreEngine\TextureTiled.h" />
     <ClInclude Include="Sources\CoreEngine\Transform.h" />
     <ClInclude Include="Sources\CoreEngine\Utils.h" />
+    <ClInclude Include="Sources\Debug\AndroidLog.h" />
+    <ClInclude Include="Sources\Debug\Log.h" />
+    <ClInclude Include="Sources\Debug\Logger.h" />
+    <ClInclude Include="Sources\Debug\StandaloneLog.h" />
     <ClInclude Include="Sources\Extras\Color.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
     <ClInclude Include="Sources\Extras\smart_pointer.h" />
+    <ClInclude Include="Sources\Extras\TimeUtils.h" />
     <ClInclude Include="Sources\Extras\Vectors.h" />
     <ClInclude Include="Sources\Systems\GameLogicSystem.h" />
     <ClInclude Include="Sources\Systems\GameTime.h" />
@@ -70,8 +75,12 @@
     <ClCompile Include="Sources\CoreEngine\TextureTiled.cpp" />
     <ClCompile Include="Sources\CoreEngine\Transform.cpp" />
     <ClCompile Include="Sources\CoreEngine\Utils.cpp" />
+    <ClCompile Include="Sources\Debug\AndroidLog.cpp" />
+    <ClCompile Include="Sources\Debug\Logger.cpp" />
+    <ClCompile Include="Sources\Debug\StandaloneLog.cpp" />
     <ClCompile Include="Sources\Extras\Color.cpp" />
     <ClCompile Include="Sources\Extras\Matrix4.cpp" />
+    <ClCompile Include="Sources\Extras\TimeUtils.cpp" />
     <ClCompile Include="Sources\Extras\Vectors.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
     <ClCompile Include="Sources\Systems\GameLogicSystem.cpp" />
@@ -117,8 +126,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>.\bin</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(ConfigurationName)</IntDir>
+    <OutDir>.\bin\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ConfigurationName)\</IntDir>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

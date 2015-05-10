@@ -7,19 +7,19 @@
 
 ShaderProgram::ShaderProgram()
 {
-	_nShaders = 0;
-	_shaders[VERTEX_SHADER] = 0;
-	_shaders[FRAGMENT_SHADER] = 0;
+	nShaders_ = 0;
+	shaders_[VERTEX_SHADER] = 0;
+	shaders_[FRAGMENT_SHADER] = 0;
 	//_shaders[GEOMETRY_SHADER] = 0;
 }
 
 ShaderProgram::~ShaderProgram()
 {
 	deleteProgram();
-	if (_shaders[VERTEX_SHADER] != 0)
-		glDeleteShader(_shaders[VERTEX_SHADER]);
-	if (_shaders[FRAGMENT_SHADER] != 0)
-		glDeleteShader(_shaders[FRAGMENT_SHADER]);
+	if (shaders_[VERTEX_SHADER] != 0)
+		glDeleteShader(shaders_[VERTEX_SHADER]);
+	if (shaders_[FRAGMENT_SHADER] != 0)
+		glDeleteShader(shaders_[FRAGMENT_SHADER]);
 // 	if (_shaders[GEOMETRY_SHADER] != 0)
 // 		glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
@@ -43,12 +43,12 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source)
 		delete[] infoLog;
 		return;
 	}
-	_nShaders++;
+	nShaders_++;
 
 	if (shader_type == GL_VERTEX_SHADER)
-		_shaders[VERTEX_SHADER] = shader;
+		shaders_[VERTEX_SHADER] = shader;
 	else if (shader_type == GL_FRAGMENT_SHADER)
-		_shaders[FRAGMENT_SHADER] = shader;
+		shaders_[FRAGMENT_SHADER] = shader;
 // 	else if (shader_type == GL_GEOMETRY_SHADER)
 // 		_shaders[GEOMETRY_SHADER] = shader;
 	else
@@ -65,31 +65,31 @@ void ShaderProgram::loadShaderFromFile(GLenum shader_type, const char* filename)
 
 void ShaderProgram::createAndLinkProgram()
 {
-	_program = glCreateProgram();
+	program_ = glCreateProgram();
 
-	if (_shaders[VERTEX_SHADER] != 0)
-		glAttachShader(_program, _shaders[VERTEX_SHADER]);
-	if (_shaders[FRAGMENT_SHADER] != 0)
-		glAttachShader(_program, _shaders[FRAGMENT_SHADER]);
+	if (shaders_[VERTEX_SHADER] != 0)
+		glAttachShader(program_, shaders_[VERTEX_SHADER]);
+	if (shaders_[FRAGMENT_SHADER] != 0)
+		glAttachShader(program_, shaders_[FRAGMENT_SHADER]);
 // 	if (_shaders[GEOMETRY_SHADER] != 0)
 // 		glAttachShader(_program, _shaders[GEOMETRY_SHADER]);
 
-	glLinkProgram(_program);
+	glLinkProgram(program_);
 
 	GLint status;
-	glGetShaderiv(_program, GL_COMPILE_STATUS, &status);
+	glGetShaderiv(program_, GL_COMPILE_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;
-		glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infoLog = new GLchar[infoLogLength];
-		glGetProgramInfoLog(_program, infoLogLength, NULL, infoLog);
+		glGetProgramInfoLog(program_, infoLogLength, NULL, infoLog);
 		std::cerr << "Program link log: " << infoLog << std::endl;
 		delete[] infoLog;
 	}
 
-	glDeleteShader(_shaders[VERTEX_SHADER]);
-	glDeleteShader(_shaders[FRAGMENT_SHADER]);
+	glDeleteShader(shaders_[VERTEX_SHADER]);
+	glDeleteShader(shaders_[FRAGMENT_SHADER]);
 	//glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
 

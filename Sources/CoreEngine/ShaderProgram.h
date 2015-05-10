@@ -92,25 +92,25 @@ public:
 
 private:
 	enum ShaderType{VERTEX_SHADER,FRAGMENT_SHADER,/*GEOMETRY_SHADER*/};
-	GLuint _program;
-	int _nShaders;
-	GLuint _shaders[3];
+	GLuint program_;
+	int nShaders_;
+	GLuint shaders_[3];
 };
 
 inline GLuint ShaderProgram::getProgram()
 {
-	return _program;
+	return program_;
 }
 
 inline void ShaderProgram::deleteProgram()
 {
-	glDeleteProgram(_program);
-	_program = -1;
+	glDeleteProgram(program_);
+	program_ = -1;
 }
 
 inline void ShaderProgram::bind()
 {
-	glUseProgram(_program);
+	glUseProgram(program_);
 }
 
 inline void ShaderProgram::unbind()
@@ -120,17 +120,17 @@ inline void ShaderProgram::unbind()
 
 inline GLint ShaderProgram::getUniformLocation(const char* name)
 {
-	return glGetUniformLocation(_program, name);
+	return glGetUniformLocation(program_, name);
 }
 
 inline GLint ShaderProgram::getAttributeLocation(const char* name)
 {
-	return glGetAttribLocation(_program, name);
+	return glGetAttribLocation(program_, name);
 }
 
 inline void ShaderProgram::bindAttribLocation(int index, const char* attribName)
 {
-	glBindAttribLocation(_program, index, attribName);
+	glBindAttribLocation(program_, index, attribName);
 }
 
 inline void ShaderProgram::setUniform1f(const char* name, GLfloat v0)

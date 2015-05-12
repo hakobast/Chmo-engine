@@ -6,20 +6,21 @@
 #include <iostream>
 #include <string>
 
+#include "DisplayModuleObserver.h"
+
 class System;
 class Component;
 class GameObject;
+class DisplayModule;
 
-class Engine
+class Engine : public DisplayModuleObserver
 {
 friend class GameObject;
 public:
 	~Engine();
-    void Init();
-	void Update();
+    void Create();
 	void Resume();
 	void Pause();
-	void ScreenChange(int width, int height);
     void addSystem(System &s, int priority);
     void addGameObject(GameObject &obj);
     void addComponent(Component &comp, int priority);
@@ -35,6 +36,9 @@ public:
 		return engine;
 	}
 
+	DisplayModule* displayModule;
+protected:
+	void draw();
 private:
 	std::vector<Component*> _compInitList; 
 	std::vector<Component*> _compInitQueue;

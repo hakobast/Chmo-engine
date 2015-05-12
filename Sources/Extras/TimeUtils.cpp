@@ -13,7 +13,7 @@ uint64_t TimeUtils::Now_Ms()
 
 /*#if defined(__APPLE__)
 
-int64_t TimeUtils::Now_Ms()
+uint64_t TimeUtils::Now_Ms()
 {
 	return 0;
 }

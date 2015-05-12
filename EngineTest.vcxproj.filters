@@ -177,6 +177,18 @@
     <ClInclude Include="Sources\Extras\TimeUtils.h">
       <Filter>Header Files\Extras</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\DisplayModule.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\WinGLUTDisplayModule.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\AndroidDisplayModule.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -295,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="Sources\Extras\TimeUtils.cpp">
       <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\WinGLUTDisplayModule.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

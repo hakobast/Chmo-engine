@@ -32,7 +32,7 @@ LOCAL_SRC_FILES += $(COMPONENTS_SRC_FILES)
 LOCAL_SRC_FILES += $(EXTRAS_SRC_FILES)
 LOCAL_SRC_FILES += $(DEBUG_SRC_FILES)
 LOCAL_STATIC_LIBRARIES := LibFreeImage
-LOCAL_LDLIBS    := -lGLESv2 -lm -llog   # using OpenGL ES 2.0 
+LOCAL_LDLIBS    := -lGLESv2 -lm -landroid -llog   # using OpenGL ES 2.0 
 LOCAL_CPPFLAGS  += -std=c++11   # enable c++11 features (fore example` non static member initialization)
 LOCAL_CPPFLAGS  += -frtti 		# for RTTI (RunTime Type Information)
 

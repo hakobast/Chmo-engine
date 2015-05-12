@@ -4,11 +4,10 @@
 
 ScreenSystem* ScreenSystem::s_instance = NULL;
 
-ScreenSystem::ScreenSystem()
+ScreenSystem::ScreenSystem(DisplayModule* displayModule)
 {
 	s_instance = this;
-
-	//glutReshapeFunc(fr_ScreenResize);
+	displayModule->addObserver(this);
 }
 
 ScreenSystem::~ScreenSystem()
@@ -26,12 +25,7 @@ void ScreenSystem::Update()
 	
 }
 
-void fr_ScreenResize(int width, int height)
-{
-	ScreenSystem::s_instance->ScreenResize(width, height);
-}
-
-void ScreenSystem::ScreenResize(int width, int height)
+void ScreenSystem::change(int width, int height)
 {
 	this->width = width;
 	this->height = height;

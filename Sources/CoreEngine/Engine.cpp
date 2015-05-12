@@ -52,8 +52,10 @@ Engine::~Engine()
 #endif
 }
 
-void Engine::Init()
+void Engine::Create()
 {
+	displayModule->create();
+
 #if defined(_WIN32) || defined(__APPLE__)
 	atexit(f_Destroy);
 	if (glewInit() == GLEW_OK)
@@ -64,9 +66,11 @@ void Engine::Init()
 	FreeImage_Initialise();
 #endif
 
+	displayModule->addObserver(this);
+
 	RenderSystem* renderSystem = new RenderSystem; //renderer system
 	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
-	ScreenSystem* screenSystem = new ScreenSystem;
+	ScreenSystem* screenSystem = new ScreenSystem(displayModule);
 	Input* inputSystem = new Input;
 	GameTime* timeSystem = new GameTime;
 
@@ -79,7 +83,7 @@ void Engine::Init()
 	std::cout << "Engine::Init()" << std::endl;
 }
 
-void Engine::Update()
+void Engine::draw()
 {
 	if(_compInitList.size() > 0)
 		vectorRemove(_compInitList, pred_initComponents);
@@ -119,11 +123,6 @@ void Engine::Update()
 
 	_compDestroyList.clear();
 	_gmObjDestroyList.clear();
-}
-
-void Engine::ScreenChange(int width, int height)
-{
-	ScreenSystem::s_instance->ScreenResize(width, height);
 }
 
 void Engine::Resume()

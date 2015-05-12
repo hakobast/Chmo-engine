@@ -18,5 +18,4 @@ JNIEXPORT void JNICALL Java_com_example_spaceshipgame_GameLibJNIWrapper_on_1draw
 	(JNIEnv * env, jclass cls) {
 		on_draw_frame();
 	}
-
 }

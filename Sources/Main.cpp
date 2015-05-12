@@ -15,109 +15,27 @@
 #include "Testings/GLTestComponent.cpp"
 #include "Testings/SecondComponent.cpp"
 #include "Testings/TestComponent.cpp"
+#include "CoreEngine/WinGLUTDisplayModule.h"
+#include "CoreEngine/DisplayModuleObserver.h"
 
 
 #define TARGET_FPS 60
 
 void CreateGame();
 
-void Render(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	Engine::getInstance().Update();
-
-	glutSwapBuffers();
-	//glutPostRedisplay();
-}
-
-void SetupRendering(void)
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-	glEnable(GL_CULL_FACE);
-	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);
-	glFrontFace(GL_CCW);
-
-	//glEnable(GL_LIGHTING);
-	/*glEnable(GL_LIGHT0);
-
-	GLfloat ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat specular[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat pos[] = { 0.0f, 0.0f, -8, 1.0f };
-	GLfloat spotDir[] = { 0.0f, 0.0f, -1.0f };
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-
-	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 15.0f);
-	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotDir);
-
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-
-	glLightfv(GL_LIGHT0, GL_POSITION, pos);*/
-
-	/*glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-}
-
-void HandleResize(int width, int height)
-{
-	Engine::getInstance().ScreenChange(width, height);
-
-// 	glViewport(0, 0, width, height);
-// 
-// 	glMatrixMode(GL_PROJECTION);
-// 	glLoadIdentity();
-// 
-// 	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 1.0f, 1000.0f);
-// 
-// 	glMatrixMode(GL_MODELVIEW);
-// 	glLoadIdentity();
-}
-
-void TimerFunc(int value)
-{
-	glutPostRedisplay();
-	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
-}
-
 int main(int argc, char **argv)
 {
-	using namespace std::chrono;
-
-	typedef high_resolution_clock Clock;
-	high_resolution_clock::time_point t1 = Clock::now();
-	for (int i = 0; i < 1000; i++)
-		printf("*");
-	high_resolution_clock::time_point t2 = Clock::now();
-
-	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-
-	auto time = t2.time_since_epoch();
-	long long t = duration_cast<milliseconds>(time).count();
-	int64_t time_int = duration_cast<milliseconds>(time).count();
-
-	std::cout << "\n" << t << std::endl;
-	std::cout << "\n" << time_int << std::endl;
-	std::cout << "\n" << TimeUtils::Now_Ms() << std::endl;
-	Logger::Print("TIME %f", (double)TimeUtils::Now_Ms());
 
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("ENGINE TESTING");
-	glutReshapeFunc(HandleResize);
-	glutDisplayFunc(Render);
-	glutTimerFunc(1000 / TARGET_FPS, TimerFunc, 0);
-	SetupRendering();
+
+	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(&argc, argv,
+		GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH,
+		800, 600,
+		"ENGINE");
 
 	//creating engine
-	Engine::getInstance().Init();
+	Engine::getInstance().displayModule = displayModule;
+	Engine::getInstance().Create();
 
 	CreateGame();
 
@@ -180,10 +98,6 @@ void CreateGame()
 		//obj->getTransform()->RotateX(90);
 		obj->getTransform()->ScaleLocal *= scale;
 	}
-
-	Logger::Print("mer gagona %d %s\n", 12, "HAKOB");
-	Logger::PrintError("mer gagona %d %s\n", 12, "HAKOB");
-	Logger::PrintWarning("mer gagona %d %s\n", 12, "HAKOB");
 
 	// **************** MODEL ****************
 	// 	char* mesh_path = "C:/Users/user/Dropbox/Scripts/OBJ Loader/cube.obj";

@@ -19,9 +19,12 @@
     <ClInclude Include="Sources\Components\Terrain.h" />
     <ClInclude Include="Sources\Components\TextureAnimator.h" />
     <ClInclude Include="Sources\CoreEngine\ActiveComponent.h" />
+    <ClInclude Include="Sources\CoreEngine\AndroidDisplayModule.h" />
     <ClInclude Include="Sources\CoreEngine\AssetManager.h" />
     <ClInclude Include="Sources\CoreEngine\ChmoEngine.h" />
     <ClInclude Include="Sources\CoreEngine\Component.h" />
+    <ClInclude Include="Sources\CoreEngine\DisplayModule.h" />
+    <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h" />
     <ClInclude Include="Sources\CoreEngine\Engine.h" />
     <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
     <ClInclude Include="Sources\CoreEngine\GameObject.h" />
@@ -37,6 +40,7 @@
     <ClInclude Include="Sources\CoreEngine\TextureTiled.h" />
     <ClInclude Include="Sources\CoreEngine\Transform.h" />
     <ClInclude Include="Sources\CoreEngine\Utils.h" />
+    <ClInclude Include="Sources\CoreEngine\WinGLUTDisplayModule.h" />
     <ClInclude Include="Sources\Debug\AndroidLog.h" />
     <ClInclude Include="Sources\Debug\Log.h" />
     <ClInclude Include="Sources\Debug\Logger.h" />
@@ -63,7 +67,9 @@
     <ClCompile Include="Sources\Components\Terrain.cpp" />
     <ClCompile Include="Sources\Components\TextureAnimator.cpp" />
     <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp" />
+    <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp" />
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
+    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
     <ClCompile Include="Sources\CoreEngine\Material.cpp" />
@@ -75,6 +81,7 @@
     <ClCompile Include="Sources\CoreEngine\TextureTiled.cpp" />
     <ClCompile Include="Sources\CoreEngine\Transform.cpp" />
     <ClCompile Include="Sources\CoreEngine\Utils.cpp" />
+    <ClCompile Include="Sources\CoreEngine\WinGLUTDisplayModule.cpp" />
     <ClCompile Include="Sources\Debug\AndroidLog.cpp" />
     <ClCompile Include="Sources\Debug\Logger.cpp" />
     <ClCompile Include="Sources\Debug\StandaloneLog.cpp" />

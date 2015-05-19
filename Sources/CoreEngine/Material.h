@@ -7,11 +7,11 @@
 #include "LIBS.h"
 #include "Texture2D.h"
 #include "ShaderProgram.h"
-#include "../Systems/RenderSystem.h"
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Color.h"
 
 class Renderer;
+class MaterialShareInfo;
 
 class Material :public RemovableObject
 {
@@ -35,7 +35,7 @@ public:
 	Material(const Material& other);
 	Material(std::string name);
 	Material(std::string name, smart_pointer<ShaderProgram>& shader);
-	Material(std::string name, const char* vertexShaderSource, const char* fragmentShaderSource);
+	Material(std::string name, const char* vertexShaderSource, int vShaderLength, const char* fragmentShaderSource, int fShaderLength);
 	~Material();
 
 	void bind();
@@ -49,7 +49,6 @@ public:
 	void setColor(Color c, const char* propertyName = "Color");
 	Color getColor(const char* propertyName = "Color");
 
-	static smart_pointer<Material> createMaterial(std::string name, const char* vertexShaderFilename, const char* fragmentShaderFilename);
 	static smart_pointer<Material> Diffuse();
 	static smart_pointer<Material> Unlit();
 };

@@ -24,10 +24,12 @@ ShaderProgram::~ShaderProgram()
 // 		glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
 
-void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source)
+void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source, int length)
 {
+	GLint lengths[] = { length };
+
 	GLuint shader = glCreateShader(shader_type);
-	glShaderSource(shader, 1, &source, NULL);
+	glShaderSource(shader, 1, &source, lengths);
 
 	glCompileShader(shader);
 
@@ -51,16 +53,6 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source)
 		shaders_[FRAGMENT_SHADER] = shader;
 // 	else if (shader_type == GL_GEOMETRY_SHADER)
 // 		_shaders[GEOMETRY_SHADER] = shader;
-	else
-	{
-		std::cerr << "Unknown type of shader";
-		exit(0);
-	}
-}
-
-void ShaderProgram::loadShaderFromFile(GLenum shader_type, const char* filename)
-{
-	loadShaderFromString(shader_type, loadFile(filename));
 }
 
 void ShaderProgram::createAndLinkProgram()

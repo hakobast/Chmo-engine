@@ -1,4 +1,4 @@
-
+﻿
 
 #include <iostream>
 #include <chrono>
@@ -16,6 +16,7 @@
 #include "Testings/SecondComponent.cpp"
 #include "Testings/TestComponent.cpp"
 #include "CoreEngine/WinGLUTDisplayModule.h"
+#include "CoreEngine/WinAssetLoader.h"
 #include "CoreEngine/DisplayModuleObserver.h"
 
 
@@ -25,21 +26,19 @@ void CreateGame();
 
 int main(int argc, char **argv)
 {
-
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(&argc, argv,
-		GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH,
-		800, 600,
-		"ENGINE");
+	WinAssetLoader* assetLoader = new WinAssetLoader;
+	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(&argc, argv, GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH, 800, 600, "ENGINE");
 
 	//creating engine
+	Engine::getInstance().assetLoader = assetLoader;
 	Engine::getInstance().displayModule = displayModule;
 	Engine::getInstance().Create();
 
 	CreateGame();
 
-	glutMainLoop();
+	glutMainLoop(); //TEMP
 
 	return 0;
 }
@@ -58,6 +57,14 @@ void CreateGame()
 	//light->setLinearAttenuation(0.1f);
 	//light->setSpotCutoff(15.0f);
 
+	AssetFile vertexShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.vert");
+	AssetFile fragmentShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.frag");
+
+	smart_pointer<Material> mat(new Material("Unlit", (char*)vertexShaderAsset.data, vertexShaderAsset.length, (char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
+
+	Engine::getInstance().assetLoader->releaseAsset(&vertexShaderAsset);
+	Engine::getInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
+
 	GameObject* camerObj = new GameObject("Camera");
 	camerObj->addComponent<GLTestComponent>();
 	camerObj->addComponent<FPSCounter>();
@@ -72,11 +79,11 @@ void CreateGame()
 	smart_pointer<Texture2D> texture = LoadTexture("Resources/heightmap2.bmp");
 	smart_pointer<Texture2D> textureTransparent = LoadTexture("Resources/vtr.bmp");
 
-	smart_pointer<Material> mat = Material::Unlit();
+	/*smart_pointer<Material> mat = Material::Unlit();*/
 	mat->addTexture(textureTransparent);
-	mat->setColor(Color::GREEN);
+	mat->setColor(Color::WHITE);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 // 		obj->addComponent<Terrain>();
@@ -125,7 +132,7 @@ void CreateGame()
 	mesh->setUVs(texcoords);
 	mesh->setIndices(indices);
 
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		GameObject* obj = new GameObject("MY OBJ");
 		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();

@@ -3,7 +3,7 @@
 
 #include "DisplayModule.h"
 
-class AndroidDisplayModule :public DisplayModule
+class AndroidDisplayModule : public DisplayModule
 {
 public:
 	AndroidDisplayModule();

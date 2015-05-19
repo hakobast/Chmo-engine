@@ -1,13 +1,13 @@
 
 #include <iostream>
 
-#include "CoreEngine/Engine.h"
-#include "CoreEngine/GameLogic.h"
-#include "Systems/Input.h"
-#include "Systems/GameTime.h"
+#include "../CoreEngine/Engine.h"
+#include "../CoreEngine/GameLogic.h"
+#include "../Systems/Input.h"
+#include "../Systems/GameTime.h"
 #include "FPSCounter.cpp"
-#include "Components/SpriteRenderer.h"
-#include "Components/MeshRenderer.h"
+#include "../Components/SpriteRenderer.h"
+#include "../Components/MeshRenderer.h"
 
 using namespace std;
 

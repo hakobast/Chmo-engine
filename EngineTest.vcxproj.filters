@@ -189,6 +189,24 @@
     <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\AssetLoader.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\AndroidAssetLoader.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\WinAssetLoader.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Extras\FileUtils.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\ImageReader.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -312,6 +330,24 @@
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
     <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\AssetLoader.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\WinAssetLoader.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\FileUtils.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>

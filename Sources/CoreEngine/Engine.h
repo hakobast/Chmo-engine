@@ -12,6 +12,7 @@ class System;
 class Component;
 class GameObject;
 class DisplayModule;
+class AssetLoader;
 
 class Engine : public DisplayModuleObserver
 {
@@ -37,6 +38,7 @@ public:
 	}
 
 	DisplayModule* displayModule;
+	AssetLoader* assetLoader;
 protected:
 	void draw();
 private:

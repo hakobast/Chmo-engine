@@ -31,7 +31,7 @@ RenderSystem::RenderSystem()
 	glEnable(GL_CULL_FACE);
 	//glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);
+	//glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
 }
 

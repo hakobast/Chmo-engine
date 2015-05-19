@@ -48,7 +48,7 @@ void Mesh::genBuffers(int submesh)
 		//NORMALS
 		if (submeshes_[submesh]->_updateNormals && submeshes_[submesh]->normals.size() > 0)
 		{
-			printf("UPDATING NORMALS\n");
+			//printf("UPDATING NORMALS\n");
 			if (vbo_id_n == 0)
 			{
 				glGenBuffers(1, &vbo_id_n);
@@ -68,7 +68,7 @@ void Mesh::genBuffers(int submesh)
 		// TEX COORDS
 		if (submeshes_[submesh]->_updateTexCoords && submeshes_[submesh]->uvs.size() > 0)
 		{
-			printf("UPDATING UVS\n");
+			//printf("UPDATING UVS\n");
 			if (vbo_id_t == 0)
 			{
 				glGenBuffers(1, &vbo_id_t);
@@ -88,7 +88,7 @@ void Mesh::genBuffers(int submesh)
 		//VERTICES
 		if (submeshes_[submesh]->_updateVertices && submeshes_[submesh]->indices.size() > 0)
 		{
-			printf("UPDATING VERTICES\n");
+			//printf("UPDATING VERTICES\n");
 			if (vbo_id_v == 0)
 			{
 				glGenBuffers(1, &vbo_id_v);
@@ -108,7 +108,7 @@ void Mesh::genBuffers(int submesh)
 		//INDICES
 		if (submeshes_[submesh]->_updateIndices && submeshes_[submesh]->indices.size() > 0)
 		{
-			printf("UPDATING INDICES\n");
+			//printf("UPDATING INDICES\n");
 			if (vbo_id_i == 0)
 			{
 				glGenBuffers(1, &vbo_id_i);
@@ -171,23 +171,23 @@ void Mesh::draw(int submesh)
 		{
 			if (uv_count > 0)
 			{
-				//std::cout << "BIND TEXCOORD BUFFER: " << _submeshes[submesh]->uv_count << std::endl;
+				//std::cout << "BIND TEXCOORD BUFFER: " << uv_count << std::endl;
 				glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->uv_buffer_id);
 				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, 0, 0);
 			}
 
 			if (normal_count > 0)
 			{
-				//std::cout << "BIND NORMAL BUFFER: " << _submeshes[submesh]->normal_count << std::endl;
+				//std::cout << "BIND NORMAL BUFFER: " << normal_count << std::endl;
 				glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->normal_buffer_id);
 				glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, false, 0, 0);
 			}
 
-			//std::cout << "BIND VERTEX BUFFER: " << _submeshes[submesh]->vertex_count << std::endl;
+			//std::cout << "BIND VERTEX BUFFER: " << vertex_count << std::endl;
 			glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->vertex_buffer_id);
 			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, false, 0, 0);
 
-			//std::cout << "BIND INDEX BUFFER: " << _submeshes[submesh]->index_count << std::endl;
+			//std::cout << "BIND INDEX BUFFER: " << index_count << std::endl;
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submeshes_[submesh]->index_buffer_id);
 			glDrawElements(GL_TRIANGLES, submeshes_[submesh]->index_count, GL_UNSIGNED_INT, 0);
 
@@ -214,7 +214,7 @@ void Mesh::draw(int submesh)
 		}
 	}
 
-	if (vertex_count)		glDisableVertexAttribArray(vertexAttrib);
+	if (vertex_count)	glDisableVertexAttribArray(vertexAttrib);
 	if (uv_count)		glDisableVertexAttribArray(texCoordAttrib);
 	if (normal_count)	glDisableVertexAttribArray(normalAttrib);
 }

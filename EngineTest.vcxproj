@@ -19,15 +19,19 @@
     <ClInclude Include="Sources\Components\Terrain.h" />
     <ClInclude Include="Sources\Components\TextureAnimator.h" />
     <ClInclude Include="Sources\CoreEngine\ActiveComponent.h" />
+    <ClInclude Include="Sources\CoreEngine\AndroidAssetLoader.h" />
     <ClInclude Include="Sources\CoreEngine\AndroidDisplayModule.h" />
+    <ClInclude Include="Sources\CoreEngine\AssetLoader.h" />
     <ClInclude Include="Sources\CoreEngine\AssetManager.h" />
     <ClInclude Include="Sources\CoreEngine\ChmoEngine.h" />
     <ClInclude Include="Sources\CoreEngine\Component.h" />
     <ClInclude Include="Sources\CoreEngine\DisplayModule.h" />
     <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h" />
     <ClInclude Include="Sources\CoreEngine\Engine.h" />
+    <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
     <ClInclude Include="Sources\CoreEngine\GameObject.h" />
+    <ClInclude Include="Sources\CoreEngine\ImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\LIBS.h" />
     <ClInclude Include="Sources\CoreEngine\Material.h" />
     <ClInclude Include="Sources\CoreEngine\Mesh.h" />
@@ -40,12 +44,14 @@
     <ClInclude Include="Sources\CoreEngine\TextureTiled.h" />
     <ClInclude Include="Sources\CoreEngine\Transform.h" />
     <ClInclude Include="Sources\CoreEngine\Utils.h" />
+    <ClInclude Include="Sources\CoreEngine\WinAssetLoader.h" />
     <ClInclude Include="Sources\CoreEngine\WinGLUTDisplayModule.h" />
     <ClInclude Include="Sources\Debug\AndroidLog.h" />
     <ClInclude Include="Sources\Debug\Log.h" />
     <ClInclude Include="Sources\Debug\Logger.h" />
     <ClInclude Include="Sources\Debug\StandaloneLog.h" />
     <ClInclude Include="Sources\Extras\Color.h" />
+    <ClInclude Include="Sources\Extras\FileUtils.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
     <ClInclude Include="Sources\Extras\smart_pointer.h" />
     <ClInclude Include="Sources\Extras\TimeUtils.h" />
@@ -67,10 +73,13 @@
     <ClCompile Include="Sources\Components\Terrain.cpp" />
     <ClCompile Include="Sources\Components\TextureAnimator.cpp" />
     <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp" />
+    <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp" />
+    <ClCompile Include="Sources\CoreEngine\AssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
     <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
+    <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
     <ClCompile Include="Sources\CoreEngine\Material.cpp" />
     <ClCompile Include="Sources\CoreEngine\Mesh.cpp" />
@@ -81,11 +90,13 @@
     <ClCompile Include="Sources\CoreEngine\TextureTiled.cpp" />
     <ClCompile Include="Sources\CoreEngine\Transform.cpp" />
     <ClCompile Include="Sources\CoreEngine\Utils.cpp" />
+    <ClCompile Include="Sources\CoreEngine\WinAssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\WinGLUTDisplayModule.cpp" />
     <ClCompile Include="Sources\Debug\AndroidLog.cpp" />
     <ClCompile Include="Sources\Debug\Logger.cpp" />
     <ClCompile Include="Sources\Debug\StandaloneLog.cpp" />
     <ClCompile Include="Sources\Extras\Color.cpp" />
+    <ClCompile Include="Sources\Extras\FileUtils.cpp" />
     <ClCompile Include="Sources\Extras\Matrix4.cpp" />
     <ClCompile Include="Sources\Extras\TimeUtils.cpp" />
     <ClCompile Include="Sources\Extras\Vectors.cpp" />
@@ -146,15 +157,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;FREEIMAGE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;C:\Users\user\Documents\ECSGameEngine\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -165,14 +178,17 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

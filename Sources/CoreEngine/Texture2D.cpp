@@ -47,41 +47,6 @@ Texture2D::Texture2D(const GLvoid* pixels,
 	setPixels(pixels);
 }
 
-/*Texture2D::Texture2D(const char* filename, bool generateMipmaps)
-: generateMipmaps(generateMipmaps)
-{
-	Image* image = loadBMP(filename);
-	
-	if (image != NULL)
-	{
-		width = image->width;
-		height = image->height;
-
-		glGenTextures(1, &texture_id);
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-		if (generateMipmaps)
-		{
-			//gluBuild2DMipmaps(GL_TEXTURE_2D, 4, this->width, this->height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-			texture_min_filter = GL_NEAREST_MIPMAP_LINEAR;
-			texture_mag_filter = GL_LINEAR_MIPMAP_LINEAR;
-		}
-		else
-		{
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-			texture_min_filter = GL_NEAREST;
-			texture_mag_filter = GL_LINEAR;
-		}
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		setPixels(image->pixels);
-	}
-	else
-		std::cout << "Texture2D: Error occurred while reading file: " << filename << std::endl;
-
-	delete image;
-}*/
-
 Texture2D::Texture2D(const GLvoid* pixels,
 	int region[],
 	int width, int height,
@@ -141,7 +106,7 @@ char* Texture2D::getPixels(GLint x, GLint y, GLint _width, GLint _height)
 {
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	//TEMPPPPPPPPP
+	//TEMPPPPPPPPP remove this shit
 	//TODO find solution for flexibility
 	int color_componens;
 	switch (format)

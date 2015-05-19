@@ -6,8 +6,6 @@
 #include <map>
 #include <string>
 
-#include "../../Dependencies/freeimage/FreeImage.h"
-
 #include "Mesh.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -23,12 +21,11 @@ struct ModelDescriptor
 	std::map<std::string, std::string> meshMaterials;
 };
 
-struct TXT_DATA
+class AssetManager
 {
-	unsigned int width = 0;
-	unsigned int height = 0;
-	FREE_IMAGE_FORMAT imgFormat = FIF_UNKNOWN;
-	BYTE* data = NULL;
+public:
+	static void Initialize();
+	static void Deinitialize();
 };
 
 std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);
@@ -57,7 +54,5 @@ smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
 											GLenum internalFormat = GL_RGB,
 											GLenum format = GL_RGB,
 											GLenum dataType = GL_UNSIGNED_BYTE);
-
-void LoadTextureData(const char* filename, FIBITMAP* fibitmap, FREE_IMAGE_FORMAT* format);
 
 #endif

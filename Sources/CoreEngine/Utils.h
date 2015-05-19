@@ -30,12 +30,6 @@ inline void vectorRemove(std::vector<T*>& vector, bool (*pred)(T*))
 	vector.erase(iter, vector.end());
 }
 
-unsigned long long timeInMilliseconds();
-
-wchar_t* charToWChar(const char* text);
-
-char* loadFile(const char* filename);
-
 void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, std::vector<Vector3>&normals, Vector3* tangent, Vector3* bitangent);
 
 GLboolean isVBOSupported();

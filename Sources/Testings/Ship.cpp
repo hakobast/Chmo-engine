@@ -1,9 +1,9 @@
 
 #include "Ship.h"
 
-#include "Systems/Input.h"
-#include "Systems/GameTime.h"
-#include "Components/SpriteRenderer.h"
+#include "../Systems/Input.h"
+#include "../Systems/GameTime.h"
+#include "../Components/SpriteRenderer.h"
 
 void Ship::Init()
 {

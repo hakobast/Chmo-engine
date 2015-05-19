@@ -8,12 +8,12 @@
 class UniformDesc
 {
 public:
-	UniformDesc(const char* name, GLenum type): type(type)
+	UniformDesc(const char* name, GLenum type) : type(type), name(name)
 	{
-		strcpy(this->name, name);
+		
 	};
 
-	char name[100];
+	const char* name;
 	GLenum type;
 };
 
@@ -22,8 +22,7 @@ class ShaderProgram : public RemovableObject
 public:
 	ShaderProgram();
 	~ShaderProgram();
-	void loadShaderFromString(GLenum shader_type, const char* source);
-	void loadShaderFromFile(GLenum shader_type, const char* filename);
+	void loadShaderFromString(GLenum shader_type, const char* source, int length);
 	void createAndLinkProgram();
 	void bind();
 	void unbind();

@@ -4,12 +4,27 @@
 #include <queue>
 #include <memory>
 
+#include "../../Dependencies/freeimage/FreeImage.h"
+
 #include "LIBS.h"
 #include "../Extras/Vectors.h"
 #include "../Extras/smart_pointer.h"
 #include "../Components/MeshRenderer.h"
+#include "../Debug/Logger.h"
+#include "FreeImageImageReader.h"
+#include "Engine.h"
+#include "AssetLoader.h"
 #include "AssetManager.h"
 
+void AssetManager::Initialize()
+{
+	FreeImage_Initialise();
+}
+
+void AssetManager::Deinitialize()
+{
+	FreeImage_DeInitialise();
+}
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vector3& p, Vector3& n, unsigned int& index);
@@ -601,46 +616,6 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 	return materials;
 }
 
-void LoadTextureData(const char* filename, FIBITMAP* fibitmap, FREE_IMAGE_FORMAT* format)
-{
-	//image format
-	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-	//pointer to the image data
-	BYTE* bits(0);
-	//pointer to the image, once loaded
-	FIBITMAP *dib(0);
-	//image width and height
-	unsigned int width(0), height(0);
-
-	//check the file signature and deduce its format
-	fif = FreeImage_GetFileType(filename, 0);
-	//if still unknown, try to guess the file format from the file extension
-	if (fif == FIF_UNKNOWN)
-		fif = FreeImage_GetFIFFromFilename(filename);
-	//if still unkown, return failure
-	if (fif == FIF_UNKNOWN)
-		return;
-
-	//check that the plugin has reading capabilities and load the file
-	if (FreeImage_FIFSupportsReading(fif))
-		dib = FreeImage_Load(fif, filename);
-	//if the image failed to load, return failure
-	if (!dib)
-		return;
-
-	//retrieve the image data
-	bits = FreeImage_GetBits(dib);
-	//get the image width and height
-	width = FreeImage_GetWidth(dib);
-	height = FreeImage_GetHeight(dib);
-	//if this somehow one of these failed (they shouldn't), return failure
-	if ((bits == 0) || (width == 0) || (height == 0))
-		return;
-
-	*format = fif;
-	fibitmap = dib;
-}
-
 smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
 											int* regions,
 											int textures_count,
@@ -689,133 +664,39 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 									GLenum format,
 									GLenum dataType)
 {
-	//image format
-	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-	//pointer to the image, once loaded
-	FIBITMAP *dib(0);
-	//pointer to the image data
-	BYTE* bits(0);
-	//image width and height
-	unsigned int width(0), height(0);
+	AssetFile imgAsset = Engine::getInstance().assetLoader->loadAsset(filename);
+	FreeImageImageReader reader(imgAsset.data, imgAsset.length);
+	Engine::getInstance().assetLoader->releaseAsset(&imgAsset);
 
-	//check the file signature and deduce its format
-	fif = FreeImage_GetFileType(filename, 0); 
-	//if still unknown, try to guess the file format from the file extension
-	if (fif == FIF_UNKNOWN)
-		fif = FreeImage_GetFIFFromFilename(filename);
-	//if still unkown, return failure
-	if (fif == FIF_UNKNOWN)
+	if ((reader.getData() == 0) || (reader.getWidth() == 0) || (reader.getHeight() == 0))
 	{
-		std::cout << "Unknown type of image file" << std::endl;
-		return smart_pointer<Texture2D>::null();
-	}
-
-	//check that the plugin has reading capabilities and load the file
-	if (FreeImage_FIFSupportsReading(fif))
-		dib = FreeImage_Load(fif, filename);
-
-	//if the image failed to load, return failure
-	if (!dib)
-	{
-		std::cout << "Can't load image file at path: " << filename << std::endl;
-		return smart_pointer<Texture2D>::null();
-	}
-
-	//retrieve the image data
-	bits = FreeImage_GetBits(dib);
-	//get the image width and height
-	width = FreeImage_GetWidth(dib);
-	height = FreeImage_GetHeight(dib);
-
-	//if this somehow one of these failed (they shouldn't), return failure
-	if ((bits == 0) || (width == 0) || (height == 0))
-	{
-		std::cout << "Error occurred while loading imafe file " << filename << std::endl;
+		Logger::PrintError("Error occurred while loading imafe file %s", filename);
 		return smart_pointer<Texture2D>::null();
 	}
 
 	smart_pointer<Texture2D> texture;
 	if (custom)
 	{
-		texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, internalFormat, format, dataType));
+		texture = smart_pointer<Texture2D>(new Texture2D(reader.getData(), reader.getWidth(), reader.getHeight(), generateMipmaps, internalFormat, format, dataType));
 	}
 	else
 	{
-		switch (fif)
+		switch (reader.getFormat())
 		{
-		case FIF_UNKNOWN:
+		case BMP:
+			texture = smart_pointer<Texture2D>(new Texture2D(reader.getData(), reader.getWidth(), reader.getHeight(), generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
 			break;
-		case FIF_BMP:
-			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
+		case JPEG:
+			texture = smart_pointer<Texture2D>(new Texture2D(reader.getData(), reader.getWidth(), reader.getHeight(), generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
 			break;
-		case FIF_ICO:
-			break;
-		case FIF_JPEG:
-			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_BGR_EXT, GL_UNSIGNED_BYTE));
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE));
-			break;
-		case FIF_JNG:
-			break;
-		case FIF_KOALA:
-			break;
-		case FIF_LBM:
-			break;
-		case FIF_MNG:
-			break;
-		case FIF_PBM:
-			break;
-		case FIF_PBMRAW:
-			break;
-		case FIF_PCD:
-			break;
-		case FIF_PCX:
-			break;
-		case FIF_PGM:
-			break;
-		case FIF_PGMRAW:
-			break;
-		case FIF_PNG:
-			//texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_BGRA_EXT, GL_UNSIGNED_BYTE));
-			texture = smart_pointer<Texture2D>(new Texture2D(bits, width, height, generateMipmaps, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE));
-			break;
-		case FIF_PPM:
-			break;
-		case FIF_PPMRAW:
-			break;
-		case FIF_RAS:
-			break;
-		case FIF_TARGA:
-			break;
-		case FIF_TIFF:
-			break;
-		case FIF_WBMP:
-			break;
-		case FIF_PSD:
-			break;
-		case FIF_CUT:
-			break;
-		case FIF_XBM:
-			break;
-		case FIF_XPM:
-			break;
-		case FIF_DDS:
-			break;
-		case FIF_GIF:
-			break;
-		case FIF_HDR:
-			break;
-		case FIF_FAXG3:
-			break;
-		case FIF_SGI:
+		case PNG:
+			texture = smart_pointer<Texture2D>(new Texture2D(reader.getData(), reader.getWidth(), reader.getWidth(), generateMipmaps, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE));
 			break;
 		default:
-			break;
+			return smart_pointer<Texture2D>::null();
 		}
+		
 	}
-
-	//Free FreeImage's copy of the data
-	FreeImage_Unload(dib);
 
 	return texture;
 }

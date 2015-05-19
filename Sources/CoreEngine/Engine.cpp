@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "System.h"
 #include "Component.h"
+#include "AssetManager.h"
 
 #include "../Systems/GameLogicSystem.h"
 #include "../Systems/RenderSystem.h"
@@ -47,14 +48,13 @@ void f_Destroy()
 
 Engine::~Engine()
 {
-#ifdef FREEIMAGE_LIB
-	FreeImage_DeInitialise();
-#endif
+	
 }
 
 void Engine::Create()
 {
 	displayModule->create();
+	displayModule->addObserver(this);
 
 #if defined(_WIN32) || defined(__APPLE__)
 	atexit(f_Destroy);
@@ -62,11 +62,7 @@ void Engine::Create()
 		printf("GLEW Inited!\n");
 #endif
 
-#ifdef FREEIMAGE_LIB
-	FreeImage_Initialise();
-#endif
-
-	displayModule->addObserver(this);
+	AssetManager::Initialize();
 
 	RenderSystem* renderSystem = new RenderSystem; //renderer system
 	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
@@ -217,4 +213,6 @@ void Engine::Cleanup()
 	_gameObjects.clear();
 	_components.clear();
 	_systems.clear();
+
+	AssetManager::Deinitialize();
 }

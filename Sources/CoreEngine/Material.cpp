@@ -1,15 +1,13 @@
 
+#include "../Systems/RenderSystem.h"
 #include "Material.h"
 #include "Utils.h"
-
 
 std::vector<Material*> Material::allMaterials;
 
 smart_pointer<Material> Material::Diffuse()
 {
-	smart_pointer<Material> mat = createMaterial("diffuse",
-		"C:/Program Files (x86)/OpenGL Shader Designer/My/BumpedDiffuse.vert",
-		"C:/Program Files (x86)/OpenGL Shader Designer/My/BumpedDiffuse.frag");
+	smart_pointer<Material> mat;
 
 	mat->setColor(Color::BLACK, "Specular");
 	mat->setColor(Color::BLACK, "Emission");
@@ -19,23 +17,11 @@ smart_pointer<Material> Material::Diffuse()
 
 smart_pointer<Material> Material::Unlit()
 {
-	smart_pointer<Material> mat = createMaterial("diffuse",
-		"C:/Program Files (x86)/OpenGL Shader Designer/My/UnlitSprite.vert",
-		"C:/Program Files (x86)/OpenGL Shader Designer/My/UnlitSprite.frag");
+	smart_pointer<Material> mat;
 
 	mat->setColor(Color::WHITE, "Color");
 
 	return mat;
-}
-
-smart_pointer<Material> Material::createMaterial(std::string name, const char* vertexShaderFilename, const char* fragmentShaderFilename)
-{
-	smart_pointer<ShaderProgram> shader = smart_pointer<ShaderProgram>(new ShaderProgram());
-	shader->loadShaderFromFile(GL_VERTEX_SHADER, vertexShaderFilename);
-	shader->loadShaderFromFile(GL_FRAGMENT_SHADER, fragmentShaderFilename);
-	shader->createAndLinkProgram();
-
-	return smart_pointer<Material>(new Material(name, shader));
 }
 
 Material::Material(const Material& other) :Material(other.name)
@@ -55,11 +41,11 @@ Material::Material(std::string name, smart_pointer<ShaderProgram>& shader) : Mat
 	this->shader = shader;
 }
 
-Material::Material(std::string name, const char* vertexShaderSource, const char* fragmentShaderSource) : Material(name)
+Material::Material(std::string name, const char* vertexShaderSource, int vShaderLength, const char* fragmentShaderSource, int fShaderLength) : Material(name)
 {
 	shader = smart_pointer<ShaderProgram>(new ShaderProgram());
-	shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource);
-	shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource);
+	shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource, vShaderLength);
+	shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource, fShaderLength);
 	shader->createAndLinkProgram();
 }
 

@@ -1,6 +1,7 @@
 #ifndef EngineTesting_Material_h
 #define EngineTesting_Material_h
 
+#include <map>
 #include <vector>
 #include <string>
 
@@ -27,30 +28,29 @@ private:
 	void unshare(MaterialShareInfo shareInfo);
 
 public:
-	std::string name;
+	static smart_pointer<Material> Diffuse();
+	static smart_pointer<Material> Unlit();
 
-	GLint illum = 1;
-	GLfloat shininess = 128.0f;
-
-	Material(const Material& other);
-	Material(std::string name);
-	Material(std::string name, smart_pointer<ShaderProgram>& shader);
-	Material(std::string name, const char* vertexShaderSource, int vShaderLength, const char* fragmentShaderSource, int fShaderLength);
 	~Material();
+	Material(const Material& other);
+	Material(const char* name,
+		const char* vertexShaderSource, int vShaderLength,
+		const char* fragmentShaderSource, int fShaderLength/*, 
+		std::map<const char*, unsigned int> shaderAattributes*/);
 
 	void bind();
 	void unbind();
-	smart_pointer<ShaderProgram>& getShader();
-	void setMainTexture(smart_pointer<Texture2D> texture);
-	void setTexture(smart_pointer<Texture2D> texture, int index);
-	void addTexture(smart_pointer<Texture2D> texture, char* samplerName = NULL);
-	smart_pointer<Texture2D>& getTexture(int index);
-	smart_pointer<Texture2D>& getMainTexture();
-	void setColor(Color c, const char* propertyName = "Color");
-	Color getColor(const char* propertyName = "Color");
+	void setMainTexture	(smart_pointer<Texture2D> texture);
+	void setTexture		(smart_pointer<Texture2D> texture, int index);
+	void addTexture		(smart_pointer<Texture2D> texture, char* samplerName = NULL);
 
-	static smart_pointer<Material> Diffuse();
-	static smart_pointer<Material> Unlit();
+	smart_pointer<Texture2D>&		getTexture(int index);
+	smart_pointer<Texture2D>&		getMainTexture();
+	smart_pointer<ShaderProgram>&	getShader();
+
+	void	setColor(Color c, const char* propertyName = "Color");
+	Color	getColor(const char* propertyName = "Color");
+	const char* name;
 };
 
 inline smart_pointer<ShaderProgram>& Material::getShader()

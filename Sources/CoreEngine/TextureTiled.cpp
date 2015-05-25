@@ -28,17 +28,17 @@ TextureTiled::TextureTiled(const GLvoid*pixels,
 		   |		|
 		   |		|
   ([0],[1])----------([2],[3])*/
-		textures[i].u_v[0] = c*tile_w/width; 
-		textures[i].u_v[1] = (rows-1-r)*tile_h/height;
+		textures[i].uv[0] = c*tile_w/width; 
+		textures[i].uv[1] = (rows-1-r)*tile_h/height;
 
-		textures[i].u_v[2] = (c+1)*tile_w/width;
-		textures[i].u_v[3] = (rows - 1 - r)*tile_h/height;
+		textures[i].uv[2] = (c+1)*tile_w/width;
+		textures[i].uv[3] = (rows - 1 - r)*tile_h/height;
 
-		textures[i].u_v[4] = (c+1)*tile_w/width;
-		textures[i].u_v[5] = (rows-r)*tile_h/height;
+		textures[i].uv[4] = (c+1)*tile_w/width;
+		textures[i].uv[5] = (rows-r)*tile_h/height;
 
-		textures[i].u_v[6] = c*tile_w/width;
-		textures[i].u_v[7] = (rows - r)*tile_h/height;
+		textures[i].uv[6] = c*tile_w/width;
+		textures[i].uv[7] = (rows - r)*tile_h/height;
 	}
 }
 

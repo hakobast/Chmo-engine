@@ -135,7 +135,7 @@ void Engine::addSystem(System &s, int priority)
 {
     s.priority = priority;
     _systems.push_back(&s);
-	std::sort(_systems.begin(), _systems.end(),pred_sortSystems);
+	std::sort(_systems.begin(), _systems.end(), pred_sortSystems);
 }
 
 void Engine::addGameObject(GameObject &obj)

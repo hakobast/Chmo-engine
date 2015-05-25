@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "../Extras/GLUtils.h"
 #include "Texture2D.h"
 
 Texture2D::Texture2D(int width, int height,
@@ -60,17 +61,17 @@ Texture2D::Texture2D(const GLvoid* pixels,
 
 	textures = new TextureRegion[1];
 
-	textures[0].u_v[0] = (float)region[0] / width;
-	textures[0].u_v[1] = (float)region[1] / height;
+	textures[0].uv[0] = (float)region[0] / width;
+	textures[0].uv[1] = (float)region[1] / height;
 
-	textures[0].u_v[2] = (float)region[2] / width;
-	textures[0].u_v[3] = (float)region[1] / height;
+	textures[0].uv[2] = (float)region[2] / width;
+	textures[0].uv[3] = (float)region[1] / height;
 
-	textures[0].u_v[4] = (float)region[2] / width;
-	textures[0].u_v[5] = (float)region[3] / height;
+	textures[0].uv[4] = (float)region[2] / width;
+	textures[0].uv[5] = (float)region[3] / height;
 
-	textures[0].u_v[6] = (float)region[0] / width;
-	textures[0].u_v[7] = (float)region[3] / height;
+	textures[0].uv[6] = (float)region[0] / width;
+	textures[0].uv[7] = (float)region[3] / height;
 }
 
 Texture2D::~Texture2D()
@@ -101,48 +102,54 @@ void Texture2D::setPixels(const GLvoid* pixels)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-//TODO implement reading by offset
 char* Texture2D::getPixels(GLint x, GLint y, GLint _width, GLint _height)
 {
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-
-	//TEMPPPPPPPPP remove this shit
-	//TODO find solution for flexibility
-	int color_componens;
-	switch (format)
-	{
-#if defined(_WIN32) || defined (__APPLE__)
-	case GL_RED: case GL_GREEN: case GL_BLUE: case GL_ALPHA: case GL_LUMINANCE:
-		color_componens = 1;
-		break;
-	case GL_RGB: case GL_BGR:
-		color_componens = 3;
-		break;
-	case GL_RGBA: case GL_BGRA:
-		color_componens = 4;
-		break;
-#else
-	case GL_RGB:
-		color_componens = 3;
-		break;
-	case GL_RGBA:
-		color_componens = 4;
-		break;
-#endif
-	default:
-		color_componens = 3;
-		break;
-	}
-
-	char* pixels = new char[width*height*color_componens];
-	//glGetTexImage(GL_TEXTURE_2D, 0, format, dataType, pixels);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	return pixels; 
+	return NULL;
 }
 
 char* Texture2D::getPixels()
 {
 	return getPixels(0, 0, width, height);
+}
+
+inline void Texture2D::setFilterMode(GLenum minFilter, GLenum magFilter)
+{
+	texture_min_filter = minFilter;
+	texture_mag_filter = magFilter;
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_min_filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline void Texture2D::setWrapmode(GLenum wrap_s, GLenum wrap_t)
+{
+	texture_wrap_s = wrap_s;
+	texture_wrap_t = wrap_t;
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+inline void Texture2D::setAnisoFiltering(bool enable)
+{
+	if (isExtensionSupported("GL_EXT_texture_filter_anisotropic"))
+	{
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+#if defined(_WIN32) || defined (__APPLE__)
+		if (enable)
+		{
+			GLfloat max;
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max);
+		}
+		else
+		{
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+		}
+#endif
+	}
 }

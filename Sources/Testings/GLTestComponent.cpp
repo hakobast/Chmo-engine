@@ -37,15 +37,19 @@ public:
 
 			if (meshRend != NULL)
 			{
-				smart_pointer<Mesh> mesh = meshRend->getSharedMesh();
+				smart_pointer<Mesh> mesh = meshRend->getMesh();
 
-				std::vector<unsigned int> indices{ 0, 1, 2 };
+				std::vector<unsigned int> indices{ 2, 3, 1 };
+			//	std::vector<unsigned int> indices{ 0, 1, 2, 3, 0, 2 };
+
 				std::vector<Vector3> verts{ Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
 				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
 
-				mesh->setVertices(verts);
+				//mesh->setVertices(&verts);
 				//mesh->setNormals(norms);
-				mesh->setIndices(indices);
+				mesh->setIndices(&indices);
+
+				//meshRend->setMesh(mesh);
 			}
 			else
 				std::cout << "CAN'T FIND\n";
@@ -57,15 +61,17 @@ public:
 
 			if (meshRend != NULL)
 			{
-				smart_pointer<Mesh> mesh = meshRend->getSharedMesh();
+				smart_pointer<Mesh> mesh = meshRend->getMesh();
 
 				std::vector<unsigned int> indices{ 3, 0, 2 };
 				std::vector<Vector3> verts{ Vector3(-1.0f, -3.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
 				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
 
-				mesh->setVertices(verts);
+				//mesh->setVertices(&verts);
 				//mesh->setNormals(norms);
-				mesh->setIndices(indices);
+				mesh->setIndices(&indices);
+
+				//meshRend->setMesh(mesh);
 			}
 			else
 				std::cout << "CAN'T FIND\n";

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Sources\Components\Camera.h" />
     <ClInclude Include="Sources\Components\Light.h" />
     <ClInclude Include="Sources\Components\MeshRenderer.h" />
@@ -28,9 +29,11 @@
     <ClInclude Include="Sources\CoreEngine\DisplayModule.h" />
     <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h" />
     <ClInclude Include="Sources\CoreEngine\Engine.h" />
+    <ClInclude Include="Sources\CoreEngine\Enums.h" />
     <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
     <ClInclude Include="Sources\CoreEngine\GameObject.h" />
+    <ClInclude Include="Sources\CoreEngine\GLMeshDrawer.h" />
     <ClInclude Include="Sources\CoreEngine\ImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\LIBS.h" />
     <ClInclude Include="Sources\CoreEngine\Material.h" />
@@ -52,6 +55,7 @@
     <ClInclude Include="Sources\Debug\StandaloneLog.h" />
     <ClInclude Include="Sources\Extras\Color.h" />
     <ClInclude Include="Sources\Extras\FileUtils.h" />
+    <ClInclude Include="Sources\Extras\GLUtils.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
     <ClInclude Include="Sources\Extras\smart_pointer.h" />
     <ClInclude Include="Sources\Extras\TimeUtils.h" />
@@ -81,6 +85,7 @@
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
     <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
+    <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp" />
     <ClCompile Include="Sources\CoreEngine\Material.cpp" />
     <ClCompile Include="Sources\CoreEngine\Mesh.cpp" />
     <ClCompile Include="Sources\CoreEngine\ShaderProgram.cpp" />
@@ -97,6 +102,7 @@
     <ClCompile Include="Sources\Debug\StandaloneLog.cpp" />
     <ClCompile Include="Sources\Extras\Color.cpp" />
     <ClCompile Include="Sources\Extras\FileUtils.cpp" />
+    <ClCompile Include="Sources\Extras\GLUtils.cpp" />
     <ClCompile Include="Sources\Extras\Matrix4.cpp" />
     <ClCompile Include="Sources\Extras\TimeUtils.cpp" />
     <ClCompile Include="Sources\Extras\Vectors.cpp" />
@@ -112,6 +118,9 @@
     <ClCompile Include="Sources\Testings\SecondComponent.cpp" />
     <ClCompile Include="Sources\Testings\Ship.cpp" />
     <ClCompile Include="Sources\Testings\TestComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EngineTest.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{76D8E35A-6452-4569-82B0-C2AA3DAFE2E2}</ProjectGuid>
@@ -159,13 +168,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;FREEIMAGE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;C:\Users\user\Documents\ECSGameEngine\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Sources;C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;FreeImaged.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -181,14 +190,15 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\user\Documents\ECSGameEngine\Sources;C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\user\Documents\ECSGameEngine\Dependencies\freeimage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

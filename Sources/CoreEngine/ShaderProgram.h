@@ -2,6 +2,8 @@
 #ifndef SHADER_PROGRAM_H
 #define SHADER_PROGRAM_H
 
+#include <map>
+
 #include "LIBS.h"
 #include "../Extras/smart_pointer.h"
 
@@ -20,7 +22,7 @@ public:
 class ShaderProgram : public RemovableObject
 {
 public:
-	ShaderProgram();
+	ShaderProgram(std::map<const char*,unsigned int> attributes);
 	~ShaderProgram();
 	void loadShaderFromString(GLenum shader_type, const char* source, int length);
 	void createAndLinkProgram();
@@ -28,10 +30,10 @@ public:
 	void unbind();
 	GLuint getProgram();
 	void deleteProgram();
+	const std::map<const char*, unsigned int> getAttributes() const;
 	std::vector<UniformDesc> getUniforms(GLenum typeFilter = -1);
 	GLint getUniformLocation(const char* name);
 	GLint getAttributeLocation(const char* name);
-	void bindAttribLocation(int index, const char* attribName);
 
 	void setUniform1f(const char* name, GLfloat v0);
 	void setUniform1fv(const char* name, GLsizei count, const GLfloat* value);
@@ -91,9 +93,9 @@ public:
 
 private:
 	enum ShaderType{VERTEX_SHADER,FRAGMENT_SHADER,/*GEOMETRY_SHADER*/};
+	std::map<const char*, unsigned int> attributes_;
 	GLuint program_;
-	int nShaders_;
-	GLuint shaders_[3];
+	GLuint shaders_[2];
 };
 
 inline GLuint ShaderProgram::getProgram()
@@ -107,14 +109,23 @@ inline void ShaderProgram::deleteProgram()
 	program_ = -1;
 }
 
+#include "../Extras/GLUtils.h"
+#include "../Debug/Logger.h"
 inline void ShaderProgram::bind()
 {
+	check_gl_error();
 	glUseProgram(program_);
+	check_gl_error();
 }
 
 inline void ShaderProgram::unbind()
 {
 	glUseProgram(0);
+}
+
+inline const std::map<const char*, unsigned int> ShaderProgram::getAttributes() const
+{
+	return attributes_;
 }
 
 inline GLint ShaderProgram::getUniformLocation(const char* name)
@@ -125,11 +136,6 @@ inline GLint ShaderProgram::getUniformLocation(const char* name)
 inline GLint ShaderProgram::getAttributeLocation(const char* name)
 {
 	return glGetAttribLocation(program_, name);
-}
-
-inline void ShaderProgram::bindAttribLocation(int index, const char* attribName)
-{
-	glBindAttribLocation(program_, index, attribName);
 }
 
 inline void ShaderProgram::setUniform1f(const char* name, GLfloat v0)

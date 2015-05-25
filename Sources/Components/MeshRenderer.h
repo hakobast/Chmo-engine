@@ -14,6 +14,7 @@ public:
 	void Update();
 	void Render(int subRenderer = 0);
 	void setMesh(smart_pointer<Mesh>& m);
+
 	smart_pointer<Mesh>& getMesh();
 	smart_pointer<Mesh>& getSharedMesh();
 private:
@@ -22,44 +23,38 @@ private:
 
 inline void MeshRenderer::setMesh(smart_pointer<Mesh>& m)
 {
-	if (m.isEmpty())
+	if (m.isEmpty() || m == mesh_)
 		return;
 
 	mesh_ = m;
 	mesh_->sharesCount_++;
-
-	for (int i = 0; i < mesh_->getSubMeshCount(); i++)
-	{
-		if(mesh_->submeshes_[i]->_updateVBO())
-			mesh_->genBuffers(i);
-	}
 }
 
 inline smart_pointer<Mesh>& MeshRenderer::getMesh()
-{		
-	if (mesh_.isEmpty())
+{
+	if (!mesh_.isEmpty())
 	{
-		mesh_ = smart_pointer<Mesh>(new Mesh);
-		mesh_->sharesCount_ = 1;
-	}
-	else if (mesh_->sharesCount_ > 1)
-	{
-		mesh_->sharesCount_ = 1;
-		mesh_ = mesh_.clone();
+		if (mesh_->sharesCount_ > 1)
+		{
+			mesh_->sharesCount_--;
+			mesh_ = mesh_.clone();
+			mesh_->sharesCount_ = 1;
+		}
+
+		return mesh_;
 	}
 
-	return mesh_;
+	return smart_pointer<Mesh>::null();
 }
 
 inline smart_pointer<Mesh>& MeshRenderer::getSharedMesh()
 {
-	if (mesh_.isEmpty())
+	if (!mesh_.isEmpty())
 	{
-		mesh_ = smart_pointer<Mesh>(new Mesh);
-		mesh_->sharesCount_ = 1;
+		return mesh_;
 	}
 
-	return mesh_;
+	return smart_pointer<Mesh>::null();
 }
 
 #endif

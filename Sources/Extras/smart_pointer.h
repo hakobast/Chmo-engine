@@ -95,32 +95,37 @@ public:
     {
         if(data != NULL)
         {
+#ifdef ENABLE_LOG
+		std::cout << "~~~~smart_pointer() <" << typeid(T).name() << ">" << std::endl;
+#endif
 			//std::cout << "REFS COUNT " << dynamic_cast<RemovableObject*>(data)->refs << std::endl;
-			if(--(dynamic_cast<RemovableObject*>(data)->refs) == 0)
+			if(--dynamic_cast<RemovableObject*>(data)->refs == 0)
             {
+#ifdef ENABLE_LOG
+				std::cout << "Data removed <" << typeid(T).name() << ">" << std::endl;
+#endif
 				delete data;
             }
+
 #ifdef ENABLE_LOG
 			std::cout << "Pointer to : " << data << " removed, " << dynamic_cast<RemovableObject*>(data)->refs << " left" << std::endl;
 #endif
         }
-#ifdef ENABLE_LOG
-		std::cout << "~~~~smart_pointer() <" << typeid(T).name() << ">" << std::endl;
-#endif
     }
     
     inline smart_pointer<T> clone()
     {
-        smart_pointer<T> sm;
-        sm.data = new T(*data);
+       // smart_pointer<T> sm;
+      //  sm.data = new T(*data);
 
-		if (data != NULL)
-			dynamic_cast<RemovableObject*>(data)->refs++;
+// 		if (data != NULL)
+// 			dynamic_cast<RemovableObject*>(data)->refs++;
         
-        return sm;
+		T* data_copy = new T(*data);
+		return smart_pointer<T>(data_copy);
     }
 
-	inline bool isEmpty() //TODO this function can be operator function 
+	inline bool isEmpty() //TODO this function can be operator
 	{
 		return data == NULL;
 	}
@@ -149,7 +154,12 @@ public:
         {
 			//std::cout << "Copy complete" << std::endl;
 			if (data != NULL && --dynamic_cast<RemovableObject*>(data)->refs == 0)
+			{
+#ifdef ENABLE_LOG
+				std::cout << "DATA REMOVED: try to copy " << typeid(T).name() << std::endl;
+#endif
 				delete data;
+			}
 
             data = other.data;
 			//std::cout << "Added reference to: " << data << std::endl;

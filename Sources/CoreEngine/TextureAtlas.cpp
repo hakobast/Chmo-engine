@@ -37,17 +37,17 @@ TextureAtlas::TextureAtlas(const GLvoid*pixels,
 		   |		|
 		   |		|
  ([0],[1]) ----------([2],[3])*/
-		textures[r].u_v[0] = x1;
-		textures[r].u_v[1] = y1;
+		textures[r].uv[0] = x1;
+		textures[r].uv[1] = y1;
 
-		textures[r].u_v[2] = x2;
-		textures[r].u_v[3] = y1;
+		textures[r].uv[2] = x2;
+		textures[r].uv[3] = y1;
 
-		textures[r].u_v[4] = x2;
-		textures[r].u_v[5] = y2;
+		textures[r].uv[4] = x2;
+		textures[r].uv[5] = y2;
 
-		textures[r].u_v[6] = x1;
-		textures[r].u_v[7] = y2;
+		textures[r].uv[6] = x1;
+		textures[r].uv[7] = y2;
 	}
 }
 

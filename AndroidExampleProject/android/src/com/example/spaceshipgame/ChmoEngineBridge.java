@@ -50,7 +50,10 @@ public class ChmoEngineBridge implements Renderer{
 	
 	public boolean OnTouchEvent(MotionEvent event)
 	{
-		//TODO implement touches
+		if(rendererSet)
+		{
+			//TODO implement touches
+		}
 		return true;
 	}
 	

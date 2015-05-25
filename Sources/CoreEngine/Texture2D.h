@@ -6,9 +6,10 @@
 
 #include "LIBS.h"
 #include "../Extras/smart_pointer.h"
-#include "Utils.h"
 #include "TextureRegion.h"
 
+//TODO implement anisotrop filtering for all platforms
+//TODO implement pixel reading functionality for all platforms
 class Texture2D:public RemovableObject
 {
 private:
@@ -64,63 +65,11 @@ public:
 	void setAnisoFiltering(bool enabled);
 
 	TextureRegion*const getTextureRegion(int index = 0);
-	TextureRegion*const operator [](int index);
 };
-
-inline void Texture2D::setFilterMode(GLenum minFilter, GLenum magFilter)
-{
-	texture_min_filter = minFilter;
-	texture_mag_filter = magFilter;
-
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_min_filter);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-inline void Texture2D::setWrapmode(GLenum wrap_s, GLenum wrap_t)
-{
-	texture_wrap_s = wrap_s;
-	texture_wrap_t = wrap_t;
-
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-inline void Texture2D::setAnisoFiltering(bool enable)
-{
-	if (isExtensionSupported("GL_EXT_texture_filter_anisotropic"))
-	{
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-#if defined(_WIN32) || defined (__APPLE__)
-		if (enable)
-		{
-			GLfloat max;
-			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max);
-		}
-		else
-		{
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
-		}
-#endif
-	}
-}
-
 
 inline void Texture2D::bindTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, texture_id);
-
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,texture_min_filter);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_mag_filter);
-
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_wrap_s);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_wrap_t);
-
-	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 inline void Texture2D::unbindTexture()
@@ -140,26 +89,20 @@ inline TextureRegion*const Texture2D::getTextureRegion(int index)
 
 	if (textures == NULL)
 	{
-		textures = new TextureRegion;
-		textures->u_v[0] = 0.0f;
-		textures->u_v[1] = 0.0f;
+		textures = new TextureRegion[1];
+		textures->uv[0] = 0.0f;
+		textures->uv[1] = 0.0f;
 
-		textures->u_v[2] = 1.0f;
-		textures->u_v[3] = 0.0f;
+		textures->uv[2] = 1.0f;
+		textures->uv[3] = 0.0f;
 
-		textures->u_v[4] = 1.0f;
-		textures->u_v[5] = 1.0f;
+		textures->uv[4] = 1.0f;
+		textures->uv[5] = 1.0f;
 
-		textures->u_v[6] = 0.0f;
-		textures->u_v[7] = 1.0f;
+		textures->uv[6] = 0.0f;
+		textures->uv[7] = 1.0f;
 	}
 
 	return &textures[index];
 }
-
-inline TextureRegion*const Texture2D::operator [](int index)
-{
-	return getTextureRegion(index);
-}
-
 #endif

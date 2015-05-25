@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Haksist. All rights reserved.
 //
 
-#ifndef OpenGLTesting_Renderer_h
-#define OpenGLTesting_Renderer_h
+#ifndef RENDERER_H
+#define RENDERER_H
 
 #include <assert.h>
 
@@ -27,27 +27,32 @@ enum SortingLayer
 class Renderer : public ActiveComponent
 {
 friend class RenderSystem;
+private:
+	void initAttributes(int materialIndex);
 protected:
 	int sortingLayer = Default;
 	int layerOrder = 0;
 
-	/* SHADER ATTRIBUTES */
-	GLint vertexAttribLocation = 0;
-	GLint texCoordAttribLocation = 1;
-	GLint normalAttribLocation = 2;
-	GLint tangAttribLocation = 3;
-	GLint bitangAttribLocation = 4;
-	const char* vertexAttribName = "InVertex";
-	const char* texCoordAttribName = "InTexCoord0";
-	const char* normalAttribName = "InNormal";
-	const char* tangentAttribName = "InTangent";
-	const char* bitangentAttribName = "InBitangent";
-	/* */
+	std::vector<int> vertexAttribLocations;
+	std::vector<int> texCoordAttribLocations;
+	std::vector<int> normalAttribLocations;
+	std::vector<int> tangAttribLocations;
+	std::vector<int> bitangAttribLocations;
 
 	std::vector<smart_pointer<Material>> materials;
-	void bindShaderAttributes(int materialIndex);
 	RenderSystem* getRenderSystem();
 public:
+	/* SHADER ATTRIBUTES */
+	static const char* vertexAttribName;
+	static const char* texCoordAttribName;
+	static const char* normalAttribName;
+	static const char* tangentAttribName;
+	static const char* bitangentAttribName;
+	/* SHADER ATTRIBUTES */
+	static std::map<const char*, unsigned int> AllAttributes;
+	static std::map<const char*, unsigned int> SmallAttributes;
+	static std::map<const char*, unsigned int> StandartAttributes;
+
 	virtual ~Renderer()
 	{
 		for (size_t i = 0, len = materials.size(); i < len; i++)
@@ -59,14 +64,15 @@ public:
 	int getLayerOrder() const;
 	void setSortingLayer(int layer, int order = 0);
 	void setLayerOrder(int order);
+
 	std::vector<smart_pointer<Material>>& getMaterials();
 	std::vector<smart_pointer<Material>>& getSharedMaterials();
 	smart_pointer<Material>& getMaterial(int index = 0);
 	smart_pointer<Material>& getSharedMaterial(int index = 0);
 	smart_pointer<Texture2D>& getMainTexture();
 
-	void addMaterial(smart_pointer<Material> mat);
-	void setMaterial(smart_pointer<Material> mat, int index);
+	virtual void addMaterial(smart_pointer<Material> mat);
+	virtual void setMaterial(smart_pointer<Material> mat, int index);
 	void setMainMaterial(smart_pointer<Material> mat);
 	void setMainTexture(smart_pointer<Texture2D> texture); 
 };

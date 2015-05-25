@@ -5,6 +5,7 @@
 #include "../Extras/smart_pointer.h"
 #include "../CoreEngine/Component.h"
 #include "../CoreEngine/Transform.h"
+#include "../Extras/GLUtils.h"
 
 Terrain::~Terrain()
 {
@@ -209,20 +210,20 @@ void Terrain::Update(){}
 
 void Terrain::Render(int materialIndex)
 {
- 	glEnableVertexAttribArray(vertexAttribLocation);
- 	glEnableVertexAttribArray(texCoordAttribLocation);
- 	glEnableVertexAttribArray(normalAttribLocation);
+	glEnableVertexAttribArray(vertexAttribLocations[materialIndex]);
+	glEnableVertexAttribArray(texCoordAttribLocations[materialIndex]);
+	glEnableVertexAttribArray(normalAttribLocations[materialIndex]);
 
 	if (isVBOSupported())
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
-		glVertexAttribPointer(vertexAttribLocation, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(vertexAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, texture_vbo_id);
-		glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 2, GL_FLOAT, false, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, normal_vbo_id);
-		glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(normalAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, 0);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 
@@ -230,16 +231,16 @@ void Terrain::Render(int materialIndex)
 	}
 	else
 	{
-		glVertexAttribPointer(texCoordAttribLocation, 3, GL_FLOAT, false, 0,    verts);
-		glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, false, 0, textures);
-		glVertexAttribPointer(normalAttribLocation,   3, GL_FLOAT, false, 0,	norms);
+		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, verts);
+		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 2, GL_FLOAT, false, 0, textures);
+		glVertexAttribPointer(normalAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, norms);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 	}
 
-	glDisableVertexAttribArray(vertexAttribLocation);
-	glDisableVertexAttribArray(texCoordAttribLocation);
-	glDisableVertexAttribArray(normalAttribLocation);
+	glDisableVertexAttribArray(vertexAttribLocations[materialIndex]);
+	glDisableVertexAttribArray(texCoordAttribLocations[materialIndex]);
+	glDisableVertexAttribArray(normalAttribLocations[materialIndex]);
 
 	/*glBegin(GL_TRIANGLE_STRIP);
 	for (int z = 0; z < length - 1; z++)

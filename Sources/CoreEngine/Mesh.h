@@ -1,95 +1,136 @@
-#ifndef EngineTesting_Mesh_h
-#define EngineTesting_Mesh_h
+#ifndef MESH_H
+#define MESH_H
 
 #include <vector>
 #include "Utils.h"
+#include "Enums.h"
 #include "../Extras/Vectors.h"
 #include "../Extras/smart_pointer.h"
+#include "../Debug/Logger.h"
 
-class Mesh:public RemovableObject
+class GLMeshDrawer;
+
+class Mesh :public RemovableObject
 {
 friend class MeshRenderer;
 
-	class SubMesh : public RemovableObject
+	struct SubMesh
 	{
-		friend class Mesh;
-		friend class MeshRenderer;
-
-		GLboolean _updateVertices = 0;
-		GLboolean _updateTexCoords = 0;
-		GLboolean _updateNormals = 0;
-		GLboolean _updateIndices = 0;
-
-		GLuint vertex_buffer_id = 0;
-		GLuint uv_buffer_id = 0;
-		GLuint normal_buffer_id = 0;
-		GLuint index_buffer_id = 0;
-
-		GLuint vertex_count = 0;
-		GLuint uv_count = 0;
-		GLuint normal_count = 0;
-		GLuint index_count = 0;
-
-		std::vector<Vector3> vertices;
-		std::vector<Vector2> uvs;
-		std::vector<Vector3> normals;
-		std::vector<unsigned int> indices;
-
-		inline GLboolean _updateVBO()
-		{
-			return _updateVertices || _updateTexCoords || _updateNormals || _updateIndices;
-		}
+		std::vector<Vector3>		vertices;	GLenum vertexVBOUsage;
+		std::vector<Vector2>		texCoords;	GLenum texCoordVBOUsage;
+		std::vector<Vector3>		normals;	GLenum normalVBOUsage;
+		std::vector<Vector3>		tangent;	GLenum tangentVBOUsage;
+		std::vector<Vector3>		bitangent;	GLenum bitangentVBOUsage;
+		std::vector<unsigned int>	indices;	GLenum indexVBOUsage;
 	};
 
-private:
-	GLenum vboUsage_ = GL_STATIC_DRAW;
-	int sharesCount_ = 0;
-	std::vector<smart_pointer<SubMesh>> submeshes_;
-	void genBuffers(int submesh = 0);
-	void deleteAllBuffers(int submesh = 0);
-	void draw(int sumbmesh = 0);
 public:
-	Mesh(const Mesh& other);
-	Mesh();
 	~Mesh();
-	std::vector<Vector3> getVertices(int submesh = 0) const;
-	std::vector<Vector2> getUVs(int submesh = 0) const ;
-	std::vector<Vector3> getNormals(int submesh = 0) const;
-	std::vector<unsigned int> getIndices(int submesh = 0) const;
-	void setVertices(std::vector<Vector3>,int submesh = 0);
-	void setUVs(std::vector<Vector2>, int submesh = 0);
-	void setNormals(std::vector<Vector3>, int submesh = 0);
-	void setIndices(std::vector<unsigned int>, int submesh = 0);
-	int getSubMeshCount() const;
+	Mesh(const Mesh& other);
+	Mesh(GLenum drawingMode = GL_TRIANGLES, DataUsage dataUsage = DataUsage::VBO);
+
+	void setVertices	(std::vector<Vector3>*		vertices,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setTexCoords	(std::vector<Vector2>*		texCoords,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setNormals		(std::vector<Vector3>*		normals,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setTangents	(std::vector<Vector3>*		tangent,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setBitangents	(std::vector<Vector3>*		bitangent,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setIndices		(std::vector<unsigned int>*	indices,	int submesh = 0, GLenum VBOUsage = GL_STATIC_DRAW);
+
+	std::vector<Vector3>		getVertices	(int submesh = 0) const;
+	std::vector<Vector2>		getTexCoords(int submesh = 0) const;
+	std::vector<Vector3>		getNormals	(int submesh = 0) const;
+	std::vector<Vector3>		getTangent	(int submesh = 0) const;
+	std::vector<Vector3>		getBitangent(int submesh = 0) const;
+	std::vector<unsigned int>	getIndices	(int submesh = 0) const;
+
+	void setVertexIndex		(GLuint index, int submesh = 0);
+	void setTexCoordIndex	(GLuint index, int submesh = 0);
+	void setNormalIndex		(GLuint index, int submesh = 0);
+	void setTangentIndex	(GLuint index, int submesh = 0);
+	void setBitangentIndex	(GLuint index, int submesh = 0);
+
 	void setSubMeshCount(int count);
-	void setVBOUsage(GLenum usage);
+	int  getSubMeshCount() const;
+	void updateMeshData(bool isDataReadable);
 	void clear();
-	std::string name;
+private:
+	std::vector<SubMesh*> subMeshes_;
+	std::vector<GLMeshDrawer*> submeshesDrawers_;
+	const GLenum drawingMode_;
+	const DataUsage dataUsage_;
+	int sharesCount_;
+
+	void draw(int submesh);
 };
 
 inline int Mesh::getSubMeshCount() const
 {
-	return submeshes_.size();
+	return subMeshes_.size();
 }
 
-inline void Mesh::setSubMeshCount(int count)
+inline std::vector<Vector3> Mesh::getVertices(int submesh) const
 {
-	if (count > (int)submeshes_.size()) // adding new submeshes
-		submeshes_.resize(count, smart_pointer<SubMesh>(new SubMesh));
-	else 
+	if (submesh < 0 || submesh >= getSubMeshCount())
 	{
-		//removing submeshes
-		while (count < (int)submeshes_.size())
-		{
-			deleteAllBuffers(submeshes_.size() - 1);
-			submeshes_.pop_back();
-		}
+		Logger::PrintWarning("Error in Mesh::getVertices. Invalid Argument \n");
+		return std::vector<Vector3>();
 	}
+
+	return subMeshes_[submesh]->vertices;
 }
 
-inline void Mesh::setVBOUsage(GLenum usage)
+inline std::vector<Vector2> Mesh::getTexCoords(int submesh) const
 {
-	vboUsage_ = usage;
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::getTexCoords. Invalid Argument \n");
+		return std::vector<Vector2>();
+	}
+
+	return subMeshes_[submesh]->texCoords;
+}
+
+inline std::vector<Vector3> Mesh::getNormals(int submesh) const
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::getNormals. Invalid Argument \n");
+		return std::vector<Vector3>();
+	}
+
+	return subMeshes_[submesh]->normals;
+}
+
+inline std::vector<Vector3> Mesh::getTangent(int submesh) const
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::getTangent. Invalid Argument \n");
+		return std::vector<Vector3>();
+	}
+
+	return subMeshes_[submesh]->tangent;
+}
+
+inline std::vector<Vector3> Mesh::getBitangent(int submesh) const
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::getBitangent. Invalid Argument \n");
+		return std::vector<Vector3>();
+	}
+
+	return subMeshes_[submesh]->bitangent;
+}
+
+inline std::vector<unsigned int> Mesh::getIndices(int submesh) const
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::getIndices. Invalid Argument \n");
+		return std::vector<unsigned int>();
+	}
+	return subMeshes_[submesh]->indices;
 }
 
 #endif

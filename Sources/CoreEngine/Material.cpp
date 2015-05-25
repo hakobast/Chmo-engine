@@ -1,5 +1,8 @@
 
+#include "../Extras/GLUtils.h"
 #include "../Systems/RenderSystem.h"
+#include "../Components/Renderer.h"
+#include "../Debug/Logger.h"
 #include "Material.h"
 #include "Utils.h"
 
@@ -24,29 +27,29 @@ smart_pointer<Material> Material::Unlit()
 	return mat;
 }
 
-Material::Material(const Material& other) :Material(other.name)
+Material::Material(const Material& other) :name(other.name)
 {
 	textures = other.textures;
-	shader = other.shader;
+	shader = other.shader; //TODO implement shader duplication
 }
 
-Material::Material(std::string name) :name(name)
+Material::Material(const char* name,
+	const char* vertexShaderSource, int vShaderLength,
+	const char* fragmentShaderSource, int fShaderLength
+	/*,std::map<const char*, unsigned int> shaderAattributes*/) : name(name)
 {
-	//std::cout << "**************MATERIAL CREATED*************" << std::endl;
-	allMaterials.push_back(this);
-}
-
-Material::Material(std::string name, smart_pointer<ShaderProgram>& shader) : Material(name)
-{
-	this->shader = shader;
-}
-
-Material::Material(std::string name, const char* vertexShaderSource, int vShaderLength, const char* fragmentShaderSource, int fShaderLength) : Material(name)
-{
-	shader = smart_pointer<ShaderProgram>(new ShaderProgram());
+	check_gl_error();
+	shader = smart_pointer<ShaderProgram>(new ShaderProgram(Renderer::AllAttributes));
+	check_gl_error();
 	shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource, vShaderLength);
+	check_gl_error();
 	shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource, fShaderLength);
+
+	check_gl_error();
 	shader->createAndLinkProgram();
+	check_gl_error();
+
+	allMaterials.push_back(this);
 }
 
 Material::~Material()

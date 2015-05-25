@@ -1,4 +1,30 @@
+#include <map>
 #include "Renderer.h"
+
+const char* Renderer::vertexAttribName = "InVertex";
+const char* Renderer::texCoordAttribName = "InTexCoord0";
+const char* Renderer::normalAttribName = "InNormal";
+const char* Renderer::tangentAttribName = "InTangent";
+const char* Renderer::bitangentAttribName = "InBitangent";
+
+std::map<const char*, unsigned int> Renderer::AllAttributes{
+	{ vertexAttribName, 0 },
+	{ texCoordAttribName, 1 },
+	{ normalAttribName, 2 },
+	{ tangentAttribName, 3 },
+	{ bitangentAttribName, 4 } 
+};
+
+std::map<const char*, unsigned int> Renderer::StandartAttributes{
+	{ vertexAttribName, 0 },
+	{ texCoordAttribName, 1 },
+	{ normalAttribName, 2 },
+};
+
+std::map<const char*, unsigned int> Renderer::SmallAttributes{
+	{ vertexAttribName, 0 },
+	{ texCoordAttribName, 1 },
+};
 
 std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {
@@ -51,7 +77,7 @@ void Renderer::addMaterial(smart_pointer<Material> mat)
 
 	materials.push_back(mat);
 	getRenderSystem()->addMaterialForRenderer(mat, this, materials.size() - 1);
-	bindShaderAttributes(materials.size() - 1);
+	initAttributes(materials.size() - 1);
 }
 
 void Renderer::setMaterial(smart_pointer<Material> mat, int index)
@@ -64,13 +90,13 @@ void Renderer::setMaterial(smart_pointer<Material> mat, int index)
 		materials[index] = mat;
 		getRenderSystem()->removeMaterialForRenderer(materials[index], this, index);
 		getRenderSystem()->addMaterialForRenderer(mat, this, index);
-		bindShaderAttributes(index);
+		initAttributes(index);
 	}
 	else
 	{
 		materials.push_back(mat);
 		getRenderSystem()->addMaterialForRenderer(mat, this, materials.size() - 1);
-		bindShaderAttributes(materials.size() - 1);
+		initAttributes(materials.size() - 1);
 	}
 }
 
@@ -101,16 +127,26 @@ smart_pointer<Texture2D>& Renderer::getMainTexture()
 	return smart_pointer<Texture2D>::null();
 }
 
-void Renderer::bindShaderAttributes(int materialIndex)
+void Renderer::initAttributes(int materialIndex)
 {
-	if ((int)materials.size() <= materialIndex)
-		return;
+	smart_pointer<Material>& mat = materials[materialIndex];
 
-	smart_pointer<ShaderProgram>& shader = materials[materialIndex]->getShader();
+	std::map<const char*, unsigned int> attributes = mat->getShader()->getAttributes();
 
-	shader->bindAttribLocation(vertexAttribLocation, vertexAttribName);
-	shader->bindAttribLocation(texCoordAttribLocation, texCoordAttribName);
-	shader->bindAttribLocation(normalAttribLocation, normalAttribName);
-	shader->bindAttribLocation(tangAttribLocation, tangentAttribName);
-	shader->bindAttribLocation(bitangAttribLocation, bitangentAttribName);
+	if (materialIndex < (int)vertexAttribLocations.size())
+	{
+		vertexAttribLocations[materialIndex] = attributes[vertexAttribName];
+		texCoordAttribLocations[materialIndex] = attributes[texCoordAttribName];
+		normalAttribLocations[materialIndex] = attributes[normalAttribName];
+		tangAttribLocations[materialIndex] = attributes[tangentAttribName];
+		bitangAttribLocations[materialIndex] = attributes[bitangentAttribName];
+	}
+	else
+	{
+		vertexAttribLocations.push_back(attributes[vertexAttribName]);
+		texCoordAttribLocations.push_back(attributes[texCoordAttribName]);
+		normalAttribLocations.push_back(attributes[normalAttribName]);
+		tangAttribLocations.push_back(attributes[tangentAttribName]);
+		bitangAttribLocations.push_back(attributes[bitangentAttribName]);
+	}
 }

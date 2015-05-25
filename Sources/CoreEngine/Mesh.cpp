@@ -1,412 +1,244 @@
 
 #include "Mesh.h"
-#include "Utils.h"
+#include "../Extras/GLUtils.h"
+#include "../Debug/Logger.h"
+
+#include "GLMeshDrawer.h"
+
+Mesh::~Mesh()
+{
+	clear();
+}
 
 Mesh::Mesh(const Mesh& other)
+:drawingMode_(other.drawingMode_), dataUsage_(other.dataUsage_)
 {
-
 	setSubMeshCount(other.getSubMeshCount());
 
 	for (int i = 0; i < getSubMeshCount(); i++)
 	{
-		setVertices(other.getVertices(i));
-		setNormals(other.getNormals(i));
-		setUVs(other.getUVs(i));
-		setIndices(other.getIndices(i));
+		if (other.subMeshes_[i]->vertices.size() > 0)
+			setVertices(&other.subMeshes_[i]->vertices, i, other.subMeshes_[i]->vertexVBOUsage);
+		setVertexIndex(other.submeshesDrawers_[i]->getVertexIndex());
+
+		if (other.subMeshes_[i]->texCoords.size() > 0)
+			setTexCoords(&other.subMeshes_[i]->texCoords, i, other.subMeshes_[i]->texCoordVBOUsage);
+		setTexCoordIndex(other.submeshesDrawers_[i]->getTexCoordIndex());
+
+		if (other.subMeshes_[i]->normals.size() > 0)
+			setNormals(&other.subMeshes_[i]->normals, i, other.subMeshes_[i]->normalVBOUsage);
+		setNormalIndex(other.submeshesDrawers_[i]->getNormalIndex());
+
+		if (other.subMeshes_[i]->tangent.size() > 0)
+			setTangents(&other.subMeshes_[i]->tangent, i, other.subMeshes_[i]->tangentVBOUsage);
+		setTangentIndex(other.submeshesDrawers_[i]->getTangentIndex());
+
+		if (other.subMeshes_[i]->bitangent.size() > 0)
+			setBitangents(&other.subMeshes_[i]->bitangent, i, other.subMeshes_[i]->bitangentVBOUsage);
+		setBitangentIndex(other.submeshesDrawers_[i]->getBitangentIndex());
+
+		if (other.subMeshes_[i]->indices.size() > 0)
+			setIndices(&other.subMeshes_[i]->indices, i, other.subMeshes_[i]->indexVBOUsage);
 	}
 }
 
-Mesh::Mesh()
+Mesh::Mesh(GLenum drawingMode, DataUsage dataUsage) 
+:drawingMode_(drawingMode), dataUsage_(dataUsage)
 {
-	std::cout << "Mesh created" << std::endl;
-}
 
-Mesh::~Mesh()
-{
-	for (int i = 0; i < getSubMeshCount(); i++)
-		deleteAllBuffers(i);
-
-	std::cout << "~~~~Mesh" << std::endl;
-}
-
-void Mesh::genBuffers(int submesh)
-{
-	if (isVBOSupported())
-	{
-		//TODO implement functionality which can choose best memory type based on vbo change frequency
-
-		GLuint& vbo_id_n = submeshes_[submesh]->normal_buffer_id;
-		GLuint& vbo_id_t = submeshes_[submesh]->uv_buffer_id;
-		GLuint& vbo_id_v = submeshes_[submesh]->vertex_buffer_id;
-		GLuint& vbo_id_i = submeshes_[submesh]->index_buffer_id;
-
-		std::vector<Vector3>& vertices = submeshes_[submesh]->vertices;
-		std::vector<Vector2>& uvs = submeshes_[submesh]->uvs;
-		std::vector<Vector3>& normals = submeshes_[submesh]->normals;
-		std::vector<unsigned int>& indices = submeshes_[submesh]->indices;
-
-		//NORMALS
-		if (submeshes_[submesh]->_updateNormals && submeshes_[submesh]->normals.size() > 0)
-		{
-			//printf("UPDATING NORMALS\n");
-			if (vbo_id_n == 0)
-			{
-				glGenBuffers(1, &vbo_id_n);
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
-				glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vector3), &normals[0], vboUsage_);
-			}
-			else
-			{
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_n);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(Vector3), &normals[0]);
-			}
-
-			normals.clear();
-			submeshes_[submesh]->_updateNormals = false;
-		}
-
-		// TEX COORDS
-		if (submeshes_[submesh]->_updateTexCoords && submeshes_[submesh]->uvs.size() > 0)
-		{
-			//printf("UPDATING UVS\n");
-			if (vbo_id_t == 0)
-			{
-				glGenBuffers(1, &vbo_id_t);
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
-				glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(Vector2), &uvs[0], vboUsage_);
-			}
-			else
-			{
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_t);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, uvs.size() * sizeof(Vector2), &uvs[0]);
-			}
-
-			uvs.clear();
-			submeshes_[submesh]->_updateTexCoords = false;
-		}
-
-		//VERTICES
-		if (submeshes_[submesh]->_updateVertices && submeshes_[submesh]->indices.size() > 0)
-		{
-			//printf("UPDATING VERTICES\n");
-			if (vbo_id_v == 0)
-			{
-				glGenBuffers(1, &vbo_id_v);
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
-				glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], vboUsage_);
-			}
-			else
-			{
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_id_v);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vector3), &vertices[0]);
-			}
-
-			vertices.clear();
-			submeshes_[submesh]->_updateVertices = false;
-		}
-
-		//INDICES
-		if (submeshes_[submesh]->_updateIndices && submeshes_[submesh]->indices.size() > 0)
-		{
-			//printf("UPDATING INDICES\n");
-			if (vbo_id_i == 0)
-			{
-				glGenBuffers(1, &vbo_id_i);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], vboUsage_);
-			}
-			else
-			{
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id_i);
-				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
-			}
-
-			indices.clear();
-			submeshes_[submesh]->_updateIndices = false;
-		}
-	}
-}
-
-void Mesh::deleteAllBuffers(int submesh)
-{
-	if (isVBOSupported())
-	{
-		GLuint& vbo_id_n = submeshes_[submesh]->normal_buffer_id;
-		GLuint& vbo_id_t =     submeshes_[submesh]->uv_buffer_id;
-		GLuint& vbo_id_v = submeshes_[submesh]->vertex_buffer_id;
-		GLuint& vbo_id_i =  submeshes_[submesh]->index_buffer_id;
-
-		if (vbo_id_n > 0){glDeleteBuffers(1, &vbo_id_n);vbo_id_n = 0;}
-		if (vbo_id_t > 0){glDeleteBuffers(1, &vbo_id_t);vbo_id_t = 0;}
-		if (vbo_id_v > 0){glDeleteBuffers(1, &vbo_id_v);vbo_id_v = 0;}
-		if (vbo_id_i > 0){glDeleteBuffers(1, &vbo_id_i);vbo_id_i = 0;}
-	}
 }
 
 void Mesh::draw(int submesh)
-{	
-	//TEMP read fields from material;
-	GLuint vertexAttrib = 0;
-	GLuint texCoordAttrib = 1;
-	GLuint normalAttrib = 2;
+{
+	if (submesh >= 0 && submesh < getSubMeshCount())
+		submeshesDrawers_[submesh]->draw();
+}
 
-	GLuint vertex_count = submeshes_[submesh]->vertex_count;
-	GLuint uv_count = submeshes_[submesh]->uv_count;
-	GLuint normal_count = submeshes_[submesh]->normal_count;
-	GLuint index_count = submeshes_[submesh]->index_count;
-
-	if (vertex_count > 0)	glEnableVertexAttribArray(vertexAttrib);
-	if (uv_count > 0)		glEnableVertexAttribArray(texCoordAttrib);
-	if (normal_count > 0)	glEnableVertexAttribArray(normalAttrib);
-
-	//if hardware supports VBOs
-	if (isVBOSupported())
+void Mesh::setSubMeshCount(int count)
+{
+	if (count >= 0 && count < getSubMeshCount())
 	{
-		//std::cout << "***Draw using VBO***" << std::endl;
-
-		if (submeshes_[submesh]->_updateVBO())
-			genBuffers(submesh);
-
-		if (vertex_count > 0 && index_count > 0)
+		while (count != getSubMeshCount())
 		{
-			if (uv_count > 0)
-			{
-				//std::cout << "BIND TEXCOORD BUFFER: " << uv_count << std::endl;
-				glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->uv_buffer_id);
-				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, 0, 0);
-			}
-
-			if (normal_count > 0)
-			{
-				//std::cout << "BIND NORMAL BUFFER: " << normal_count << std::endl;
-				glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->normal_buffer_id);
-				glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, false, 0, 0);
-			}
-
-			//std::cout << "BIND VERTEX BUFFER: " << vertex_count << std::endl;
-			glBindBuffer(GL_ARRAY_BUFFER, submeshes_[submesh]->vertex_buffer_id);
-			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, false, 0, 0);
-
-			//std::cout << "BIND INDEX BUFFER: " << index_count << std::endl;
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submeshes_[submesh]->index_buffer_id);
-			glDrawElements(GL_TRIANGLES, submeshes_[submesh]->index_count, GL_UNSIGNED_INT, 0);
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			delete subMeshes_.back();		 subMeshes_.pop_back();
+			delete submeshesDrawers_.back(); submeshesDrawers_.pop_back();
 		}
 	}
-	else
+	else if ( count > getSubMeshCount())
 	{
-		std::cout << "***Draw using VERTEX ARRAYS***" << std::endl;
-
-		std::vector<Vector3>& vertices = submeshes_[submesh]->vertices;
-		std::vector<Vector2>& uvs = submeshes_[submesh]->uvs;
-		std::vector<Vector3>& normals = submeshes_[submesh]->normals;
-		std::vector<unsigned int>& indices = submeshes_[submesh]->indices;
-
-		if (vertex_count > 0 && index_count > 0)
+		while (count != getSubMeshCount())
 		{
-			if (uv_count > 0)		glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, 0, &uvs[0]);
-			if (normal_count > 0)	glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, false, 0, &normals[0]);
+			subMeshes_.push_back(new SubMesh);
 
-			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, false, 0, &vertices[0]);
-			glDrawElements(GL_TRIANGLES, submeshes_[submesh]->index_count, GL_UNSIGNED_INT, &indices[0]);
+			GLMeshDrawer* meshDrawer = new GLMeshDrawer(drawingMode_, dataUsage_);
+
+			//TEMP
+			meshDrawer->setVertexIndex(0);
+			meshDrawer->setTexCoordIndex(1);
+			meshDrawer->setNormalIndex(2);
+			meshDrawer->setTangentIndex(3);
+			meshDrawer->setBitangentIndex(4);
+
+			submeshesDrawers_.push_back(meshDrawer);
 		}
 	}
-
-	if (vertex_count)	glDisableVertexAttribArray(vertexAttrib);
-	if (uv_count)		glDisableVertexAttribArray(texCoordAttrib);
-	if (normal_count)	glDisableVertexAttribArray(normalAttrib);
-}
-
-std::vector<Vector3> Mesh::getVertices(int submesh) const
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return std::vector<Vector3>();
-	}
-
-	smart_pointer<SubMesh> subMesh = submeshes_[submesh];
-
-	if (isVBOSupported())
-	{
-		std::vector<Vector3> data(subMesh->vertex_count);
-		glBindBuffer(GL_ARRAY_BUFFER, subMesh->vertex_buffer_id);
-
-// 		glGetVertexAttribPointerv(0, GL_VERTEX_ATTRIB_ARRAY_POINTER, );
-// 		std::cout << "DOUBLE POINTER " << data.size() << std::endl;
-		
-	//	glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector3), data.data());
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-		return data;
-	}
-	else
-	{
-		return subMesh->vertices;
-	}
-}
-
-std::vector<Vector2> Mesh::getUVs(int submesh) const
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return std::vector<Vector2>();
-	}
-
-	smart_pointer<SubMesh> subMesh = submeshes_[submesh];
-
-	if (isVBOSupported())
-	{
-		std::vector<Vector2> data(subMesh->uv_count);
-		glBindBuffer(GL_ARRAY_BUFFER, subMesh->uv_buffer_id);
-		//glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector2), data.data());
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		return data;
-	}
-	else
-	{
-		return subMesh->uvs;
-	}
-}
-
-std::vector<Vector3> Mesh::getNormals(int submesh) const
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return std::vector<Vector3>();
-	}
-
-	smart_pointer<SubMesh> subMesh = submeshes_[submesh];
-
-	if (isVBOSupported())
-	{
-		std::vector<Vector3> data(subMesh->normal_count);
-		glBindBuffer(GL_ARRAY_BUFFER, subMesh->normal_buffer_id);
-		//glGetBufferSubData(GL_ARRAY_BUFFER, 0, data.size()*sizeof(Vector3), data.data());
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		return data;
-	}
-	else
-	{
-		return subMesh->normals;
-	}
-}
-
-std::vector<unsigned int> Mesh::getIndices(int submesh)const
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return std::vector<unsigned int>();
-	}
-
-	smart_pointer<SubMesh> subMesh = submeshes_[submesh];
-
-	if (isVBOSupported())
-	{
-		std::vector<unsigned int> data(subMesh->index_count);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subMesh->index_buffer_id);
-		//glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size()*sizeof(unsigned int), data.data());
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		return data;
-	}
-	else
-	{
-		return subMesh->indices;
-	}
-}
-
-void Mesh::setVertices(std::vector<Vector3> vertices, int submesh)
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return;
-	}
-
-	if (submeshes_[submesh]->vertex_buffer_id != 0 && submeshes_[submesh]->vertices.size() != vertices.size())
-	{
-		glDeleteBuffers(1, &submeshes_[submesh]->vertex_buffer_id);
-		submeshes_[submesh]->vertex_buffer_id = 0;
-	}
-
-	submeshes_[submesh]->_updateVertices = true;
-	submeshes_[submesh]->vertices = vertices;
-	submeshes_[submesh]->vertex_count = vertices.size();
-}
-
-void Mesh::setUVs(std::vector<Vector2> uvs, int submesh)
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return;
-	}
-
-	if (submeshes_[submesh]->uv_buffer_id != 0 && submeshes_[submesh]->uvs.size() != uvs.size())
-	{
-		glDeleteBuffers(1, &submeshes_[submesh]->uv_buffer_id);
-		submeshes_[submesh]->uv_buffer_id = 0;
-	}
-
-	submeshes_[submesh]->_updateTexCoords = true;
-	submeshes_[submesh]->uvs = uvs;
-	submeshes_[submesh]->uv_count = uvs.size();
-}
-
-void Mesh::setNormals(std::vector<Vector3> normals, int submesh)
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return;
-
-	}
-	if (submeshes_[submesh]->normal_buffer_id != 0 && submeshes_[submesh]->normals.size() != normals.size())
-	{
-		glDeleteBuffers(1, &submeshes_[submesh]->normal_buffer_id);
-		submeshes_[submesh]->normal_buffer_id = 0;
-	}
-
-	submeshes_[submesh]->_updateNormals = true;
-	submeshes_[submesh]->normals = normals;
-	submeshes_[submesh]->normal_count = normals.size();
-}
-
-void Mesh::setIndices(std::vector<unsigned int> indices, int submesh)
-{
-	if (submesh >= (int)submeshes_.size())
-	{
-		printf("There is no submesh at index %d\n", submesh);
-		return;
-	}
-
-	if (submeshes_[submesh]->index_buffer_id != 0 && submeshes_[submesh]->indices.size() != indices.size())
-	{
-		glDeleteBuffers(1, &submeshes_[submesh]->index_buffer_id);
-		submeshes_[submesh]->index_buffer_id = 0;
-	}
-
-	submeshes_[submesh]->_updateIndices = true;
-	submeshes_[submesh]->indices = indices;
-	submeshes_[submesh]->index_count = indices.size();
 }
 
 void Mesh::clear()
 {
-	for (int i = 0; i < (int)submeshes_.size(); i++)
-	{
-		smart_pointer<SubMesh>& m = submeshes_[i];
+	for (GLMeshDrawer* meshDrawer : submeshesDrawers_)
+		delete meshDrawer;
 
-		deleteAllBuffers(i);
-		m->vertices.clear(); m->vertex_count = 0;
-		m->uvs.clear(); m->uv_count = 0;
-		m->normals.clear(); m->normal_count = 0;
-		m->indices.clear(); m->index_count = 0;
+	for (SubMesh* subMesh : subMeshes_)
+		delete subMesh;
+}
+
+void Mesh::updateMeshData(bool isDataReadable)
+{
+	for (size_t i = 0, len = subMeshes_.size(); i < len; i++)
+	{
+		submeshesDrawers_[i]->updateBuffers();
+		if (!isDataReadable && submeshesDrawers_[i]->dataUsage == VBO)
+		{
+			subMeshes_[i]->vertices.clear();
+			subMeshes_[i]->texCoords.clear();
+			subMeshes_[i]->normals.clear();
+			subMeshes_[i]->tangent.clear();
+			subMeshes_[i]->bitangent.clear();
+			subMeshes_[i]->indices.clear();
+		}
 	}
+}
+
+void Mesh::setVertices(std::vector<Vector3>* vertices, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || vertices->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setVertices. Invalid Argument \n");
+		return;
+	}
+	
+	subMeshes_[submesh]->vertexVBOUsage = VBOUsage;
+	subMeshes_[submesh]->vertices = *vertices;
+	submeshesDrawers_[submesh]->setVertexData(3, false, vertices->size(), subMeshes_[submesh]->vertices[0].getPointer(), VBOUsage);
+}
+
+void Mesh::setTexCoords(std::vector<Vector2>* texCoords, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || texCoords->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setTexCoords. Invalid Argument \n");
+		return;
+	}
+
+	subMeshes_[submesh]->texCoordVBOUsage = VBOUsage;
+	subMeshes_[submesh]->texCoords = *texCoords;
+	submeshesDrawers_[submesh]->setTexCoordData(2, false, texCoords->size(), subMeshes_[submesh]->texCoords[0].getPointer(), VBOUsage);
+}
+
+void Mesh::setNormals(std::vector<Vector3>* normals, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || normals->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setNormals. Invalid Argument \n");
+		return;
+	}
+
+	subMeshes_[submesh]->normalVBOUsage = VBOUsage;
+	subMeshes_[submesh]->normals = *normals;
+	submeshesDrawers_[submesh]->setNormalData(true, normals->size(), (*normals)[0].getPointer(), VBOUsage);
+}
+
+void Mesh::setTangents(std::vector<Vector3>* tangent, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || tangent->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setTangents. Invalid Argument \n");
+		return;
+	}
+
+	subMeshes_[submesh]->tangentVBOUsage = VBOUsage;
+	subMeshes_[submesh]->tangent = *tangent;
+	submeshesDrawers_[submesh]->setTangentData(3, false, tangent->size(), subMeshes_[submesh]->tangent[0].getPointer(), VBOUsage);
+}
+
+void Mesh::setBitangents(std::vector<Vector3>* bitangent, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || bitangent->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setBitangents. Invalid Argument \n");
+		return;
+	}
+
+	subMeshes_[submesh]->bitangentVBOUsage = VBOUsage;
+	subMeshes_[submesh]->bitangent = *bitangent;
+	submeshesDrawers_[submesh]->setBitangentData(3, false, bitangent->size(), subMeshes_[submesh]->bitangent[0].getPointer(), VBOUsage);
+}
+
+void Mesh::setIndices(std::vector<unsigned int>* indices, int submesh, GLenum VBOUsage)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount() || indices->size() == 0)
+	{
+		Logger::PrintWarning("Error in Mesh::setIndices. Invalid Argument \n");
+		return;
+	}
+
+	subMeshes_[submesh]->indexVBOUsage = VBOUsage;
+	subMeshes_[submesh]->indices = *indices;
+	submeshesDrawers_[submesh]->setIndexData(indices->size(), subMeshes_[submesh]->indices.data(), VBOUsage);
+}
+
+inline void Mesh::setVertexIndex(GLuint index, int submesh)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::setVertexIndex. Invalid Argument \n");
+		return;
+	}
+
+	submeshesDrawers_[submesh]->setVertexIndex(index);
+}
+
+inline void Mesh::setTexCoordIndex(GLuint index, int submesh)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::setTexCoordIndex. Invalid Argument \n");
+		return;
+	}
+
+	submeshesDrawers_[submesh]->setTexCoordIndex(index);
+}
+
+inline void Mesh::setNormalIndex(GLuint index, int submesh)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::setNormalIndex. Invalid Argument \n");
+		return;
+	}
+
+	submeshesDrawers_[submesh]->setNormalIndex(index);
+}
+
+inline void Mesh::setTangentIndex(GLuint index, int submesh)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::setTangentIndex. Invalid Argument \n");
+		return;
+	}
+
+	submeshesDrawers_[submesh]->setTangentIndex(index);
+}
+
+inline void Mesh::setBitangentIndex(GLuint index, int submesh)
+{
+	if (submesh < 0 || submesh >= getSubMeshCount())
+	{
+		Logger::PrintWarning("Error in Mesh::setBitangentIndex. Invalid Argument \n");
+		return;
+	}
+
+	submeshesDrawers_[submesh]->setBitangentIndex(index);
 }

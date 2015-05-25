@@ -22,7 +22,7 @@ public class MainActivity extends Activity
 
 	public void onResume()
 	{
-		super.onPause();
+		super.onResume();
 		bridge.resume();
 	}
 

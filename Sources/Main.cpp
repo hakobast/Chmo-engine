@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "CoreEngine/ChmoEngine.h"
+#include "Extras/GLUtils.h"
 
 #include "Testings/Ship.h"
 #include "Testings/FPSCounter.cpp"
@@ -42,7 +43,7 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
+ 
 void CreateGame()
 {
 	//creating game logics
@@ -56,11 +57,13 @@ void CreateGame()
 // 	light->setLightType(POSITIONAL);
 	//light->setLinearAttenuation(0.1f);
 	//light->setSpotCutoff(15.0f);
-
+	 
 	AssetFile vertexShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.vert");
 	AssetFile fragmentShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.frag");
 
-	smart_pointer<Material> mat(new Material("Unlit", (char*)vertexShaderAsset.data, vertexShaderAsset.length, (char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
+	smart_pointer<Material> mat(new Material("Unlit",
+		(char*)vertexShaderAsset.data, vertexShaderAsset.length,
+		(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
 
 	Engine::getInstance().assetLoader->releaseAsset(&vertexShaderAsset);
 	Engine::getInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
@@ -71,10 +74,10 @@ void CreateGame()
 	camerObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
 
 	Camera* camera = camerObj->addComponent<Camera>();
-	camera->setProjectionMode(ProjectionMode::PERSPECTIVE);
+	camera->setProjectionMode(ProjectionMode::ORTHOGRAPHIC);
 	camera->setOrthoSize(5.0f);
 	camera->setFOVY(60.0f);
-
+	
 	int regions[4] = { 0, 0, 128, 128 };
 	smart_pointer<Texture2D> texture = LoadTexture("Resources/heightmap2.bmp");
 	smart_pointer<Texture2D> textureTransparent = LoadTexture("Resources/vtr.bmp");
@@ -83,7 +86,7 @@ void CreateGame()
 	mat->addTexture(textureTransparent);
 	mat->setColor(Color::WHITE);
 
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 // 		obj->addComponent<Terrain>();
@@ -128,17 +131,17 @@ void CreateGame()
 
 	smart_pointer<Mesh> mesh(new Mesh);
 	mesh->setSubMeshCount(1);
-	mesh->setVertices(verts);
-	mesh->setUVs(texcoords);
-	mesh->setIndices(indices);
+	mesh->setVertices(&verts);
+ 	mesh->setTexCoords(&texcoords);
+ 	mesh->setIndices(&indices);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		GameObject* obj = new GameObject("MY OBJ");
 		MeshRenderer* meshRend = obj->addComponent<MeshRenderer>();
 		meshRend->setMainMaterial(mat);
 		meshRend->setMesh(mesh);
 
-		obj->getTransform()->Location.set(0.0f, 0.0f, -2.0f);
+		obj->getTransform()->Location.set(2.0f*i, 0.0f, -2.0f);
 	}
 }

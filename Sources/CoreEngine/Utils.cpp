@@ -1,6 +1,7 @@
 #include <chrono>
 
 #include "Utils.h"
+#include "../Debug/Logger.h"
 
 // calculates tangents for simple Triangle rendering
 void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, std::vector<Vector3>&normals, Vector3* tangent, Vector3* bitangent)
@@ -44,35 +45,4 @@ void calcTangent(std::vector<Vector3>& verts, std::vector<Vector2>& texcoords, s
 		if (normal.cross(tang).dot(bitangent[i]) < 0.0f)
 			tangent[i] = tangent[i] * -1.0f;
 	}
-}
-
-GLboolean isExtensionSupported(const char* extension)
-{
-	const GLubyte* exts = glGetString(GL_EXTENSIONS);
-	char* extToken = strtok((char*)exts, " ");
-
-	while (extToken != NULL)
-	{
-		int res = strcmp(extToken, extension);
-
-		if (res == 0)
-			return true;
-
-		extToken = strtok(NULL, " ");
-	}
-
-	return false;
-}
-
-GLboolean isVBOSupported()
-{
-	static bool first = true;
-	static GLboolean hasVBO;
-	if (first)
-	{
-		hasVBO = isExtensionSupported("GL_ARB_vertex_buffer_object");
-		first = false;
-	}
-
-	return hasVBO;
 }

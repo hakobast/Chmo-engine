@@ -49,15 +49,15 @@ void RenderSystem::Init()
 void RenderSystem::Update()
 {
 	//std::cout << "RenderSystem:: Update() " << std::endl;
+
+	//TODO apply multiple cameras
+	if (Camera::main == NULL)
+		return;
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	//TODO apply multiple cameras
-	if (Camera::main == NULL)
-		return;
 
 	static Matrix4 ModelMatrix, ViewMatrix, ModelViewMatrix, ModelViewProjectionMatrix;
 

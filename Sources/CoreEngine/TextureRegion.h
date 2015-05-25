@@ -10,11 +10,12 @@ public:
 	TextureRegion(){};
 	TextureRegion(const GLfloat* uv)
 	{
-		memcpy(u_v, uv, sizeof(GLfloat)* 8);
+		memcpy(this->uv, uv, sizeof(GLfloat) * 8);
 	}
+
 	//float operator [](int index) const;
 	GLfloat* operator [](int index);
-	GLfloat u_v[8];
+	GLfloat uv[8];
 };
 
 //inline float TextureRegion::operator[](int index)const
@@ -24,6 +25,6 @@ public:
 
 inline GLfloat* TextureRegion::operator[](int index)
 {
-	return &u_v[index];
+	return &uv[index];
 }
 #endif

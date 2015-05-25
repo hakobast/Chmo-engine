@@ -18,11 +18,6 @@ JNIEXPORT void JNICALL Java_com_example_spaceshipgame_GameLibJNIWrapper_init_1as
 	(JNIEnv * env, jclass cls, jobject assetManager)
 {
 	assetLoader = new AndroidAssetLoader(AAssetManager_fromJava(env, assetManager));
-
-	AssetFile asset = assetLoader->loadAsset("test.txt");
-	
-	Logger::Print("FILE %s\n", (char*)asset.data);
-	__android_log_print(ANDROID_LOG_DEBUG, "ChmoEngine", "FILE %s\n", (char*)asset.data);
 }
 
 JNIEXPORT void JNICALL Java_com_example_spaceshipgame_GameLibJNIWrapper_on_1surface_1created

@@ -39,6 +39,7 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 	std::vector<unsigned int>& uIndices,
 	std::vector<unsigned int>& nIndices);
 
+//FIXME
 std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile)
 {
 	vector<GameObject*> gameObjects;
@@ -415,10 +416,10 @@ void setVertexAttributes(smart_pointer<Mesh>& mesh, int subMesh,
 
 	printf("submeshes %d, index %d \n", mesh->getSubMeshCount(), subMesh);
 
-	mesh->setVertices(vertices, subMesh);
-	mesh->setUVs(uvs, subMesh);
-	mesh->setNormals(normals, subMesh);
-	mesh->setIndices(indices, subMesh);
+	mesh->setVertices(&vertices, subMesh);
+	mesh->setTexCoords(&uvs, subMesh);
+	mesh->setNormals(&normals, subMesh);
+	mesh->setIndices(&indices, subMesh);
 }
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t,unsigned int& index)
@@ -505,7 +506,7 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 			fscanf(file, "%s\n", line);
 			//std::cout << "NAME: " << name << std::endl;
 
-			mat = smart_pointer<Material>(new Material(line));
+			//mat = smart_pointer<Material>(new Material(line));
 			materials.push_back(mat);
 		}
 		else if (strcmp(lineHeader, "map_Ka") == 0)
@@ -569,13 +570,13 @@ std::vector<smart_pointer<Material>> LoadMtl(const char* filename)
 		}
 		else if (strcmp(lineHeader, "Ns") == 0)
 		{
-			fscanf(file, "%f\n", &mat->shininess);
+			//fscanf(file, "%f\n", &mat->shininess);
 
 			//std::cout << "Shiness: " << shininess << std::endl;
 		}
 		else if (strcmp(lineHeader, "illum") == 0)
 		{
-			fscanf(file, "%d\n", &mat->illum);
+			//fscanf(file, "%d\n", &mat->illum);
 
 			//std::cout << "Illum: " << illum << std::endl;
 		}
@@ -670,7 +671,7 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 
 	if ((reader.getData() == 0) || (reader.getWidth() == 0) || (reader.getHeight() == 0))
 	{
-		Logger::PrintError("Error occurred while loading imafe file %s", filename);
+		Logger::PrintError("Error occurred while loading image file %s", filename);
 		return smart_pointer<Texture2D>::null();
 	}
 

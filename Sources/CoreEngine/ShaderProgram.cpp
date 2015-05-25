@@ -2,12 +2,13 @@
 #include <iostream>
 #include <vector>
 
+#include "../Debug/Logger.h"
+#include "../Extras/GLUtils.h"
 #include "ShaderProgram.h"
 #include "Utils.h"
 
-ShaderProgram::ShaderProgram()
+ShaderProgram::ShaderProgram(std::map<const char*, unsigned int> attributes) :attributes_(attributes)
 {
-	nShaders_ = 0;
 	shaders_[VERTEX_SHADER] = 0;
 	shaders_[FRAGMENT_SHADER] = 0;
 	//_shaders[GEOMETRY_SHADER] = 0;
@@ -27,25 +28,28 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source, int length)
 {
 	GLint lengths[] = { length };
-
+	
+	check_gl_error();
 	GLuint shader = glCreateShader(shader_type);
+	check_gl_error();
 	glShaderSource(shader, 1, &source, lengths);
-
+	check_gl_error();
 	glCompileShader(shader);
 
+	check_gl_error();
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+	check_gl_error();
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infoLog = new GLchar[infoLogLength];
 		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
-		std::cerr << "Shader compile log: " << infoLog << std::endl;
+		Logger::PrintError("Shader compile log: %s", infoLog);
 		delete[] infoLog;
 		return;
 	}
-	nShaders_++;
 
 	if (shader_type == GL_VERTEX_SHADER)
 		shaders_[VERTEX_SHADER] = shader;
@@ -58,6 +62,9 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source,
 void ShaderProgram::createAndLinkProgram()
 {
 	program_ = glCreateProgram();
+	
+	for (std::map<const char*, unsigned int>::iterator it = attributes_.begin(); it != attributes_.end(); it++)
+		glBindAttribLocation(program_, it->second, it->first);
 
 	if (shaders_[VERTEX_SHADER] != 0)
 		glAttachShader(program_, shaders_[VERTEX_SHADER]);
@@ -69,14 +76,15 @@ void ShaderProgram::createAndLinkProgram()
 	glLinkProgram(program_);
 
 	GLint status;
-	glGetShaderiv(program_, GL_COMPILE_STATUS, &status);
+	glGetProgramiv(program_, GL_LINK_STATUS, &status);
+
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;
 		glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infoLog = new GLchar[infoLogLength];
 		glGetProgramInfoLog(program_, infoLogLength, NULL, infoLog);
-		std::cerr << "Program link log: " << infoLog << std::endl;
+		Logger::PrintError("Program link log: %s", infoLog);
 		delete[] infoLog;
 	}
 

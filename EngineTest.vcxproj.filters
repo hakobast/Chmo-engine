@@ -207,6 +207,18 @@
     <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\Extras\GLUtils.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\GLMeshDrawer.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -332,9 +344,6 @@
     <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
@@ -350,5 +359,19 @@
     <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Extras\GLUtils.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EngineTest.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

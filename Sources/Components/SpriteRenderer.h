@@ -24,9 +24,9 @@ public:
 	Color getColor();
 private:
 	int frame_ = 0;
-	GLfloat meterPerPixel_;
+	GLfloat meterPerPixel_ = 0;
 
-	GLMeshDrawer* drawer;
+	GLMeshDrawer* drawer = 0;
 	Vector2* verts_;
 	Vector2* texcoords_;
 	Vector3* normals_;

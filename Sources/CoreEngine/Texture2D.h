@@ -21,7 +21,7 @@ private:
 	GLfloat anisotroplevel = 1.0f;
 
 protected:
-	TextureRegion* textures;
+	TextureRegion* textures = NULL;
 	GLuint texture_id;
 	int frameCount = 1;
 public:

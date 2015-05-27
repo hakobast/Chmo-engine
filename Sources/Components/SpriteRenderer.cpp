@@ -131,8 +131,8 @@ void SpriteRenderer::setTextureFrame(int frame)
 		float width = (region->uv[2] - region->uv[0])*txt->width;
 		float height = (region->uv[5] - region->uv[1])*txt->height;
 
-		GLfloat wRange_ = meterPerPixel_*width;
-		GLfloat hRange_ = meterPerPixel_*height;
+		float wRange_ = meterPerPixel_*width;
+		float hRange_ = meterPerPixel_*height;
 
 		verts_[0].set(-wRange_, -hRange_);
 		verts_[1].set(wRange_, -hRange_);

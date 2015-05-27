@@ -26,7 +26,7 @@ private:
 	uint64_t lastTime_;
 	GLfloat deltaTime_ = 0;
 	GLfloat timeSinceGameStarted_ = 0;
-	GLuint frame_ = 1;
+	GLuint frame_ = 0;
 };
 
 //static functions

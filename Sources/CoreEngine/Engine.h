@@ -18,8 +18,18 @@ class Engine : public DisplayModuleObserver
 {
 friend class GameObject;
 public:
+	static Engine& getInstance()
+	{
+		static Engine engine;
+		return engine;
+	}
+
 	~Engine();
-    void Create();
+
+	DisplayModule* displayModule = 0;
+	AssetLoader* assetLoader = 0;
+
+    void Start();
 	void Resume();
 	void Pause();
     void addSystem(System &s, int priority);
@@ -31,17 +41,15 @@ public:
 	template<class T> T* FindComponent() const;
 	template<class T> std::vector<T*> FindComponents() const;
 
-	static Engine& getInstance()
-	{
-		static Engine engine;
-		return engine;
-	}
-
-	DisplayModule* displayModule;
-	AssetLoader* assetLoader;
 protected:
 	void draw();
 private:
+
+	Engine()
+	{
+		std::cout << "ENGINE created" << std::endl;
+	}
+
 	std::vector<Component*> _compInitList; 
 	std::vector<Component*> _compInitQueue;
 	std::vector<Component*> _compDestroyList;
@@ -50,11 +58,6 @@ private:
     std::vector<Component*> _components;
     std::vector<GameObject*> _gameObjects;
     std::vector<System*> _systems;
-
-	Engine()
-	{
-		std::cout << "ENGINE created" << std::endl;
-	}
 
 	void Cleanup();
 

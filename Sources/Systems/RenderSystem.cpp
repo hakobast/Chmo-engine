@@ -66,17 +66,18 @@ void RenderSystem::Update()
 
 	//std::cout << "MATERIALS " << Material::allMaterials.size() << std::endl;
 
- 	for (size_t i = 0, len = Material::allMaterials.size(); i < len; i++)
+ 	for (size_t i = 0, len = Material::allMaterials_.size(); i < len; i++)
  	{
- 		Material* mat = Material::allMaterials[i];
+ 		Material* mat = Material::allMaterials_[i];
  
  		//std::cout << "SHARINGS " << mat->sharingInfo.size() << std::endl;
 		//printf("Batching:::::::\n");
+
 		mat->bind();
 		{
- 			for (size_t r = 0, rlen = mat->sharingInfo.size(); r < rlen; r++)
+ 			for (size_t r = 0, rlen = mat->sharingInfo_.size(); r < rlen; r++)
  			{
-				Renderer* rend = mat->sharingInfo[r].rend;
+				Renderer* rend = mat->sharingInfo_[r].rend;
 				Transform* transform = rend->getTransform();
 
 				transform->getMatrix(ModelMatrix, true);
@@ -87,7 +88,7 @@ void RenderSystem::Update()
 				GLint loc = mat->getShader()->getUniformLocation("ModelViewProjectionMatrix");
 				glUniformMatrix4fv(loc, 1, false, &ModelViewProjectionMatrix[0]);
 
-				rend->Render(mat->sharingInfo[r].materialIndex);
+				rend->Render(mat->sharingInfo_[r].materialIndex);
  			}
 		}
  		mat->unbind();

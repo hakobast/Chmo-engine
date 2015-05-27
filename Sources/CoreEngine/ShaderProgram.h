@@ -29,7 +29,6 @@ public:
 	void bind();
 	void unbind();
 	GLuint getProgram();
-	void deleteProgram();
 	const std::map<const char*, unsigned int> getAttributes() const;
 	std::vector<UniformDesc> getUniforms(GLenum typeFilter = -1);
 	GLint getUniformLocation(const char* name);
@@ -103,19 +102,11 @@ inline GLuint ShaderProgram::getProgram()
 	return program_;
 }
 
-inline void ShaderProgram::deleteProgram()
-{
-	glDeleteProgram(program_);
-	program_ = -1;
-}
-
 #include "../Extras/GLUtils.h"
 #include "../Debug/Logger.h"
 inline void ShaderProgram::bind()
 {
-	check_gl_error();
 	glUseProgram(program_);
-	check_gl_error();
 }
 
 inline void ShaderProgram::unbind()

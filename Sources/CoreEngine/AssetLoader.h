@@ -9,8 +9,8 @@ struct AssetFile
 		:length(0), data(0), handler(0){}
 
 	const long length;
-	const void* data;
-	const void* handler;
+	const void* data = 0;
+	const void* handler = 0;
 };
 
 class AssetLoader

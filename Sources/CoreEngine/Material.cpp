@@ -6,7 +6,7 @@
 #include "Material.h"
 #include "Utils.h"
 
-std::vector<Material*> Material::allMaterials;
+std::vector<Material*> Material::allMaterials_;
 
 smart_pointer<Material> Material::Diffuse()
 {
@@ -29,8 +29,8 @@ smart_pointer<Material> Material::Unlit()
 
 Material::Material(const Material& other) :name(other.name)
 {
-	textures = other.textures;
-	shader = other.shader; //TODO implement shader duplication
+	textures_ = other.textures_;
+	shader_ = other.shader_; //TODO implement shader duplication
 }
 
 Material::Material(const char* name,
@@ -38,74 +38,69 @@ Material::Material(const char* name,
 	const char* fragmentShaderSource, int fShaderLength
 	/*,std::map<const char*, unsigned int> shaderAattributes*/) : name(name)
 {
-	check_gl_error();
-	shader = smart_pointer<ShaderProgram>(new ShaderProgram(Renderer::AllAttributes));
-	check_gl_error();
-	shader->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource, vShaderLength);
-	check_gl_error();
-	shader->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource, fShaderLength);
+	shader_ = smart_pointer<ShaderProgram>(new ShaderProgram(Renderer::AllAttributes));
+	shader_->loadShaderFromString(GL_VERTEX_SHADER, vertexShaderSource, vShaderLength);
+	shader_->loadShaderFromString(GL_FRAGMENT_SHADER, fragmentShaderSource, fShaderLength);
+	shader_->createAndLinkProgram();
 
-	check_gl_error();
-	shader->createAndLinkProgram();
-	check_gl_error();
-
-	allMaterials.push_back(this);
+	allMaterials_.push_back(this);
 }
 
 Material::~Material()
 {
-	vectorRemove<Material>(allMaterials, this);
+	vectorRemove<Material>(allMaterials_, this);
 }
 
 void Material::bind()
 {
 	//glEnable(GL_TEXTURE_2D);
 
-	if (!shader.isEmpty())
-		shader->bind();
-
-	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
+	//check_gl_error();
+	if (!shader_.isEmpty())
+		shader_->bind();
+	//check_gl_error();
+	for (size_t i = 0, ilen = textures_.size(); i < ilen; i++)
 	{
-		if (!textures[i].isEmpty())
+		if (!textures_[i].isEmpty())
 		{
 			glActiveTexture(GL_TEXTURE0 + i);
-			textures[i]->bindTexture();
+			textures_[i]->bindTexture();
 		}
 	}
 }
 
 void Material::unbind()
 {
-	for (size_t i = 0, ilen = textures.size(); i < ilen; i++)
+	for (size_t i = 0, ilen = textures_.size(); i < ilen; i++)
 	{
-		if (!textures[i].isEmpty())
+		if (!textures_[i].isEmpty())
 		{
-			textures[i]->unbindTexture();
+			textures_[i]->unbindTexture();
 		}
 	}
 
-	if (!shader.isEmpty())
-		shader->unbind();
+	if (!shader_.isEmpty())
+		shader_->unbind();
 }
 
 void Material::setTexture(smart_pointer<Texture2D> texture, int index)
 {
-	if (index >= (int)textures.size())
+	if (index >= (int)textures_.size())
 	{
-		textures.push_back(texture);
-		index = textures.size() - 1;
+		textures_.push_back(texture);
+		index = textures_.size() - 1;
 	}
 	else
 	{
-		textures[index] = texture;
+		textures_[index] = texture;
 	}
 
-	if (!shader.isEmpty())
+	if (!shader_.isEmpty())
 	{
-		std::vector<UniformDesc> samplers = shader->getUniforms(GL_SAMPLER_2D);
+		std::vector<UniformDesc> samplers = shader_->getUniforms(GL_SAMPLER_2D);
 		if (index < (int)samplers.size())
 		{
-			shader->setUniform1i(samplers[index].name, index);
+			shader_->setUniform1i(samplers[index].name, index);
 		}
 	}
 }
@@ -113,21 +108,21 @@ void Material::setTexture(smart_pointer<Texture2D> texture, int index)
 
 void Material::addTexture(smart_pointer<Texture2D> texture, char* samplerName)
 {
-	textures.push_back(texture);
+	textures_.push_back(texture);
 
-	if (!shader.isEmpty())
+	if (!shader_.isEmpty())
 	{
 		if (samplerName != NULL)
 		{
-			shader->setUniform1i(samplerName, textures.size() - 1);
+			shader_->setUniform1i(samplerName, textures_.size() - 1);
 		}
 		else
 		{
-			std::vector<UniformDesc> samplers = shader->getUniforms(GL_SAMPLER_2D);
-			if (textures.size() <= samplers.size())
+			std::vector<UniformDesc> samplers = shader_->getUniforms(GL_SAMPLER_2D);
+			if (textures_.size() <= samplers.size())
 			{
 				//printf("Sampler %s\n", samplers[textures.size() - 1].name);
-				shader->setUniform1i(samplers[textures.size() - 1].name, textures.size() - 1);
+				shader_->setUniform1i(samplers[textures_.size() - 1].name, textures_.size() - 1);
 			}
 		}
 	}
@@ -135,9 +130,9 @@ void Material::addTexture(smart_pointer<Texture2D> texture, char* samplerName)
 
 void Material::setColor(Color c, const char* propertyName)
 {
-	if (!shader.isEmpty())
+	if (!shader_.isEmpty())
 	{
-		shader->setUniform4f(propertyName, c.getR(), c.getG(), c.getB(), c.getA());
+		shader_->setUniform4f(propertyName, c.getR(), c.getG(), c.getB(), c.getA());
 	}
 }
 
@@ -146,12 +141,12 @@ Color Material::getColor(const char* propertyName)
 {
 	// implement Uniform reads
 
-	if (!shader.isEmpty())
+	if (!shader_.isEmpty())
 	{
 		GLfloat* colorData = new GLfloat[4];
 
-		GLuint loc = shader->getUniformLocation(propertyName);
-		glGetUniformfv(shader->getProgram(), loc, colorData);
+		GLuint loc = shader_->getUniformLocation(propertyName);
+		glGetUniformfv(shader_->getProgram(), loc, colorData);
 
 		Color c(colorData[0], colorData[1], colorData[2], colorData[3]);
 		delete[] colorData;
@@ -164,17 +159,17 @@ Color Material::getColor(const char* propertyName)
 
 void Material::share(MaterialShareInfo info)
 {
-	sharingInfo.push_back(info);
+	sharingInfo_.push_back(info);
 }
 
 void Material::unshare(MaterialShareInfo info)
 {
 	std::vector<MaterialShareInfo>::iterator iter;
-	for (iter = sharingInfo.begin(); iter != sharingInfo.end(); iter++)
+	for (iter = sharingInfo_.begin(); iter != sharingInfo_.end(); iter++)
 	{
 		if (iter->rend == info.rend && iter->materialIndex == info.materialIndex)
 		{
-			sharingInfo.erase(iter);
+			sharingInfo_.erase(iter);
 			//printf("**************MATERIAL UNSHARED******************\n");
 			break;
 		}
@@ -183,5 +178,5 @@ void Material::unshare(MaterialShareInfo info)
 
 int Material::getSharesCount()
 {
-	return sharingInfo.size();
+	return sharingInfo_.size();
 }

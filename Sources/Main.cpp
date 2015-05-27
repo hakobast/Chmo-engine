@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	//creating engine
 	Engine::getInstance().assetLoader = assetLoader;
 	Engine::getInstance().displayModule = displayModule;
-	Engine::getInstance().Create();
+	Engine::getInstance().Start();
 
 	CreateGame();
 

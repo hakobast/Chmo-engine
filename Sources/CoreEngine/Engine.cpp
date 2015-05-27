@@ -51,7 +51,7 @@ Engine::~Engine()
 	
 }
 
-void Engine::Create()
+void Engine::Start()
 {
 	displayModule->create();
 	displayModule->addObserver(this);
@@ -70,13 +70,13 @@ void Engine::Create()
 	Input* inputSystem = new Input;
 	GameTime* timeSystem = new GameTime;
 
-	Engine::getInstance().addSystem(*gameLogicSystem, 1);
-	Engine::getInstance().addSystem(*screenSystem, 2);
-	Engine::getInstance().addSystem(*renderSystem, 3);
-	Engine::getInstance().addSystem(*inputSystem, 4);
-	Engine::getInstance().addSystem(*timeSystem, 5);
+	addSystem(*gameLogicSystem, 1);
+	addSystem(*screenSystem, 2);
+	addSystem(*renderSystem, 3);
+	addSystem(*inputSystem, 4);
+	addSystem(*timeSystem, 5);
 
-	std::cout << "Engine::Init()" << std::endl;
+	Logger::PrintError("Engine::Started\n");
 }
 
 void Engine::draw()

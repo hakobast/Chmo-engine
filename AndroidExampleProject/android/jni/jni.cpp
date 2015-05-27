@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_com_example_spaceshipgame_GameLibJNIWrapper_on_1surf
 
 	Engine::getInstance().displayModule = displayModule;
 	Engine::getInstance().assetLoader = assetLoader;
-	Engine::getInstance().Create();
+	Engine::getInstance().Start();
 	Main();
 }
 

@@ -18,10 +18,10 @@ class Material :public RemovableObject
 {
 friend class RenderSystem;
 private:
-	static std::vector<Material*> allMaterials;
-	std::vector<smart_pointer<Texture2D>> textures;
-	std::vector<MaterialShareInfo> sharingInfo;
-	smart_pointer<ShaderProgram> shader;
+	static std::vector<Material*> allMaterials_;
+	std::vector<smart_pointer<Texture2D>> textures_;
+	std::vector<MaterialShareInfo> sharingInfo_;
+	smart_pointer<ShaderProgram> shader_;
 
 	int getSharesCount();
 	void share(MaterialShareInfo shareInfo);
@@ -55,32 +55,32 @@ public:
 
 inline smart_pointer<ShaderProgram>& Material::getShader()
 {
-	return shader;
+	return shader_;
 }
 
 inline smart_pointer<Texture2D>& Material::getTexture(int index)
 {
-	if (index < (int)textures.size())
-		return textures[index];
+	if (index < (int)textures_.size())
+		return textures_[index];
 
 	return smart_pointer<Texture2D>::null();
 }
 
 inline smart_pointer<Texture2D>& Material::getMainTexture()
 {
-	if (textures.size() > 0)
-		return textures[0];
+	if (textures_.size() > 0)
+		return textures_[0];
 
 	return smart_pointer<Texture2D>::null();
 }
 
 inline void Material::setMainTexture(smart_pointer<Texture2D> texture)
 {
-	if (textures.size() > 0)
-		textures[0] = texture;
+	if (textures_.size() > 0)
+		textures_[0] = texture;
 	else
 	{
-		textures.push_back(texture);
+		textures_.push_back(texture);
 	}
 }
 

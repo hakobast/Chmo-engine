@@ -16,11 +16,13 @@ ShaderProgram::ShaderProgram(std::map<const char*, unsigned int> attributes) :at
 
 ShaderProgram::~ShaderProgram()
 {
-	deleteProgram();
-	if (shaders_[VERTEX_SHADER] != 0)
-		glDeleteShader(shaders_[VERTEX_SHADER]);
-	if (shaders_[FRAGMENT_SHADER] != 0)
-		glDeleteShader(shaders_[FRAGMENT_SHADER]);
+	glDeleteProgram(program_);
+	program_ = -1;
+
+// 	if (shaders_[VERTEX_SHADER] != 0)
+// 		glDeleteShader(shaders_[VERTEX_SHADER]);
+// 	if (shaders_[FRAGMENT_SHADER] != 0)
+// 		glDeleteShader(shaders_[FRAGMENT_SHADER]);
 // 	if (_shaders[GEOMETRY_SHADER] != 0)
 // 		glDeleteShader(_shaders[GEOMETRY_SHADER]);
 }
@@ -29,17 +31,12 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source,
 {
 	GLint lengths[] = { length };
 	
-	check_gl_error();
 	GLuint shader = glCreateShader(shader_type);
-	check_gl_error();
 	glShaderSource(shader, 1, &source, lengths);
-	check_gl_error();
 	glCompileShader(shader);
 
-	check_gl_error();
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-	check_gl_error();
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;

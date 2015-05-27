@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../Extras/TimeUtils.h"
+#include "../Debug/Logger.h"
 #include "GameTime.h"
 
 //static variable initialization
@@ -27,6 +28,9 @@ void GameTime::Init()
 
 void GameTime::Update()
 {
+	Logger::Print("GameTime::Update %d\n", frame_);
+
+	Logger::Print("GameTime::Pointer %p\n", this);
 	uint64_t time = TimeUtils::Now_Ms();
 
 	deltaTime_ = (time - lastTime_) / 1000.0f;

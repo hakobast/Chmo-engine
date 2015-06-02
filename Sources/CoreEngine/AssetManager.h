@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include "System.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -21,11 +22,16 @@ struct ModelDescriptor
 	std::map<std::string, std::string> meshMaterials;
 };
 
-class AssetManager
+class AssetManager : public System
 {
+protected:
+	virtual ~AssetManager();
 public:
-	static void Initialize();
-	static void Deinitialize();
+	AssetManager();
+	virtual void OnCreate();
+	virtual void OnResume();
+	virtual void OnPause();
+	virtual void OnDestroy();
 };
 
 std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);

@@ -14,10 +14,10 @@ class SpriteRenderer : public Renderer
 public:
 	~SpriteRenderer();
 	SpriteRenderer();
-	void Create();
-	void Init();
-	void Update();
-	void Render(int subRenderers = 0);
+	virtual void Create();
+	virtual void Init();
+	virtual void Update();
+	virtual void Render(int subRenderers = 0);
 
 	void setTextureFrame(int frame);
 	void setColor(Color c);

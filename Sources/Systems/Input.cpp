@@ -84,7 +84,7 @@ Input::~Input()
 	std::cout << "InputSystem:: ~~~deleted~~~" << std::endl;
 }
 
-void Input::Init()
+void Input::OnCreate()
 {
 	std::cout << "InputSystem:: Init()" << std::endl;
 }
@@ -94,7 +94,3 @@ void Input::Update()
 	//std::cout << "InputSystem:: Update()" << std::endl;
 	//keypressed.clear();
 }
-
-void Input::addComponent(Component &c){}
-void Input::removeComponent(Component &c){}
-bool Input::isSystemComponent(Component &c){ return false; }

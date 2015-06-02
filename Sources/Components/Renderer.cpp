@@ -1,4 +1,6 @@
 #include <map>
+
+#include "../Debug/Logger.h"
 #include "Renderer.h"
 
 const char* Renderer::vertexAttribName = "InVertex";
@@ -26,19 +28,21 @@ std::map<const char*, unsigned int> Renderer::SmallAttributes{
 	{ texCoordAttribName, 1 },
 };
 
+//TODO implement material and shader copy constructor to remove comment
 std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {
-	for (size_t i = 0, len = materials.size(); i < len; i++)
+	/*for (size_t i = 0, len = materials.size(); i < len; i++)
 	{
 		if (getRenderSystem()->getMaterialSharesCount(materials[i]) > 1)
 		{
-			printf("get AllMaterials:: unsharing material\n");
 			materials[i] = materials[i].clone();
 			getRenderSystem()->addMaterialForRenderer(materials[i], this, i);
 		}
 	}
 
-	return materials;
+	return materials;*/
+
+	return getSharedMaterials();
 }
 
 smart_pointer<Material>& Renderer::getSharedMaterial(int index)
@@ -52,9 +56,10 @@ smart_pointer<Material>& Renderer::getSharedMaterial(int index)
 	return smart_pointer<Material>::null();
 }
 
+//TODO implement material and shader copy constructor to remove comment
 smart_pointer<Material>& Renderer::getMaterial(int index)
 {
-	if (index < (int)materials.size())
+	/*if (index < (int)materials.size())
 	{
 		if (getRenderSystem()->getMaterialSharesCount(materials[index]) > 1)
 		{
@@ -67,7 +72,9 @@ smart_pointer<Material>& Renderer::getMaterial(int index)
 	}
 
 	std::cout << "There is no material at index: " << index << std::endl;
-	return smart_pointer<Material>::null();
+	return smart_pointer<Material>::null();*/
+
+	return getSharedMaterial(index);
 }
 
 void Renderer::addMaterial(smart_pointer<Material> mat)

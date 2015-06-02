@@ -75,13 +75,45 @@ public class ChmoEngineBridge implements Renderer{
 	public void pause()
 	{
 		if(rendererSet)
+		{
+			glSurfaceView.queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					GameLibJNIWrapper.on_pause();
+				}
+			});				
 			glSurfaceView.onPause();
+		}
+		
+		//TEMP
+		activity_.finish();
 	}
 	
 	public void resume()
 	{
 		if(rendererSet)
+		{
 			glSurfaceView.onResume();
+			glSurfaceView.queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					GameLibJNIWrapper.on_resume();
+				}
+			});		
+		}
+	}
+	
+	public void destroy()
+	{
+		/*if(rendererSet)
+		{
+			glSurfaceView.queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					GameLibJNIWrapper.on_destroy();
+				}
+			});
+		}*/
 	}
 	
 	private boolean isProbablyEmulator() {

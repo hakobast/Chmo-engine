@@ -10,6 +10,9 @@ protected:
 	virtual void create(){};
 	virtual void change(int width, int height){};
 	virtual void draw(){};
+	virtual void pause(){};
+	virtual void resume(){};
+	virtual void destroy(){};
 };
 
 #endif

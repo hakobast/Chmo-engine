@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "RenderSystem.h"
+#include "../Debug/Logger.h"
 #include "../CoreEngine/Transform.h"
 #include "../Components/Renderer.h"
 #include "../Components/Camera.h"
@@ -40,7 +41,7 @@ RenderSystem::~RenderSystem()
 	std::cout << "RenderSystem:: ~~~deleted~~~" << std::endl;
 }
 
-void RenderSystem::Init()
+void RenderSystem::OnCreate()
 {
 	std::cout << "RenderSystem:: Init()" << std::endl;
 }
@@ -70,9 +71,6 @@ void RenderSystem::Update()
  	{
  		Material* mat = Material::allMaterials_[i];
  
- 		//std::cout << "SHARINGS " << mat->sharingInfo.size() << std::endl;
-		//printf("Batching:::::::\n");
-
 		mat->bind();
 		{
  			for (size_t r = 0, rlen = mat->sharingInfo_.size(); r < rlen; r++)

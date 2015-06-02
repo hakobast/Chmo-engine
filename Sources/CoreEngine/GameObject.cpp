@@ -29,8 +29,8 @@ GameObject::GameObject(string name)
 
 	//std::cout << "GameObject() " << name << std::endl;
 
-	Engine::getInstance().addComponent(*trComp, trComp->priority);
-	Engine::getInstance().addGameObject(*this);
+	Engine::GetInstance().addComponent(*trComp, trComp->priority);
+	Engine::GetInstance().addGameObject(*this);
 }
 
 GameObject::~GameObject()
@@ -78,7 +78,7 @@ void GameObject::setActive(bool toogle)
 void GameObject::removeComponent(Component* comp)
 {
 	vectorRemove<Component>(components_, comp);
-	Engine::getInstance().removeComponent(*comp);
+	Engine::GetInstance().removeComponent(*comp);
 }
 
 void GameObject::destroy()
@@ -93,15 +93,15 @@ void GameObject::destroy()
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components_[i]);
 		if (activeComp != NULL)
 			activeComp->_destroy();
-		Engine::getInstance().removeComponent(*components_[i]);
+		Engine::GetInstance().removeComponent(*components_[i]);
 	}
 	components_.erase(components_.begin() + 1, components_.end());
 
-	Engine::getInstance().removeGameObject(*this);
+	Engine::GetInstance().removeGameObject(*this);
 }
 
 //******static*****
 GameObject* GameObject::FindGameObjectByName(std::string name)
 {
-	return Engine::getInstance().FindGameObjectByName(name);
+	return Engine::GetInstance().FindGameObjectByName(name);
 }

@@ -19,7 +19,7 @@ GameLogicSystem::~GameLogicSystem()
 	std::cout << "GameLogicSystem:: ~~~deleted~~~" << std::endl;
 }
 
-void GameLogicSystem::Init()
+void GameLogicSystem::OnCreate()
 {
 	std::cout << "GameLogicSystem:: Init()" << std::endl;
 }

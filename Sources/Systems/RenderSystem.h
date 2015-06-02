@@ -28,11 +28,11 @@ private:
 	static bool pred_ShareMaterial(std::pair< smart_pointer<Material>, MaterialShareInfo> info);
 protected:
 	~RenderSystem();
-	void Init();
-	void Update();
-	void addComponent(Component &c);
-	void removeComponent(Component &c);
-	bool isSystemComponent(Component &c);
+	virtual void OnCreate();
+	virtual void Update();
+	virtual void addComponent(Component &c);
+	virtual void removeComponent(Component &c);
+	virtual bool isSystemComponent(Component &c);
 public:
 	RenderSystem();
 	void sortComponents();

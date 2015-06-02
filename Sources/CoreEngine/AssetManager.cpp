@@ -16,14 +16,34 @@
 #include "AssetLoader.h"
 #include "AssetManager.h"
 
-void AssetManager::Initialize()
+AssetManager::~AssetManager()
+{
+	FreeImage_DeInitialise();
+}
+
+AssetManager::AssetManager()
 {
 	FreeImage_Initialise();
 }
 
-void AssetManager::Deinitialize()
+void AssetManager::OnCreate()
 {
-	FreeImage_DeInitialise();
+
+}
+
+void AssetManager::OnResume()
+{
+
+}
+
+void AssetManager::OnPause()
+{
+
+}
+
+void AssetManager::OnDestroy()
+{
+
 }
 
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);
@@ -665,9 +685,9 @@ smart_pointer<Texture2D> LoadTexture(const char* filename,
 									GLenum format,
 									GLenum dataType)
 {
-	AssetFile imgAsset = Engine::getInstance().assetLoader->loadAsset(filename);
+	AssetFile imgAsset = Engine::GetInstance().assetLoader->loadAsset(filename);
 	FreeImageImageReader reader(imgAsset.data, imgAsset.length);
-	Engine::getInstance().assetLoader->releaseAsset(&imgAsset);
+	Engine::GetInstance().assetLoader->releaseAsset(&imgAsset);
 
 	if ((reader.getData() == 0) || (reader.getWidth() == 0) || (reader.getHeight() == 0))
 	{

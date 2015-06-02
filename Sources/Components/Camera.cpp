@@ -1,8 +1,8 @@
 
 #include "Camera.h"
 #include "../CoreEngine/LIBS.h"
-//#include "../CoreEngine/Transform.h"
 #include "../Systems/ScreenSystem.h"
+#include "../Debug/Logger.h"
 
 Camera* Camera::main = NULL;
 
@@ -25,6 +25,12 @@ void Camera::Update()
 void Camera::OnEnable()
 {
 	ApplyCameraChanges();
+}
+
+void Camera::OnDestroy()
+{
+	if (main == this)
+		main = NULL;
 }
 
 void Camera::ApplyCameraChanges()

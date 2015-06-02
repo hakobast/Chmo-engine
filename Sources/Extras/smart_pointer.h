@@ -3,9 +3,11 @@
 #define OOPTesting_smart_pointer_h
 
 #include <assert.h>
-#include <type_traits>
+#include <typeinfo>
 #include <iostream>
 #include <map>
+
+#include "../Debug/Logger.h"
 
 //#define ENABLE_LOG
 
@@ -83,7 +85,7 @@ public:
 		if (data != NULL)
 		{
 			dynamic_cast<RemovableObject*>(data)->refs++;
-
+			//Logger::Print("Added reference of type %s \n", typeid(T).name());
 			//std::cout << "Added reference to: " << data << std::endl;
 		}
 #ifdef ENABLE_LOG
@@ -102,7 +104,7 @@ public:
 			if(--dynamic_cast<RemovableObject*>(data)->refs == 0)
             {
 #ifdef ENABLE_LOG
-				std::cout << "Data removed <" << typeid(T).name() << ">" << std::endl;
+				Logger::Print("Object of type %s deleted\n", typeid(T).name());
 #endif
 				delete data;
             }

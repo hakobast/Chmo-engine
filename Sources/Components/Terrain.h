@@ -32,10 +32,10 @@ public:
 	
 	// **Component**
 	~Terrain();
-	void Create();
-	void Init();
-	void Update();
-	void Render(int materialIndex = 0);
+	virtual void Create();
+	virtual void Init();
+	virtual void Update();
+	virtual void Render(int materialIndex = 0);
 };
 
 inline GLint Terrain::getWidth()

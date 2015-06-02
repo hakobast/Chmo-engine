@@ -12,11 +12,11 @@ private:
 	std::vector<GameLogic*> components;
 public:
     ~GameLogicSystem();
-    void Init();
-    void Update();
-    void addComponent(Component &c);
-	void removeComponent(Component &c);
-	bool isSystemComponent(Component &c);
+    virtual void OnCreate();
+	virtual void Update();
+	virtual void addComponent(Component &c);
+	virtual void removeComponent(Component &c);
+	virtual bool isSystemComponent(Component &c);
 };
 
 #endif

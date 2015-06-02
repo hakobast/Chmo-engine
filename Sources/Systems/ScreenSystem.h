@@ -3,10 +3,8 @@
 
 #include "../CoreEngine/System.h"
 #include "../Components/Camera.h"
-#include "../CoreEngine/DisplayModuleObserver.h"
-#include "../CoreEngine/DisplayModule.h"
 
-class ScreenSystem : public System, public DisplayModuleObserver
+class ScreenSystem : public System
 {
 private:
 	std::vector<Camera*> components;
@@ -14,17 +12,15 @@ private:
 	int height;
 public:
 	~ScreenSystem();
-	ScreenSystem(DisplayModule* displayModule);
-	void Init();
-	void Update();
-	void addComponent(Component &c);
-	void removeComponent(Component &c);
-	bool isSystemComponent(Component &c);
+	ScreenSystem();
+	virtual void OnCreate();
+	virtual void Update();
+	virtual void OnScreenChange(int width, int height);
+	virtual void addComponent(Component &c);
+	virtual void removeComponent(Component &c);
+	virtual bool isSystemComponent(Component &c);
 	static int getHeight();
 	static int getWidth();
-
-protected:
-	void change(int width, int height);
 private:
 	static ScreenSystem* s_instance;
 };

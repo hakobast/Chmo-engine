@@ -116,11 +116,8 @@ public:
 	Input(); //TEMP remove this when init function will called
 protected:
 	~Input();
-	void Init();
-	void Update();
-	void addComponent(Component &c);
-	void removeComponent(Component &c);
-	bool isSystemComponent(Component &c);
+	virtual void OnCreate();
+	virtual void Update();
 private:
 	friend void OnKeyDown             (unsigned char, int, int);
 	friend void OnKeyUp               (unsigned char, int, int);

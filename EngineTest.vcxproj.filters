@@ -219,6 +219,9 @@
     <ClInclude Include="Sources\CoreEngine\Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\Extras\Singleton.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -347,9 +350,6 @@
     <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\AssetLoader.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\CoreEngine\WinAssetLoader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
@@ -363,9 +363,6 @@
       <Filter>Source Files\Extras</Filter>
     </ClCompile>
     <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>

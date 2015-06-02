@@ -57,6 +57,7 @@
     <ClInclude Include="Sources\Extras\FileUtils.h" />
     <ClInclude Include="Sources\Extras\GLUtils.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
+    <ClInclude Include="Sources\Extras\Singleton.h" />
     <ClInclude Include="Sources\Extras\smart_pointer.h" />
     <ClInclude Include="Sources\Extras\TimeUtils.h" />
     <ClInclude Include="Sources\Extras\Vectors.h" />
@@ -79,9 +80,7 @@
     <ClCompile Include="Sources\CoreEngine\ActiveComponent.cpp" />
     <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp" />
-    <ClCompile Include="Sources\CoreEngine\AssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
-    <ClCompile Include="Sources\CoreEngine\DisplayModule.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
     <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />

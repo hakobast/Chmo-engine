@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Haksist. All rights reserved.
 //
 
+#include <cassert>
 #include <iostream>
 
 #include "Engine.h"
@@ -16,6 +17,7 @@
 #include "System.h"
 #include "Component.h"
 #include "AssetManager.h"
+#include "AssetLoader.h"
 
 #include "../Systems/GameLogicSystem.h"
 #include "../Systems/RenderSystem.h"
@@ -32,7 +34,7 @@ bool pred_initComponents(Component* c)
 {
 	if (c->isEnabled())
 	{
-		for (System* s : Engine::getInstance()._systems)
+		for (System* s : Engine::GetInstance()._systems)
 			s->addComponent(*c);
 		c->Init();
 		return true;
@@ -43,40 +45,63 @@ bool pred_initComponents(Component* c)
 
 void f_Destroy()
 {
-	Engine::getInstance().Cleanup();
+	Engine::GetInstance().Cleanup();
 }
 
 Engine::~Engine()
 {
-	
+	Logger::PrintError("Engine::DELETED\n");
+
+	Cleanup(); //TEMP
+
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+	{
+		delete _systems[i];
+	}
+
+	delete displayModule;
+	delete assetLoader;
+
+	displayModule = NULL;
+	assetLoader = NULL;
 }
 
-void Engine::Start()
+void Engine::create()
 {
-	displayModule->create();
-	displayModule->addObserver(this);
-
+	if (!isEngineInited_)
+	{
 #if defined(_WIN32) || defined(__APPLE__)
-	atexit(f_Destroy);
-	if (glewInit() == GLEW_OK)
-		printf("GLEW Inited!\n");
+		atexit(f_Destroy);
+		if (glewInit() == GLEW_OK)
+			printf("GLEW Inited!\n");
 #endif
 
-	AssetManager::Initialize();
+		RenderSystem* renderSystem = new RenderSystem; //renderer system
+		GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
+		ScreenSystem* screenSystem = new ScreenSystem;
+		Input* inputSystem = new Input;
+		GameTime* timeSystem = new GameTime;
+		AssetManager* assetSystem = new AssetManager;
 
-	RenderSystem* renderSystem = new RenderSystem; //renderer system
-	GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
-	ScreenSystem* screenSystem = new ScreenSystem(displayModule);
-	Input* inputSystem = new Input;
-	GameTime* timeSystem = new GameTime;
+		addSystem(*assetSystem, 0);
+		addSystem(*gameLogicSystem, 1);
+		addSystem(*screenSystem, 2);
+		addSystem(*renderSystem, 3);
+		addSystem(*inputSystem, 4);
+		addSystem(*timeSystem, 5);
 
-	addSystem(*gameLogicSystem, 1);
-	addSystem(*screenSystem, 2);
-	addSystem(*renderSystem, 3);
-	addSystem(*inputSystem, 4);
-	addSystem(*timeSystem, 5);
+		isEngineInited_ = true;
+		Logger::PrintError("Engine::Inited\n");
+	}
 
-	Logger::PrintError("Engine::Started\n");
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+		_systems[i]->OnCreate();
+}
+
+void Engine::change(int width, int height)
+{
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+		_systems[i]->OnScreenChange(width,height);
 }
 
 void Engine::draw()
@@ -121,14 +146,38 @@ void Engine::draw()
 	_gmObjDestroyList.clear();
 }
 
-void Engine::Resume()
+//TODO load graphic resources
+void Engine::resume()
 {
+	Logger::PrintError("ENGINE::Resume");
 
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+		_systems[i]->OnResume();
 }
 
-void Engine::Pause()
+//TODO unload graphic resources
+void Engine::pause() 
 {
+	Logger::PrintError("ENGINE::Pause");
 
+	for (size_t i = 0, len = _systems.size(); i < len; i++)
+		_systems[i]->OnPause();
+
+	//TEMPPPPPPPPPPPPPPP
+	delete instance_;
+	instance_ = NULL;
+}
+
+//TODO cleanup objects, resources and destroy engine
+void Engine::destroy()
+{
+	Logger::PrintError("ENGINE::Destroy");
+
+ 	for (size_t i = 0, len = _systems.size(); i < len; i++)
+ 		_systems[i]->OnDestroy();
+
+	delete instance_;
+	instance_ = NULL;
 }
 
 void Engine::addSystem(System &s, int priority)
@@ -205,14 +254,6 @@ void Engine::Cleanup()
 		delete gmObj;
 	}
 
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-	{
-		delete _systems[i];
-	}
-
 	_gameObjects.clear();
 	_components.clear();
-	_systems.clear();
-
-	AssetManager::Deinitialize();
 }

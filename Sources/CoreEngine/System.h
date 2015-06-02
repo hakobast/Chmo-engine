@@ -15,12 +15,16 @@ public:
 	int priority;
 protected:
 	virtual ~System(){};
-	virtual void Init() = 0; //INFO this function maybe not usable
-    virtual void Update() = 0;
+	virtual void Update(){};
 public:
-	virtual void addComponent(Component &c) = 0;
-	virtual void removeComponent(Component &c) = 0;
-	virtual bool isSystemComponent(Component &c) = 0;
+	virtual void OnCreate(){};
+	virtual void OnScreenChange(int width, int height){};
+	virtual void OnResume(){};
+	virtual void OnPause(){};
+	virtual void OnDestroy(){};
+	virtual void addComponent(Component &c){};
+	virtual void removeComponent(Component &c){};
+	virtual bool isSystemComponent(Component &c){ return false; };
 };
 
 #endif

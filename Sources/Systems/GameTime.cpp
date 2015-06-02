@@ -13,7 +13,6 @@ GameTime* GameTime::instance_ = NULL;
 GameTime::GameTime()
 {
 	instance_ = this;
-	lastTime_ = TimeUtils::Now_Ms();
 }
 
 GameTime::~GameTime()
@@ -21,16 +20,14 @@ GameTime::~GameTime()
 
 }
 
-void GameTime::Init()
+void GameTime::OnCreate()
 {
 	std::cout << "GameTime System:: Init()" << std::endl;
+	lastTime_ = TimeUtils::Now_Ms();
 }
 
 void GameTime::Update()
 {
-	Logger::Print("GameTime::Update %d\n", frame_);
-
-	Logger::Print("GameTime::Pointer %p\n", this);
 	uint64_t time = TimeUtils::Now_Ms();
 
 	deltaTime_ = (time - lastTime_) / 1000.0f;
@@ -38,7 +35,3 @@ void GameTime::Update()
 	frame_++;
 	lastTime_ = time;
 }
-
-void GameTime::addComponent(Component &c){}
-void GameTime::removeComponent(Component &c){}
-bool GameTime::isSystemComponent(Component &c){ return false; }

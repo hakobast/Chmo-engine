@@ -9,10 +9,10 @@ class MeshRenderer : public Renderer
 {
 public:
 	~MeshRenderer();
-	void Create();
-	void Init();
-	void Update();
-	void Render(int subRenderer = 0);
+	virtual void Create();
+	virtual void Init();
+	virtual void Update();
+	virtual void Render(int subRenderer = 0);
 	void setMesh(smart_pointer<Mesh>& m);
 
 	smart_pointer<Mesh>& getMesh();

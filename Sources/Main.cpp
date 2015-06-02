@@ -29,13 +29,14 @@ int main(int argc, char **argv)
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	WinAssetLoader* assetLoader = new WinAssetLoader;
-	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(&argc, argv, GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH, 800, 600, "ENGINE");
-
 	//creating engine
-	Engine::getInstance().assetLoader = assetLoader;
-	Engine::getInstance().displayModule = displayModule;
-	Engine::getInstance().Start();
+	Engine* engine = new Engine;
+
+	WinAssetLoader* assetLoader = new WinAssetLoader;
+	engine->assetLoader = assetLoader;
+
+	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(engine, &argc, argv, GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH, 800, 600, "ENGINE");
+	displayModule->create();
 
 	CreateGame();
 
@@ -55,18 +56,18 @@ void CreateGame()
 // 	light->setDiffuse(Color(1.0f, 0.0f, 0.0f));
 // 	light->setSpecular(Color(0.0f, 0.0f, 0.0f));
 // 	light->setLightType(POSITIONAL);
-	//light->setLinearAttenuation(0.1f);
-	//light->setSpotCutoff(15.0f);
+//	light->setLinearAttenuation(0.1f);
+//	light->setSpotCutoff(15.0f);
 	 
-	AssetFile vertexShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.vert");
-	AssetFile fragmentShaderAsset = Engine::getInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.frag");
+	AssetFile vertexShaderAsset = Engine::GetInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.vert");
+	AssetFile fragmentShaderAsset = Engine::GetInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.frag");
 
 	smart_pointer<Material> mat(new Material("Unlit",
 		(char*)vertexShaderAsset.data, vertexShaderAsset.length,
 		(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
 
-	Engine::getInstance().assetLoader->releaseAsset(&vertexShaderAsset);
-	Engine::getInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
+	Engine::GetInstance().assetLoader->releaseAsset(&vertexShaderAsset);
+	Engine::GetInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
 
 	GameObject* camerObj = new GameObject("Camera");
 	camerObj->addComponent<GLTestComponent>();

@@ -3,19 +3,16 @@
 
 #include <vector>
 
-class DisplayModuleObserver;
-
 class DisplayModule
 {
 public:
 	virtual ~DisplayModule(){}
-	virtual void create();
-	virtual void change(int width, int height);
-	virtual void draw();
-	void addObserver(DisplayModuleObserver* observer);
-	void removeObserver(DisplayModuleObserver* observer);
-private:
-	std::vector<DisplayModuleObserver*> observers_;
+	virtual void create() = 0;
+	virtual void change(int width, int height) = 0;
+	virtual void draw() = 0;
+	virtual void pause() = 0;
+	virtual void resume() = 0;
+	virtual void destroy() = 0;
 };
 
 #endif

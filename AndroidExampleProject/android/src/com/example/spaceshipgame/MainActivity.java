@@ -25,6 +25,12 @@ public class MainActivity extends Activity
 		super.onResume();
 		bridge.resume();
 	}
+	
+	public void onDestroy()
+	{
+		super.onDestroy();
+		bridge.destroy();
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)

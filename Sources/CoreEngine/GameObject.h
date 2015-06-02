@@ -80,7 +80,7 @@ T* GameObject::addComponent()
 		baseType->transform_ = dynamic_cast<Transform*>(components_[0]); // first component of each gameobject is GameTransform
 
 		components_.push_back(baseType);
-		Engine::getInstance().addComponent(*baseType, baseType->priority);
+		Engine::GetInstance().addComponent(*baseType, baseType->priority);
 
 		//if the gameobject is in destroy state added component must be destroyed
 		if (destroyState_)
@@ -91,7 +91,7 @@ T* GameObject::addComponent()
 				activeComp->destroy();
 			}
 			else
-				Engine::getInstance().removeComponent(*baseType);
+				Engine::GetInstance().removeComponent(*baseType);
 		}
 
 		return t;
@@ -133,13 +133,13 @@ std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
 template<class T>
 T* GameObject::FindComponent()
 {
-	return Engine::getInstance().FindComponent<T>();
+	return Engine::GetInstance().FindComponent<T>();
 }
 
 template<class T>
 std::vector<T*> GameObject::FindComponents()
 {
-	return Engine::getInstance().FindComponents<T>();
+	return Engine::GetInstance().FindComponents<T>();
 }
 
 #endif

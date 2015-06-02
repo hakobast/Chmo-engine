@@ -13,14 +13,11 @@ public:
 	static GLfloat DeltaTime();
 	static GLfloat TimeSinceGameStarted();
 	static GLuint GetFrame();
-	GameTime(); //TEMP remove this when init function will called
+	GameTime();
 protected:
 	~GameTime();
-	void Init();
-	void Update();
-	void addComponent(Component &c);
-	void removeComponent(Component &c);
-	bool isSystemComponent(Component &c);
+	virtual void OnCreate();
+	virtual void Update();
 private:
 	static GameTime* instance_;
 	uint64_t lastTime_;

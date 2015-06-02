@@ -76,7 +76,6 @@ Texture2D::Texture2D(const GLvoid* pixels,
 
 Texture2D::~Texture2D()
 {
-	std::cout << "Texture2D ~~~deleted~~~" << std::endl;
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 	glDeleteTextures(1, &texture_id);
 	delete[] textures;

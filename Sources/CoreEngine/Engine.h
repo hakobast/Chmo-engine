@@ -7,6 +7,7 @@
 #include <string>
 
 #include "DisplayModuleObserver.h"
+#include "../Extras/Singleton.h"
 
 class System;
 class Component;
@@ -14,24 +15,13 @@ class GameObject;
 class DisplayModule;
 class AssetLoader;
 
-class Engine : public DisplayModuleObserver
+class Engine : public Singleton<Engine>
 {
 friend class GameObject;
 public:
-	static Engine& getInstance()
-	{
-		static Engine engine;
-		return engine;
-	}
-
-	~Engine();
-
 	DisplayModule* displayModule = 0;
 	AssetLoader* assetLoader = 0;
 
-    void Start();
-	void Resume();
-	void Pause();
     void addSystem(System &s, int priority);
     void addGameObject(GameObject &obj);
     void addComponent(Component &comp, int priority);
@@ -41,14 +31,14 @@ public:
 	template<class T> T* FindComponent() const;
 	template<class T> std::vector<T*> FindComponents() const;
 
-protected:
+	void create();
+	void change(int width, int height);
+	void resume();
+	void pause();
+	void destroy();
 	void draw();
 private:
-
-	Engine()
-	{
-		std::cout << "ENGINE created" << std::endl;
-	}
+	~Engine();
 
 	std::vector<Component*> _compInitList; 
 	std::vector<Component*> _compInitQueue;
@@ -58,8 +48,9 @@ private:
     std::vector<Component*> _components;
     std::vector<GameObject*> _gameObjects;
     std::vector<System*> _systems;
+	bool isEngineInited_ = false;
 
-	void Cleanup();
+	void Cleanup(); //TEMP
 
 	friend void f_Destroy();
 	friend bool pred_initComponents(Component* c);

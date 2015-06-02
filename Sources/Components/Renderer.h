@@ -40,6 +40,7 @@ protected:
 	std::vector<int> bitangAttribLocations;
 
 	std::vector<smart_pointer<Material>> materials;
+
 	RenderSystem* getRenderSystem();
 public:
 	/* SHADER ATTRIBUTES */
@@ -79,9 +80,7 @@ public:
 
 inline RenderSystem* Renderer::getRenderSystem()
 {
-	static RenderSystem* rendSystem = dynamic_cast<RenderSystem*>(system);
-
-	return rendSystem;
+	return dynamic_cast<RenderSystem*>(system);
 }
 
 inline int Renderer::getLayerOrder() const

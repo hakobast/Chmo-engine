@@ -4,10 +4,9 @@
 
 ScreenSystem* ScreenSystem::s_instance = NULL;
 
-ScreenSystem::ScreenSystem(DisplayModule* displayModule)
+ScreenSystem::ScreenSystem()
 {
 	s_instance = this;
-	displayModule->addObserver(this);
 }
 
 ScreenSystem::~ScreenSystem()
@@ -15,7 +14,7 @@ ScreenSystem::~ScreenSystem()
 	std::cout << "ScreenSystem:: ~~~deleted~~~" << std::endl;
 }
 
-void ScreenSystem::Init()
+void ScreenSystem::OnCreate()
 {
 
 }
@@ -25,7 +24,7 @@ void ScreenSystem::Update()
 	
 }
 
-void ScreenSystem::change(int width, int height)
+void ScreenSystem::OnScreenChange(int width, int height)
 {
 	this->width = width;
 	this->height = height;

@@ -1,8 +1,10 @@
 
 #include <iostream>
 
+#include "../../Sources/Debug/Logger.h"
 #include "../../Sources/CoreEngine/ChmoEngine.h"
 #include "../../Sources/Extras/GLUtils.h"
+
 class HelloEngine : public GameLogic
 {
 public:
@@ -16,8 +18,8 @@ public:
 		camera->setOrthoSize(5.0f);
 		camera->setFOVY(60.0f);
 
-		AssetFile vertexShaderAsset = Engine::getInstance().assetLoader->loadAsset("UnlitSprite.vert");
-		AssetFile fragmentShaderAsset = Engine::getInstance().assetLoader->loadAsset("UnlitSprite.frag");
+		AssetFile vertexShaderAsset = Engine::GetInstance().assetLoader->loadAsset("UnlitSprite.vert");
+		AssetFile fragmentShaderAsset = Engine::GetInstance().assetLoader->loadAsset("UnlitSprite.frag");
 		smart_pointer<Material> mat(new Material("Unlit",
 			(char*)vertexShaderAsset.data, vertexShaderAsset.length,
 			(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
@@ -56,8 +58,8 @@ public:
 			obj->getTransform()->Location.set(1.0f*i, 0.0f, -2.0f);
 		}
 
-		Engine::getInstance().assetLoader->releaseAsset(&vertexShaderAsset);
-		Engine::getInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
+		Engine::GetInstance().assetLoader->releaseAsset(&vertexShaderAsset);
+		Engine::GetInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
 	}
 
 	void Update()
@@ -65,13 +67,12 @@ public:
 		frames++;
 		time += GameTime::DeltaTime();
 
-		Logger::Print("FRAMES %d", GameTime::GetFrame());
 		if (time >= 1.0f)
 		{
 			Logger::Print("FPS %d", frames);
 			
-			Logger::Print("DELTA TIME %f", GameTime::DeltaTime());
-			Logger::Print("TIME SINCE STARTED %f", GameTime::TimeSinceGameStarted());
+			//Logger::Print("DELTA TIME %f", GameTime::DeltaTime());
+			//Logger::Print("TIME SINCE STARTED %f", GameTime::TimeSinceGameStarted());
 
 			time = 0;
 			frames = 0;

@@ -30,6 +30,7 @@ private:
 	void Update();
 	void ApplyCameraChanges();
 	void OnEnable();
+	void OnDestroy();
 	Matrix4 rotationMatrix; 
 	Matrix4 translationMatrix;
 	Matrix4 projectionMatrix;

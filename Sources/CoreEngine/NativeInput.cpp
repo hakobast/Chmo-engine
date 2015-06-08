@@ -6,6 +6,7 @@
 #include "../Extras/Vectors.h"
 #include "NativeInput.h"
 
+//TODO make it class member
 std::mutex mtx;
 
 NativeInput::NativeInput()
@@ -31,11 +32,12 @@ void NativeInput::unlock()
 	mtx.unlock();
 }
 
-const Touch& NativeInput::getTouch(int index) const
+Touch* NativeInput::getTouch(int index)
 {
 	//Logger::PrintError("Index %d, Count %d", index, touchCount_);
 	if (index >= 0 && index < touchCount_)
-		return touches_[index];
+		return &touches_[index];
 
 	Logger::PrintError("Error in NativeInput::getTouch. Invalid Argument \n");
+	return NULL;
 }

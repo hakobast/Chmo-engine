@@ -2,28 +2,6 @@
 #include "../CoreEngine/LIBS.h"
 #include "ScreenSystem.h"
 
-ScreenSystem* ScreenSystem::s_instance = NULL;
-
-ScreenSystem::ScreenSystem()
-{
-	s_instance = this;
-}
-
-ScreenSystem::~ScreenSystem()
-{
-	std::cout << "ScreenSystem:: ~~~deleted~~~" << std::endl;
-}
-
-void ScreenSystem::OnCreate()
-{
-
-}
-
-void ScreenSystem::Update()
-{
-	
-}
-
 void ScreenSystem::OnScreenChange(int width, int height)
 {
 	this->width = width;

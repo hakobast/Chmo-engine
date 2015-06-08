@@ -47,7 +47,7 @@ bool pred_initComponents(Component* c)
 
 void f_Destroy()
 {
-	Engine::GetInstance().Cleanup();
+	Engine::GetInstance().destroy();
 }
 
 Engine::~Engine()
@@ -93,12 +93,14 @@ void Engine::create()
 		addSystem(*renderSystem, 4);
 		addSystem(*timeSystem, 5);
 
+		for (size_t i = 0, len = _systems.size(); i < len; i++)
+			_systems[i]->OnCreate();
+
 		isEngineInited_ = true;
 		Logger::PrintError("Engine::Inited\n");
+
 	}
 
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-		_systems[i]->OnCreate();
 }
 
 void Engine::change(int width, int height)

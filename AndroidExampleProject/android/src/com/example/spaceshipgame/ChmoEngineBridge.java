@@ -59,14 +59,7 @@ public class ChmoEngineBridge implements Renderer{
 	{
 		if(rendererSet)
 		{
-			GameLibJNIWrapper.on_touch_event(event);
-			/*glSurfaceView.queueEvent(new Runnable() {
-				@Override
-				public void run() {
-					GameLibJNIWrapper.on_touch_event(event);
-				}
-			});	*/
-			
+			GameLibJNIWrapper.on_touch_event(event);			
 		}
 		
 		return true;

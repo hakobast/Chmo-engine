@@ -26,6 +26,11 @@ void Input::OnEndFrame()
 	nativeInput_->unlock();
 }
 
+void Input::OnDestroy()
+{
+	nativeInput_->unlock();
+}
+
 // Static functions
 bool Input::IsKeyDown(Key key)
 {
@@ -67,7 +72,7 @@ int	Input::GetTouchCount()
 	return instance_->nativeInput_->getTouchCount();
 }
 
-const Touch& Input::GetTouch(int index)
+Touch* Input::GetTouch(int index)
 {
 	return instance_->nativeInput_->getTouch(index);
 }

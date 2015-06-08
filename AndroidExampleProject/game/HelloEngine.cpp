@@ -83,10 +83,11 @@ public:
 		{
 			for (int i = 0, len = Input::GetTouchCount(); i < len; i++)
 			{
-				const Touch& touch = Input::GetTouch(i);
-				touch.getPosition(v);
-				touch.getDeltaPosition(delta);
-				Logger::Print("Touch: id=%d, pos=(%f,%f), action=%d", touch.getTouchId(), v.x, v.y, touch.getAction());
+				Touch* touch = Input::GetTouch(i);
+				
+				touch->getPosition(v);
+				touch->getDeltaPosition(delta);
+				Logger::Print("Touch: id=%d, pos=(%f,%f), action=%d", touch->getTouchId(), v.x, v.y, touch->getAction());
 				Logger::Print("Touch: delta=(%f,%f)",  delta.x, delta.y);
 			}
 		}

@@ -118,12 +118,13 @@ public:
 	static bool IsMouseDownNow		(MouseButton button);
 	static void GetMousePosition	(Vector2& value);
 	static int	GetTouchCount		();
-	static const Touch& GetTouch	(int index);
+	static Touch* GetTouch	(int index);
 
 	Input(NativeInput* input);
 	virtual void Update();
 	virtual void OnStartFrame();
 	virtual void OnEndFrame();
+	virtual void OnDestroy();
 private:
 	NativeInput* nativeInput_;
 };

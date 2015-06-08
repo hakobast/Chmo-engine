@@ -25,6 +25,11 @@ protected:
 
 		instance_ = (T*)this;
 	}
+
+	virtual ~Singleton()
+	{
+		instance_ = NULL;
+	}
 };
 
 template<class T>

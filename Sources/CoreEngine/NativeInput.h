@@ -135,7 +135,7 @@ public:
 	void getMousePosition	(Vector2& value)	 const;
 	int	 getTouchCount		()					 const;
 
-	const Touch& getTouch(int index) const;
+	Touch* getTouch(int index);
 
 protected:
 	int frame_ = 0;

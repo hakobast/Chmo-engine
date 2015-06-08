@@ -16,9 +16,9 @@
 #include "Testings/GLTestComponent.cpp"
 #include "Testings/SecondComponent.cpp"
 #include "Testings/TestComponent.cpp"
-#include "CoreEngine/WinGLUTDisplayModule.h"
+#include "CoreEngine/GLUTDisplay.h"
+#include "CoreEngine/GLUTInput.h"
 #include "CoreEngine/WinAssetLoader.h"
-#include "CoreEngine/DisplayModuleObserver.h"
 
 
 #define TARGET_FPS 60
@@ -32,10 +32,14 @@ int main(int argc, char **argv)
 	//creating engine
 	Engine* engine = new Engine;
 
+	GLUTInput* nativeInput = new GLUTInput;
+	engine->nativeInput = nativeInput;
+
 	WinAssetLoader* assetLoader = new WinAssetLoader;
 	engine->assetLoader = assetLoader;
 
-	WinGLUTDisplayModule* displayModule = new WinGLUTDisplayModule(engine, &argc, argv, GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH, 800, 600, "ENGINE");
+	GLUTDisplay* displayModule = new GLUTDisplay(engine, &argc, argv, GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH, 800, 600, "ENGINE");
+	engine->display = displayModule;
 	displayModule->create();
 
 	CreateGame();

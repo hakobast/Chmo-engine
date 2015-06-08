@@ -1,6 +1,7 @@
 package com.example.spaceshipgame;
 
 import android.content.res.AssetManager;
+import android.view.MotionEvent;
 
 public class GameLibJNIWrapper {
 
@@ -14,6 +15,8 @@ public class GameLibJNIWrapper {
 	public static native void on_surface_changed(int width, int height);
 	
 	public static native void on_draw_frame();
+	
+	public static native void on_touch_event(MotionEvent event);
 	
 	public static native void on_resume();
 	

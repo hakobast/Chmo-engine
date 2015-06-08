@@ -31,7 +31,7 @@ public:
 
 	void Update()
 	{
-		if (Input::IsKeyDownNow(KeyCode::RIGHT_ALT))
+		if (Input::IsKeyDownNow(SpecialKey::UP))
 		{
 			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
 
@@ -55,7 +55,7 @@ public:
 				std::cout << "CAN'T FIND\n";
 		}
 
-		if (Input::IsKeyDownNow(KeyCode::LEFT_CTRL))
+		if (Input::IsKeyDownNow(SpecialKey::DOWN))
 		{
 			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
 
@@ -77,7 +77,17 @@ public:
 				std::cout << "CAN'T FIND\n";
 		}
 
-		if (Input::IsKeyDownNow(KeyCode::F))
+		if (Input::IsMouseDownNow(MouseButton::Left))
+		{
+			std::cout << "PRINT ME\n";
+		}
+
+		if (Input::IsKeyDownNow(Key::p))
+		{
+			std::cout << "PRINT ME\n";
+		}
+
+		if (Input::IsKeyDownNow(Key::F))
 		{
 			SpriteRenderer* spRend = GameObject::FindComponent<SpriteRenderer>();
 			if (spRend != NULL)
@@ -99,7 +109,7 @@ public:
 		//}
 		//glEnd();
 
-		if (Input::IsKeyDown(27))
+		if (Input::IsKeyDown(Key::e))
 		{
 			printf("AUUUUUU\n");
 			exit(0);
@@ -107,22 +117,22 @@ public:
 
 		float speed = 15.0f;
 		float rotationSpeed = 100.0f;
-		if (Input::IsKeyDown(KeyCode::a))
+		if (Input::IsKeyDown(Key::a))
 			//getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
 			getTransform()->TranslateRight(-speed*GameTime::DeltaTime());
-		if (Input::IsKeyDown(KeyCode::d))
+		if (Input::IsKeyDown(Key::d))
 			//getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
 			getTransform()->TranslateRight(speed*GameTime::DeltaTime());
-		if (Input::IsKeyDown(KeyCode::w))
+		if (Input::IsKeyDown(Key::w))
 			getTransform()->TranslateForward(-speed*GameTime::DeltaTime());
-		if (Input::IsKeyDown(KeyCode::s))
+		if (Input::IsKeyDown(Key::s))
 			getTransform()->TranslateForward(speed*GameTime::DeltaTime());
 
-		if (Input::IsKeyDown(KeyCode::n))
+		if (Input::IsKeyDown(Key::n))
 		{
 			getTransform()->RotateX(rotationSpeed*GameTime::DeltaTime());
 		}
-		if (Input::IsKeyDown(KeyCode::m))
+		if (Input::IsKeyDown(Key::m))
 		{
 			getTransform()->RotateX(-rotationSpeed*GameTime::DeltaTime());
 		}

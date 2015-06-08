@@ -9,16 +9,16 @@
 
 class System
 {
-friend class Engine;
-
 public:
 	int priority;
-protected:
+
 	virtual ~System(){};
+
 	virtual void Update(){};
-public:
 	virtual void OnCreate(){};
 	virtual void OnScreenChange(int width, int height){};
+	virtual void OnStartFrame(){};
+	virtual void OnEndFrame(){};
 	virtual void OnResume(){};
 	virtual void OnPause(){};
 	virtual void OnDestroy(){};

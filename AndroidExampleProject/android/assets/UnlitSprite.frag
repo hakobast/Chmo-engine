@@ -1,4 +1,4 @@
-#version 120
+//#version 120
 
 uniform vec4 Color;// = vec4(1.0,1.0,1.0,1.0);
 uniform sampler2D mainTexture;

@@ -177,18 +177,6 @@
     <ClInclude Include="Sources\Extras\TimeUtils.h">
       <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\DisplayModule.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\WinGLUTDisplayModule.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\AndroidDisplayModule.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\DisplayModuleObserver.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\CoreEngine\AssetLoader.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
@@ -221,6 +209,24 @@
     </ClInclude>
     <ClInclude Include="Sources\Extras\Singleton.h">
       <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\NativeInput.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\GLUTInput.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\GLUTDisplay.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\Display.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\AndroidDisplay.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\AndroidInput.h">
+      <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,12 +347,6 @@
     <ClCompile Include="Sources\Extras\TimeUtils.cpp">
       <Filter>Source Files\Extras</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\WinGLUTDisplayModule.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\AndroidDisplayModule.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
@@ -363,6 +363,21 @@
       <Filter>Source Files\Extras</Filter>
     </ClCompile>
     <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\NativeInput.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\GLUTInput.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\GLUTDisplay.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\AndroidDisplay.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\AndroidInput.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,21 +6,22 @@
 #include <iostream>
 #include <string>
 
-#include "DisplayModuleObserver.h"
 #include "../Extras/Singleton.h"
 
 class System;
 class Component;
 class GameObject;
-class DisplayModule;
+class Display;
 class AssetLoader;
+class NativeInput;
 
 class Engine : public Singleton<Engine>
 {
 friend class GameObject;
 public:
-	DisplayModule* displayModule = 0;
+	Display* display = 0;
 	AssetLoader* assetLoader = 0;
+	NativeInput* nativeInput = 0;
 
     void addSystem(System &s, int priority);
     void addGameObject(GameObject &obj);

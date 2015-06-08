@@ -11,6 +11,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Build;
 import android.view.MotionEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class ChmoEngineBridge implements Renderer{
@@ -38,7 +40,12 @@ public class ChmoEngineBridge implements Renderer{
 			
 			glSurfaceView.setEGLContextClientVersion(2);
 			glSurfaceView.setRenderer(this);
+			
+			activity_.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			activity_. getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			activity_.setContentView(glSurfaceView);
+			
 			rendererSet = true;
 		}
 		else
@@ -48,12 +55,20 @@ public class ChmoEngineBridge implements Renderer{
 		}
 	}
 	
-	public boolean OnTouchEvent(MotionEvent event)
+	public boolean OnTouchEvent(final MotionEvent event)
 	{
 		if(rendererSet)
 		{
-			//TODO implement touches
+			GameLibJNIWrapper.on_touch_event(event);
+			/*glSurfaceView.queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					GameLibJNIWrapper.on_touch_event(event);
+				}
+			});	*/
+			
 		}
+		
 		return true;
 	}
 	

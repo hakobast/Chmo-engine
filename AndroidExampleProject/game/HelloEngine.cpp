@@ -1,7 +1,6 @@
 
 #include <iostream>
 
-#include "../../Sources/Debug/Logger.h"
 #include "../../Sources/CoreEngine/ChmoEngine.h"
 #include "../../Sources/Extras/GLUtils.h"
 
@@ -76,6 +75,20 @@ public:
 
 			time = 0;
 			frames = 0;
+		}
+
+		Vector2 v;
+		Vector2 delta;
+		if (Input::GetTouchCount() > 0)
+		{
+			for (int i = 0, len = Input::GetTouchCount(); i < len; i++)
+			{
+				const Touch& touch = Input::GetTouch(i);
+				touch.getPosition(v);
+				touch.getDeltaPosition(delta);
+				Logger::Print("Touch: id=%d, pos=(%f,%f), action=%d", touch.getTouchId(), v.x, v.y, touch.getAction());
+				Logger::Print("Touch: delta=(%f,%f)",  delta.x, delta.y);
+			}
 		}
 	}
 

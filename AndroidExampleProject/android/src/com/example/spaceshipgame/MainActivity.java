@@ -16,20 +16,20 @@ public class MainActivity extends Activity
 	
 	public void onPause()
 	{
-		super.onPause();
 		bridge.pause();
+		super.onPause();
 	}
 
 	public void onResume()
 	{
-		super.onResume();
 		bridge.resume();
+		super.onResume();
 	}
 	
 	public void onDestroy()
 	{
-		super.onDestroy();
 		bridge.destroy();
+		super.onDestroy();
 	}
 
 	@Override

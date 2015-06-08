@@ -109,9 +109,9 @@ void SpriteRenderer::Render(int material)
 
 	float rotationSpeed = 100.0f;
 
-	if (Input::IsKeyDown(KeyCode::z))
+	if (Input::IsKeyDown(Key::z))
 		getTransform()->RotateY(rotationSpeed*GameTime::DeltaTime());
-	if (Input::IsKeyDown(KeyCode::x))
+	if (Input::IsKeyDown(Key::x))
 		getTransform()->RotateY(-rotationSpeed*GameTime::DeltaTime());
 }
 

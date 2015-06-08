@@ -18,6 +18,8 @@
 #include "Component.h"
 #include "AssetManager.h"
 #include "AssetLoader.h"
+#include "Display.h"
+#include "NativeInput.h"
 
 #include "../Systems/GameLogicSystem.h"
 #include "../Systems/RenderSystem.h"
@@ -59,10 +61,11 @@ Engine::~Engine()
 		delete _systems[i];
 	}
 
-	delete displayModule;
+	delete display;
 	delete assetLoader;
+	delete nativeInput;
 
-	displayModule = NULL;
+	display = NULL;
 	assetLoader = NULL;
 }
 
@@ -79,15 +82,15 @@ void Engine::create()
 		RenderSystem* renderSystem = new RenderSystem; //renderer system
 		GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
 		ScreenSystem* screenSystem = new ScreenSystem;
-		Input* inputSystem = new Input;
+		Input* inputSystem = new Input(nativeInput);
 		GameTime* timeSystem = new GameTime;
 		AssetManager* assetSystem = new AssetManager;
 
 		addSystem(*assetSystem, 0);
-		addSystem(*gameLogicSystem, 1);
-		addSystem(*screenSystem, 2);
-		addSystem(*renderSystem, 3);
-		addSystem(*inputSystem, 4);
+		addSystem(*inputSystem, 1);
+		addSystem(*gameLogicSystem, 2);
+		addSystem(*screenSystem, 3);
+		addSystem(*renderSystem, 4);
 		addSystem(*timeSystem, 5);
 
 		isEngineInited_ = true;
@@ -110,7 +113,13 @@ void Engine::draw()
 		vectorRemove(_compInitList, pred_initComponents);
 
 	for (System* s : _systems)
+		s->OnStartFrame();
+
+	for (System* s : _systems)
 		s->Update();
+
+	for (System* s : _systems)
+		s->OnEndFrame();
 
 	for (Component* comp : _compDestroyList)
 	{

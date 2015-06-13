@@ -1,5 +1,6 @@
 
 #include "../CoreEngine/LIBS.h"
+#include "../Components/Camera.h"
 #include "ScreenSystem.h"
 
 void ScreenSystem::OnScreenChange(int width, int height)

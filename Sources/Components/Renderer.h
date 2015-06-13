@@ -1,15 +1,5 @@
-//
-//  Transform.h
-//  OpenGLTesting
-//
-//  Created by Hakob on 11/7/14.
-//  Copyright (c) 2014 Haksist. All rights reserved.
-//
-
 #ifndef RENDERER_H
 #define RENDERER_H
-
-#include <assert.h>
 
 #include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/ActiveComponent.h"
@@ -54,13 +44,10 @@ public:
 	static std::map<const char*, unsigned int> SmallAttributes;
 	static std::map<const char*, unsigned int> StandartAttributes;
 
-	virtual ~Renderer()
-	{
-		for (size_t i = 0, len = materials.size(); i < len; i++)
-			getRenderSystem()->removeMaterialForRenderer(materials[i], this, i);
-	};
-
+	virtual void OnEnable();
+	virtual void OnDisable();
 	virtual void Render(int materialIndex = 0) = 0;
+
 	int getSortingLayer() const;
 	int getLayerOrder() const;
 	void setSortingLayer(int layer, int order = 0);

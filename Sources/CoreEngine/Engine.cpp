@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Engine.h"
+#include "Application.h"
 #include "LIBS.h"
 #include "ActiveComponent.h"
 #include "Utils.h"
@@ -73,7 +74,7 @@ void Engine::create()
 {
 	if (!isEngineInited_)
 	{
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
 		atexit(f_Destroy);
 		if (glewInit() == GLEW_OK)
 			printf("GLEW Inited!\n");
@@ -97,7 +98,7 @@ void Engine::create()
 			_systems[i]->OnCreate();
 
 		isEngineInited_ = true;
-		Logger::PrintError("Engine::Inited\n");
+		Logger::Print("Engine::Inited\n");
 
 	}
 

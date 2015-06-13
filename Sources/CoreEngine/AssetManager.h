@@ -14,6 +14,7 @@
 #include "TextureAtlas.h"
 #include "TextureTiled.h"
 #include "../Extras/smart_pointer.h"
+#include "../Extras/Singleton.h"
 
 struct ModelDescriptor
 {
@@ -22,7 +23,7 @@ struct ModelDescriptor
 	std::map<std::string, std::string> meshMaterials;
 };
 
-class AssetManager : public System
+class AssetManager : public System, private Singleton<AssetManager>
 {
 protected:
 	virtual ~AssetManager();
@@ -32,7 +33,17 @@ public:
 	virtual void OnResume();
 	virtual void OnPause();
 	virtual void OnDestroy();
+
+	static smart_pointer<Material> LoadMaterial(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath);
+
+	smart_pointer<Material> material(const char* name, const char* vertexShaderPath, const char* fragmentShaderPath);
+
 };
+
+inline smart_pointer<Material> AssetManager::LoadMaterial(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath)
+{
+	return AssetManager::instance_->material(name, vertexShaderRelativePath, fragmentShaderRelativePath);
+}
 
 std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);
 std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor* descriptor = NULL);

@@ -1,13 +1,9 @@
 
 #include <iostream>
 
-#include "../CoreEngine/Engine.h"
-#include "../CoreEngine/GameLogic.h"
-#include "../Systems/Input.h"
-#include "../Systems/GameTime.h"
 #include "FPSCounter.cpp"
-#include "../Components/SpriteRenderer.h"
-#include "../Components/MeshRenderer.h"
+
+#include "../CoreEngine/ChmoEngine.h"
 
 using namespace std;
 
@@ -31,84 +27,6 @@ public:
 
 	void Update()
 	{
-		if (Input::IsKeyDownNow(SpecialKey::UP))
-		{
-			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
-
-			if (meshRend != NULL)
-			{
-				smart_pointer<Mesh> mesh = meshRend->getMesh();
-
-				std::vector<unsigned int> indices{ 2, 3, 1 };
-			//	std::vector<unsigned int> indices{ 0, 1, 2, 3, 0, 2 };
-
-				std::vector<Vector3> verts{ Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
-				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
-
-				//mesh->setVertices(&verts);
-				//mesh->setNormals(norms);
-				mesh->setIndices(&indices);
-
-				//meshRend->setMesh(mesh);
-			}
-			else
-				std::cout << "CAN'T FIND\n";
-		}
-
-		if (Input::IsKeyDownNow(SpecialKey::DOWN))
-		{
-			MeshRenderer* meshRend = GameObject::FindComponent<MeshRenderer>();
-
-			if (meshRend != NULL)
-			{
-				smart_pointer<Mesh> mesh = meshRend->getMesh();
-
-				std::vector<unsigned int> indices{ 3, 0, 2 };
-				std::vector<Vector3> verts{ Vector3(-1.0f, -3.0f, 0.0f), Vector3(1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), Vector3(-1.0f, 1.0f, 0.0f) };
-				std::vector<Vector3> norms{ Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f) };
-
-				//mesh->setVertices(&verts);
-				//mesh->setNormals(norms);
-				mesh->setIndices(&indices);
-
-				//meshRend->setMesh(mesh);
-			}
-			else
-				std::cout << "CAN'T FIND\n";
-		}
-
-		if (Input::IsMouseDownNow(MouseButton::Left))
-		{
-			std::cout << "PRINT ME\n";
-		}
-
-		if (Input::IsKeyDownNow(Key::p))
-		{
-			std::cout << "PRINT ME\n";
-		}
-
-		if (Input::IsKeyDownNow(Key::F))
-		{
-			SpriteRenderer* spRend = GameObject::FindComponent<SpriteRenderer>();
-			if (spRend != NULL)
-			{
-				spRend->destroy();
-			}
-		}
-
-		//glMaterialfv(GL_FRONT, GL_DIFFUSE, new float[4]{ 1.0f, 0.0f, 0.0f, 1.0f });
-		//glBegin(GL_LINES);
-		//{
-		//	float z = -5.0f;
-
-		//	glVertex3f(0.0f, 1.0f, z);
-		//	glVertex3f(0.0f, -1.0f, z);
-
-		//	glVertex3f(-1.0f, 0.0f, z);
-		//	glVertex3f(1.0f, 0.0f, z);
-		//}
-		//glEnd();
-
 		if (Input::IsKeyDown(Key::e))
 		{
 			printf("AUUUUUU\n");

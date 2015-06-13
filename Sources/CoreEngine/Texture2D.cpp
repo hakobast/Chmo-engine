@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "Application.h"
 #include "../Extras/GLUtils.h"
 #include "Texture2D.h"
 
@@ -138,7 +139,7 @@ inline void Texture2D::setAnisoFiltering(bool enable)
 	if (isExtensionSupported("GL_EXT_texture_filter_anisotropic"))
 	{
 		glBindTexture(GL_TEXTURE_2D, texture_id);
-#if defined(_WIN32) || defined (__APPLE__)
+#ifdef GL_OPENGL
 		if (enable)
 		{
 			GLfloat max;

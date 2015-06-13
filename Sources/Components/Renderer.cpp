@@ -28,6 +28,19 @@ std::map<const char*, unsigned int> Renderer::SmallAttributes{
 	{ texCoordAttribName, 1 },
 };
 
+//TODO Test this functions because thies may cause a bug 
+void Renderer::OnEnable()
+{
+	for (size_t i = 0, len = materials.size(); i < len; i++)
+		getRenderSystem()->addMaterialForRenderer(materials[i], this, i);
+}
+
+void Renderer::OnDisable()
+{
+	for (size_t i = 0, len = materials.size(); i < len; i++)
+		getRenderSystem()->removeMaterialForRenderer(materials[i], this, i);
+}
+
 //TODO implement material and shader copy constructor to remove comment
 std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {

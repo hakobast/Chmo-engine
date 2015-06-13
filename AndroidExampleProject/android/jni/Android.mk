@@ -17,6 +17,9 @@ EXTRAS_SRC_FILES  := $(EXTRAS_SRC_FILES:$(LOCAL_PATH)/%=%)
 DEBUG_SRC_FILES  := $(wildcard $(LOCAL_PATH)/../../../Sources/Debug/*.cpp)
 DEBUG_SRC_FILES  := $(DEBUG_SRC_FILES:$(LOCAL_PATH)/%=%)
 
+GAME_SRC_FILES  := $(wildcard $(LOCAL_PATH)/../../game/Logic/*.cpp)
+GAME_SRC_FILES  := $(GAME_SRC_FILES:$(LOCAL_PATH)/%=%)
+
 # prepare FreeImage
 include $(CLEAR_VARS)
 LOCAL_MODULE    := LibFreeImage
@@ -31,6 +34,7 @@ LOCAL_SRC_FILES += $(SYSTEMS_SRC_FILES)
 LOCAL_SRC_FILES += $(COMPONENTS_SRC_FILES)
 LOCAL_SRC_FILES += $(EXTRAS_SRC_FILES)
 LOCAL_SRC_FILES += $(DEBUG_SRC_FILES)
+LOCAL_SRC_FILES += $(GAME_SRC_FILES)
 LOCAL_STATIC_LIBRARIES := LibFreeImage
 LOCAL_LDLIBS    := -lGLESv2 -lm -landroid -llog   # using OpenGL ES 2.0 
 LOCAL_CPPFLAGS  += -std=c++11   # enable c++11 features (fore example` non static member initialization)

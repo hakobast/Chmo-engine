@@ -13,6 +13,7 @@ struct AssetFile
 	const void* handler = 0;
 };
 
+//TODO create function to load assets from files in disk
 class AssetLoader
 {
 public:

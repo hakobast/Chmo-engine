@@ -7,7 +7,7 @@
 #include "../CoreEngine/Material.h"
 #include "../Extras/Color.h"
 
-class GLMeshDrawer;
+class GLDrawer;
 
 class SpriteRenderer : public Renderer
 {
@@ -17,7 +17,7 @@ public:
 	virtual void Create();
 	virtual void Init();
 	virtual void Update();
-	virtual void Render(int subRenderers = 0);
+	virtual void Render(int materialIndex = 0);
 
 	void setTextureFrame(int frame);
 	void setColor(Color c);
@@ -26,7 +26,7 @@ private:
 	int frame_ = 0;
 	GLfloat meterPerPixel_ = 0;
 
-	GLMeshDrawer* drawer = 0;
+	GLDrawer* drawer_ = 0;
 	Vector2* verts_;
 	Vector2* texcoords_;
 	Vector3* normals_;
@@ -37,12 +37,18 @@ private:
 
 inline void SpriteRenderer::setColor(Color c)
 {
-	getSharedMaterial()->setColor(c);
+	smart_pointer<Material>& mat = getSharedMaterial();
+	if (!mat.isEmpty())
+		mat->setColor(c);
 }
 
 inline Color SpriteRenderer::getColor()
 {
-	return getSharedMaterial()->getColor();
+	smart_pointer<Material>& mat = getSharedMaterial();
+	if (!mat.isEmpty())
+		return mat->getColor();
+
+	return Color::BLACK;
 }
 
 #endif

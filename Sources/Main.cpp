@@ -11,15 +11,16 @@
 #include "CoreEngine/ChmoEngine.h"
 #include "Extras/GLUtils.h"
 
-#include "Testings/Ship.h"
-#include "Testings/FPSCounter.cpp"
-#include "Testings/GLTestComponent.cpp"
-#include "Testings/SecondComponent.cpp"
-#include "Testings/TestComponent.cpp"
 #include "CoreEngine/GLUTDisplay.h"
 #include "CoreEngine/GLUTInput.h"
 #include "CoreEngine/WinAssetLoader.h"
 
+#include "Testings/Ship.h"
+#include "Testings/EnemySpawner.h"
+#include "Testings/Weapon.h"
+#include "Testings/ShipController.h"
+#include "Testings/FPSCounter.cpp"
+#include "Testings/GLTestComponent.cpp"
 
 #define TARGET_FPS 60
 
@@ -49,6 +50,51 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+void createSimpleSpaceship()
+{
+	std::vector<Vector3> points;
+	points.push_back(Vector3(0.03f, 0.6f, 0.0f));
+	points.push_back(Vector3(0.03f, 0.71f, 0.0f));
+	points.push_back(Vector3(0.1f, 0.7f, 0.0f));
+	points.push_back(Vector3(0.2f, 0.4f, 0.0f));
+	points.push_back(Vector3(0.5f, 0.1f, 0.0f));
+	points.push_back(Vector3(0.5f, -0.3f, 0.0f));
+	points.push_back(Vector3(0.3f, -0.5f, 0.0f));
+	points.push_back(Vector3(0.25f, -0.7f, 0.0f));
+	points.push_back(Vector3(0.15f, -0.8f, 0.0f));
+	points.push_back(Vector3(0.1f, -0.6f, 0.0f));
+
+	points.push_back(Vector3(-0.1f, -0.6f, 0.0f));
+	points.push_back(Vector3(-0.15f, -0.8f, 0.0f));
+	points.push_back(Vector3(-0.25f, -0.7f, 0.0f));
+	points.push_back(Vector3(-0.3f, -0.5f, 0.0f));
+	points.push_back(Vector3(-0.5f, -0.3f, 0.0f));
+	points.push_back(Vector3(-0.5f, 0.1f, 0.0f));
+	points.push_back(Vector3(-0.2f, 0.4f, 0.0f));
+	points.push_back(Vector3(-0.1f, 0.7f, 0.0f));
+
+	points.push_back(Vector3(-0.03f, 0.71f, 0.0f));
+	points.push_back(Vector3(-0.03f, 0.6f, 0.0f));
+	points.push_back(Vector3(0.03f, 0.6f, 0.0f));
+
+	GameObject* obj = new GameObject("LineRenderer");
+	obj->addComponent<ShipController>();
+	Ship* ship = obj->addComponent<Ship>();
+
+	smart_pointer<Material> mat =
+		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitLine.vert", "Resources/Shaders/UnlitLine.frag");
+
+	LineRenderer* lineRend = obj->addComponent<LineRenderer>();
+	lineRend->setMainMaterial(mat);
+	lineRend->setPointsCount(points.size());
+	lineRend->setPoints(&points);
+	lineRend->setColor(Color::GREEN);
+
+	ship->addWeapon(new Weapon(Color::RED), Vector3(-0.3f, -0.2f, 0.0f),Vector3::UP);
+	ship->addWeapon(new Weapon(Color::RED), Vector3(0.3f, -0.2f, 0.0f), Vector3::UP);
+	ship->addWeapon(new Weapon(Color::PURPLE), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
+}
+
 void CreateGame()
 {
 	//creating game logics
@@ -63,20 +109,13 @@ void CreateGame()
 //	light->setLinearAttenuation(0.1f);
 //	light->setSpotCutoff(15.0f);
 	 
-	AssetFile vertexShaderAsset = Engine::GetInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.vert");
-	AssetFile fragmentShaderAsset = Engine::GetInstance().assetLoader->loadAsset("Resources/Shaders/UnlitSprite.frag");
-
-	smart_pointer<Material> mat(new Material("Unlit",
-		(char*)vertexShaderAsset.data, vertexShaderAsset.length,
-		(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
-
-	Engine::GetInstance().assetLoader->releaseAsset(&vertexShaderAsset);
-	Engine::GetInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
+	smart_pointer<Material> mat = 
+		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitLine.vert", "Resources/Shaders/UnlitLine.frag");
 
 	GameObject* camerObj = new GameObject("Camera");
-	camerObj->addComponent<GLTestComponent>();
+	//camerObj->addComponent<GLTestComponent>();
 	camerObj->addComponent<FPSCounter>();
-	camerObj->getTransform()->Location.set(0.0f, 0.0f, 10.0f);
+	camerObj->getTransform()->setPosition(Vector3(0.0f, 0.0f, 10.0f));
 
 	Camera* camera = camerObj->addComponent<Camera>();
 	camera->setProjectionMode(ProjectionMode::ORTHOGRAPHIC);
@@ -89,9 +128,13 @@ void CreateGame()
 
 	/*smart_pointer<Material> mat = Material::Unlit();*/
 	mat->addTexture(textureTransparent);
-	mat->setColor(Color::WHITE);
 
-	for (int i = 0; i < 1; i++)
+	GameObject* enemySpawner = new GameObject("EnemySpawner");
+	enemySpawner->addComponent<EnemySpawner>();
+
+	createSimpleSpaceship();
+
+	for (int i = 0; i < 0; i++)
 	{
 		GameObject* obj = new GameObject("FirstGameObject");
 // 		obj->addComponent<Terrain>();
@@ -108,10 +151,7 @@ void CreateGame()
 		//obj->getComponent<SpriteRenderer>()->setSortingLayer(SortingLayer::Default, 2);
 		//obj->getTransform()->Location.set(-10.0f + rand() % 20, -10.0f + rand() % 20, -20.0f);
 
-		float scale = 1.0f;
-		obj->getTransform()->Location.set(0.0f, 0.0f, -2.0f);
-		//obj->getTransform()->RotateX(90);
-		obj->getTransform()->ScaleLocal *= scale;
+		obj->getTransform()->setPosition(Vector3(0.0f, 0.0f, -2.0f));
 	}
 
 	// **************** MODEL ****************
@@ -147,6 +187,6 @@ void CreateGame()
 		meshRend->setMainMaterial(mat);
 		meshRend->setMesh(mesh);
 
-		obj->getTransform()->Location.set(2.0f*i, 0.0f, -2.0f);
+		obj->getTransform()->setPosition(Vector3(2.0f*i, 0.0f, -2.0f));
 	}
 }

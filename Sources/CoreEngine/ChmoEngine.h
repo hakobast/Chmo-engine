@@ -3,6 +3,7 @@
 #define OOPTesting_ChmoEngine_h
 
 
+#include "Application.h"
 #include "LIBS.h"
 #include "Engine.h"
 #include "ActiveComponent.h"
@@ -23,14 +24,15 @@
 #include "../Systems/GameTime.h"
 #include "../Systems/Input.h"
 
-#if defined(_WIN32) || defined (__APPLE__) //TODO implement functionality for OpenGL ES
-#include "../Components/Light.h"
+#ifdef GL_OPENGL 
+#include "../Components/Light.h" //TODO implement functionality for OpenGL ES
 #endif
 
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Renderer.h"
 #include "../Components/SpriteRenderer.h"
+#include "../Components/LineRenderer.h"
 #include "../Components/Terrain.h"
 #include "../Components/TextureAnimator.h"
 
@@ -39,6 +41,7 @@
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Vectors.h"
 #include "../Extras/TimeUtils.h"
+#include "../Extras/Math.h"
 
 #include "../Debug/Logger.h"
 

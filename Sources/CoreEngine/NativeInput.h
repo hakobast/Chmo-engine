@@ -110,6 +110,7 @@ class Touch
 	friend class NativeInput;
 public:
 	void getPosition(Vector2& value) const;
+	Vector2 getPosition() const;
 	void getDeltaPosition(Vector2& value) const;
 	int	 getTouchId() const;
 	TouchAction getAction() const;
@@ -133,6 +134,7 @@ public:
 	int  getKey				(SpecialKey key)	 const;
 	int	 getMouse			(MouseButton button) const;
 	void getMousePosition	(Vector2& value)	 const;
+Vector2  getMousePosition	()					 const;
 	int	 getTouchCount		()					 const;
 
 	Touch* getTouch(int index);
@@ -169,6 +171,11 @@ inline void NativeInput::getMousePosition(Vector2& value) const
 	value.y = (float)mousePosition_[1];
 }
 
+inline Vector2 NativeInput::getMousePosition() const
+{
+	return Vector2((float)mousePosition_[0], (float)mousePosition_[1]);
+}
+
 inline int	NativeInput::getTouchCount() const
 { 
 	return touchCount_;
@@ -179,6 +186,11 @@ inline void Touch::getPosition(Vector2& value) const
 {
 	value.x = (float)position[0];
 	value.y = (float)position[1];
+}
+
+inline Vector2 Touch::getPosition() const
+{
+	return Vector2((float)position[0], (float)position[1]);
 }
 
 inline void Touch::getDeltaPosition(Vector2& value) const

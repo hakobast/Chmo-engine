@@ -153,9 +153,6 @@
     <ClInclude Include="Sources\Extras\Matrix4.h">
       <Filter>Header Files\Extras</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Testings\Ship.h">
-      <Filter>Header Files\Testing</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\Testings\imageloader.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
@@ -201,12 +198,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\GLMeshDrawer.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\CoreEngine\Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\Extras\Singleton.h">
       <Filter>Header Files\Extras</Filter>
     </ClInclude>
@@ -226,6 +217,42 @@
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
     <ClInclude Include="Sources\CoreEngine\AndroidInput.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\GLDrawer.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Components\LineRenderer.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\ShipController.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\Ship.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\Weapon.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\Bullet.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\SimplePool.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\Enums.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\EnemySpawner.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\Enemy.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Extras\Math.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CoreEngine\Application.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -311,15 +338,6 @@
     <ClCompile Include="Sources\Testings\FPSCounter.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Testings\TestComponent.cpp">
-      <Filter>Source Files\Testing</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Testings\Ship.cpp">
-      <Filter>Source Files\Testing</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Testings\SecondComponent.cpp">
-      <Filter>Source Files\Testing</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\Testings\GLTestComponent.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
@@ -362,9 +380,6 @@
     <ClCompile Include="Sources\Extras\GLUtils.cpp">
       <Filter>Source Files\Extras</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\CoreEngine\NativeInput.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
@@ -378,6 +393,36 @@
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
     <ClCompile Include="Sources\CoreEngine\AndroidInput.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\GLDrawer.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\LineRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\ShipController.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\Ship.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\Weapon.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\Bullet.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\EnemySpawner.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\Enemy.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Extras\Math.cpp">
+      <Filter>Source Files\Extras</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\Application.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>

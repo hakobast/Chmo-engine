@@ -1,7 +1,6 @@
 
 #include "Camera.h"
 #include "../CoreEngine/LIBS.h"
-#include "../Systems/ScreenSystem.h"
 #include "../Debug/Logger.h"
 
 Camera* Camera::main = NULL;
@@ -43,32 +42,25 @@ void Camera::ApplyCameraChanges()
 
 	glViewport(0, 0, width, height);
 
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-
-	GLfloat ratio = (GLfloat)width / (GLfloat)height;
+	float ratio = (float)width / height;
 
 	if (projectionMode_ == ORTHOGRAPHIC)
 	{
 		if (width <= height)
 		{
-			//glOrtho(-_orthoSize, _orthoSize, -_orthoSize / ratio, _orthoSize / ratio, _zNear, _zFar);
-			projectionMatrix = Matrix4::setOrthoFrustum(-_orthoSize, _orthoSize, -_orthoSize / ratio, _orthoSize / ratio, _zNear, _zFar);
+			halfSize_.x = orthoSize_;
+			halfSize_.y = orthoSize_ / ratio;
+			projectionMatrix = Matrix4::setOrthoFrustum(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
 		}
 		else
 		{
-			//glOrtho(-_orthoSize*ratio, _orthoSize*ratio, -_orthoSize, _orthoSize, _zNear, _zFar);
-			projectionMatrix = Matrix4::setOrthoFrustum(-_orthoSize*ratio, _orthoSize*ratio, -_orthoSize, _orthoSize, _zNear, _zFar);
+			halfSize_.x = orthoSize_*ratio;
+			halfSize_.y = orthoSize_;
+			projectionMatrix = Matrix4::setOrthoFrustum(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
 		}
 	}
 	else
 	{
-		//gluPerspective(_fovy, ratio, _zNear, _zFar);
 		projectionMatrix = Matrix4::setFrustum(_fovy, ratio, _zNear, _zFar);
 	}
-
- 	//glMatrixMode(GL_MODELVIEW);
- 	//glLoadIdentity();
-
-	//printf("RESIZE %d,%d\n", width, height);
 }

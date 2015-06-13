@@ -13,7 +13,7 @@ class ActiveComponent :public Component
 {
 	friend class GameObject;
 protected:
-	~ActiveComponent();
+	virtual ~ActiveComponent();
 private:
 	bool enabled = true;
 	bool destroyState = false;

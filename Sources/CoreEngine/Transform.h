@@ -14,22 +14,28 @@ class Transform: public Component
 {
 	friend class GameObject;
 private:
-	Matrix4 matrix;
-	Vector3 _Up;
-	Vector3 _Forward;
+	Matrix4 matrix_;
+	Vector3 location_;
+	Vector3 scaleLocal_;
+	Vector3 up_;
+	Vector3 forward_;
 	Transform() :
-		Location(Vector3(0.0f, 0.0f, 0.0f)),
-		_Up(Vector3(0.0f, 1.0f, 0.0f)),
-		_Forward(Vector3(0.0f,0.0f,1.0f)),
-		ScaleLocal(Vector3(1.0f,1.0f,1.0f)){};
+		location_(Vector3(0.0f, 0.0f, 0.0f)),
+		up_(Vector3(0.0f, 1.0f, 0.0f)),
+		forward_(Vector3(0.0f,0.0f,1.0f)),
+		scaleLocal_(Vector3(1.0f,1.0f,1.0f)){};
 protected:
 	~Transform();
 public:
-	Vector3 Location;
-	Vector3 ScaleLocal;
-	Vector3 Right();
-	Vector3 Up();
-	Vector3 Forward();
+	void getPosition(Vector3& v) const;
+	Vector3 getPosition() const;
+	void setPosition(Vector3 newPos);
+	void getScale(Vector3& v) const;
+	Vector3 getScale() const;
+	void setScale(Vector3 newScale);
+	Vector3 Right() const;
+	Vector3 Up() const;
+	Vector3 Forward() const;
 	void getMatrix(Matrix4& matrix, bool calcScale = false);
 
 	void Translate(GLfloat x, GLfloat y, GLfloat z);
@@ -43,19 +49,53 @@ public:
 	void RotateX(GLfloat Angle);
 };
 
-inline Vector3 Transform::Right()
+inline Vector3 Transform::getPosition() const
 {
-	return _Up.cross(_Forward);
+	return location_;
 }
 
-inline Vector3 Transform::Up()
+inline void Transform::getPosition(Vector3& v) const
+{
+	v.x = location_.x;
+	v.y = location_.y;
+	v.z = location_.z;
+}
+
+inline void Transform::setPosition(Vector3 newPos)
+{
+	location_ = newPos;
+}
+
+inline void Transform::getScale(Vector3& v) const
+{
+	v.x = scaleLocal_.x;
+	v.y = scaleLocal_.y;
+	v.z = scaleLocal_.z;
+}
+
+inline Vector3 Transform::getScale() const
+{
+	return scaleLocal_;
+}
+
+inline void Transform::setScale(Vector3 newScale)
+{
+	scaleLocal_ = newScale;
+}
+
+inline Vector3 Transform::Right() const
+{
+	return up_.cross(forward_);
+}
+
+inline Vector3 Transform::Up() const
 { 
-	return _Up;
+	return up_;
 }
 
-inline Vector3 Transform::Forward()
+inline Vector3 Transform::Forward() const
 {
-	return _Forward;
+	return forward_;
 }
 
 #endif

@@ -3,7 +3,7 @@
 #include "../Extras/GLUtils.h"
 #include "../Debug/Logger.h"
 
-#include "GLMeshDrawer.h"
+#include "GLDrawer.h"
 
 Mesh::~Mesh()
 {
@@ -70,7 +70,7 @@ void Mesh::setSubMeshCount(int count)
 		{
 			subMeshes_.push_back(new SubMesh);
 
-			GLMeshDrawer* meshDrawer = new GLMeshDrawer(drawingMode_, dataUsage_);
+			GLDrawer* meshDrawer = new GLDrawer(drawingMode_, dataUsage_);
 
 			//TEMP
 			meshDrawer->setVertexIndex(0);
@@ -86,7 +86,7 @@ void Mesh::setSubMeshCount(int count)
 
 void Mesh::clear()
 {
-	for (GLMeshDrawer* meshDrawer : submeshesDrawers_)
+	for (GLDrawer* meshDrawer : submeshesDrawers_)
 		delete meshDrawer;
 
 	for (SubMesh* subMesh : subMeshes_)

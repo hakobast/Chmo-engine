@@ -1,5 +1,6 @@
 
-#if defined(_WIN32) || defined(__APPLE__)
+#include "../CoreEngine/Application.h"
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
 
 #include <assert.h>
 

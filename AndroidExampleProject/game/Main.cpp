@@ -1,6 +1,6 @@
 
-#include "../../Sources/CoreEngine/ChmoEngine.h"
-#include "HelloEngine.cpp"
+#include "Logic/EngineInclude.h"
+#include "Logic/HelloEngine.cpp"
 
 void Main()
 {

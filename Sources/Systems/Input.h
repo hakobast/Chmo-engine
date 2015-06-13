@@ -117,6 +117,7 @@ public:
 	static bool IsMouseDown			(MouseButton button);
 	static bool IsMouseDownNow		(MouseButton button);
 	static void GetMousePosition	(Vector2& value);
+	static Vector2 GetMousePosition ();
 	static int	GetTouchCount		();
 	static Touch* GetTouch	(int index);
 
@@ -126,7 +127,7 @@ public:
 	virtual void OnEndFrame();
 	virtual void OnDestroy();
 private:
-	NativeInput* nativeInput_;
+	NativeInput* nativeInput_ = 0;
 };
 
 #endif

@@ -46,11 +46,6 @@ void GameObject::sendAction(string action, void*const data)
 		((GameLogic*)c)->OnAction(action, data);
 }	
 
-void GameObject::sendMessage(string function, void *data)
-{
-
-}
-
 void GameObject::setActive(bool toogle)
 {
 	if (isActive_ == toogle)

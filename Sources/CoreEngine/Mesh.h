@@ -8,7 +8,7 @@
 #include "../Extras/smart_pointer.h"
 #include "../Debug/Logger.h"
 
-class GLMeshDrawer;
+class GLDrawer;
 
 class Mesh :public RemovableObject
 {
@@ -55,7 +55,7 @@ public:
 	void clear();
 private:
 	std::vector<SubMesh*> subMeshes_;
-	std::vector<GLMeshDrawer*> submeshesDrawers_;
+	std::vector<GLDrawer*> submeshesDrawers_;
 	const GLenum drawingMode_;
 	const DataUsage dataUsage_;
 	int sharesCount_;

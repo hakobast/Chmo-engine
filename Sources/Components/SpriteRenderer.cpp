@@ -6,7 +6,7 @@
 #include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/Transform.h"
 #include "../CoreEngine/Component.h"
-#include "../CoreEngine/GLMeshDrawer.h"
+#include "../CoreEngine/GLDrawer.h"
 #include "../Systems/ScreenSystem.h"
 #include "../CoreEngine/GameObject.h"
 #include "../CoreEngine/ShaderProgram.h"
@@ -24,7 +24,7 @@ SpriteRenderer::~SpriteRenderer()
 	delete[] bitangent_;
 	delete[] indices_;
 
-	delete drawer;
+	delete drawer_;
 }
 
 SpriteRenderer::SpriteRenderer()
@@ -71,19 +71,19 @@ SpriteRenderer::SpriteRenderer()
 
 	indices_ = new unsigned int[6]{ 0, 1, 2, 3, 0, 2 };
 
-	drawer = new GLMeshDrawer(GL_TRIANGLES, VAO);
+	drawer_ = new GLDrawer(GL_TRIANGLES, VAO);
 
 	//TEMP get this data from shader
-	drawer->setVertexIndex(0);
-	drawer->setTexCoordIndex(1);
-	drawer->setNormalIndex(2);
-	drawer->setTangentIndex(3);
-	drawer->setBitangentIndex(4);
+	drawer_->setVertexIndex(0);
+	drawer_->setTexCoordIndex(1);
+	drawer_->setNormalIndex(2);
+	drawer_->setTangentIndex(3);
+	drawer_->setBitangentIndex(4);
 
-	drawer->setNormalData(false, 4, normals_[0].getPointer());
-	drawer->setTangentData(3, false, 4, tangent_[0].getPointer());
-	drawer->setBitangentData(3, false, 4, bitangent_[0].getPointer());
-	drawer->setIndexData(6, indices_);
+	drawer_->setNormalData(false, 4, normals_[0].getPointer());
+	drawer_->setTangentData(3, false, 4, tangent_[0].getPointer());
+	drawer_->setBitangentData(3, false, 4, bitangent_[0].getPointer());
+	drawer_->setIndexData(6, indices_);
 }
 
 void SpriteRenderer::Create()
@@ -103,9 +103,9 @@ void SpriteRenderer::Init()
 void SpriteRenderer::Update(){}
 
 bool hasTexture;
-void SpriteRenderer::Render(int material)
+void SpriteRenderer::Render(int materialIndex)
 {
- 	drawer->draw();
+ 	drawer_->draw();
 
 	float rotationSpeed = 100.0f;
 
@@ -144,7 +144,7 @@ void SpriteRenderer::setTextureFrame(int frame)
 		texcoords_[2].set(region->uv[4], region->uv[5]);
 		texcoords_[3].set(region->uv[6], region->uv[7]);
 
-		drawer->setVertexData(2, false, 4, verts_[0].getPointer());
-		drawer->setTexCoordData(2, false, 4, texcoords_[0].getPointer());
+		drawer_->setVertexData(2, false, 4, verts_[0].getPointer());
+		drawer_->setTexCoordData(2, false, 4, texcoords_[0].getPointer());
 	}
 }

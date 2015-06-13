@@ -14,7 +14,7 @@ class GameLogic :public ActiveComponent
 friend class GameObject;
 friend class GameLogicSystem;
 protected:
-	~GameLogic(){};
+	virtual ~GameLogic(){};
 public:
 	virtual void OnAction(std::string action, void*const data){};
 	void sendAction(std::string action, void*const data);

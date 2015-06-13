@@ -1,9 +1,9 @@
 
 #include "../Extras/GLUtils.h"
 #include "../Debug/Logger.h"
-#include "GLMeshDrawer.h"
+#include "GLDrawer.h"
 
-GLMeshDrawer::~GLMeshDrawer()
+GLDrawer::~GLDrawer()
 {
 	if (vertexBufferId_ != 0)	 glDeleteBuffers(1, &vertexBufferId_);
 	if (texCoordBufferId_ != 0)  glDeleteBuffers(1, &texCoordBufferId_);
@@ -13,7 +13,7 @@ GLMeshDrawer::~GLMeshDrawer()
 	if (indexBufferId_ != 0)	 glDeleteBuffers(1, &indexBufferId_);
 }
 
-GLMeshDrawer::GLMeshDrawer(GLenum drawingMode, DataUsage dataUsage)
+GLDrawer::GLDrawer(GLenum drawingMode, DataUsage dataUsage)
 :drawingMode(drawingMode), dataUsage(dataUsage)
 {
 #ifdef GL_ES_VERSION_2_0
@@ -36,16 +36,16 @@ GLMeshDrawer::GLMeshDrawer(GLenum drawingMode, DataUsage dataUsage)
 	}
 }
 
-void GLMeshDrawer::draw()
+void GLDrawer::draw()
 {
-	if (dataUsage == NONE)
+	if (dataUsage == NONE || vertexCount_ <= 0)
 		return;
 
 	if (dataUsage == VBO)
 	{
 		if (isDirty())
 			updateBuffers();
-
+		
 		if (texCoordCount_ > 0)
 		{
 			glEnableVertexAttribArray(texCoordIndex_);
@@ -137,7 +137,7 @@ void GLMeshDrawer::draw()
 	if (bitangentCount_ > 0)	glDisableVertexAttribArray(bitangentIndex_);
 }
 
-void GLMeshDrawer::updateBuffers()
+void GLDrawer::updateBuffers()
 {
 	if (isVertexDirty_)
 	{
@@ -242,7 +242,7 @@ void GLMeshDrawer::updateBuffers()
 	}
 }
 
-void GLMeshDrawer::setVertexData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
+void GLDrawer::setVertexData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
 {
 	if (count*size != vertexCount_*vertexSize_ || VBOUsage != vertexVBOUsage)
 	{
@@ -261,7 +261,7 @@ void GLMeshDrawer::setVertexData(GLsizei size, GLboolean normalized, GLuint coun
 	isVertexDirty_ = true;
 }
 
-void GLMeshDrawer::setTexCoordData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
+void GLDrawer::setTexCoordData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
 {
 	if (count*size != texCoordCount_*texCoordSize_ || VBOUsage != texCoordVBOUsage)
 	{
@@ -280,7 +280,7 @@ void GLMeshDrawer::setTexCoordData(GLsizei size, GLboolean normalized, GLuint co
 	isTexCoordDirty_ = true;
 }
 
-void GLMeshDrawer::setTangentData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
+void GLDrawer::setTangentData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
 {
 	if (count*size != tangentCount_*tangentSize_ || VBOUsage != tangentVBOUsage)
 	{
@@ -299,7 +299,7 @@ void GLMeshDrawer::setTangentData(GLsizei size, GLboolean normalized, GLuint cou
 	isTangentDirty_ = true;
 }
 
-void GLMeshDrawer::setBitangentData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
+void GLDrawer::setBitangentData(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
 {
 	if (count*size != bitangentCount_*bitangentSize_ || VBOUsage != bitangentVBOUsage)
 	{
@@ -318,7 +318,7 @@ void GLMeshDrawer::setBitangentData(GLsizei size, GLboolean normalized, GLuint c
 	isBitangentDirty_ = true;
 }
 
-void GLMeshDrawer::setNormalData(GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
+void GLDrawer::setNormalData(GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage)
 {
 	normalSize_ = 3;
 	if (count*normalSize_ != normalCount_*normalSize_ || VBOUsage != normalVBOUsage)
@@ -337,7 +337,7 @@ void GLMeshDrawer::setNormalData(GLboolean normalized, GLuint count, GLfloat* da
 	isNormalDirty_ = true;
 }
 
-void GLMeshDrawer::setIndexData(GLuint count, GLuint* data, GLenum VBOUsage)
+void GLDrawer::setIndexData(GLuint count, GLuint* data, GLenum VBOUsage)
 {
 	if (count != indexCount_ || VBOUsage != indexVBOUsage)
 	{

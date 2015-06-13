@@ -46,6 +46,22 @@ void AssetManager::OnDestroy()
 
 }
 
+smart_pointer<Material> AssetManager::material(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath)
+{
+	AssetFile vertexShaderAsset = Engine::GetInstance().assetLoader->loadAsset(vertexShaderRelativePath);
+	AssetFile fragmentShaderAsset = Engine::GetInstance().assetLoader->loadAsset(fragmentShaderRelativePath);
+
+	smart_pointer<Material> mat(new Material(name,
+		(char*)vertexShaderAsset.data, vertexShaderAsset.length,
+		(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
+	mat->setColor(Color::WHITE);
+
+	Engine::GetInstance().assetLoader->releaseAsset(&vertexShaderAsset);
+	Engine::GetInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
+
+	return mat;
+}
+
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, Vector3& p, Vector3& n, unsigned int& index);
 bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector2>& texcoord, Vector3& p, Vector2& t, unsigned int& index);

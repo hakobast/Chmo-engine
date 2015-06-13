@@ -12,11 +12,14 @@
 
 const float EPSILON = 0.000001f;
 
+struct Vector3;
+
 struct Vector2
 {
 	float x, y;
 	Vector2() :x(0.0f), y(0.0f){}
 	Vector2(float x, float y) :x(x), y(y){}
+	Vector2(const Vector3& v);
 
 public:
 	static const Vector2 ZERO;
@@ -214,6 +217,7 @@ struct Vector3
     float x,y,z;
     Vector3():x(0.0f),y(0.0f),z(0.0f){}
     Vector3(float x, float y,float z):x(x),y(y),z(z){}
+	Vector3(const Vector2& v);
     
 public:
 	static const Vector3 ZERO;
@@ -221,6 +225,8 @@ public:
 	static const Vector3 RIGHT;
 	static const Vector3 UP;
 	static const Vector3 FORWARD;
+
+	static Vector3 Lerp(Vector3 a, Vector3 b, float t);
 
     void set(float x,float y,float z);
     Vector3 duplicate() const;
@@ -252,8 +258,15 @@ public:
     float& operator [](int index);
     bool operator ==(const Vector3& other) const;
     bool operator !=(const Vector3& other) const;
+	bool operator ==(const Vector2& other) const;
+	bool operator !=(const Vector2& other) const;
 	friend std::ostream& operator <<(std::ostream& stream, const Vector3& v3);
 };
+
+inline Vector3 Vector3::Lerp(Vector3 a, Vector3 b, float t)
+{
+	return a*(1 - t) + b*t;
+}
 
 inline std::ostream& operator <<(std::ostream& stream, const Vector3& v3)
 {
@@ -425,6 +438,16 @@ inline bool Vector3:: operator ==(const Vector3& other) const
 inline bool Vector3:: operator !=(const Vector3& other) const
 {
     return fabs(x-other.x) > EPSILON && fabs(y-other.y) > EPSILON && fabs(z-other.z) > EPSILON;
+}
+
+inline bool Vector3:: operator ==(const Vector2& other) const
+{
+	return fabs(x - other.x) <= EPSILON && fabs(y - other.y) <= EPSILON;
+}
+
+inline bool Vector3:: operator !=(const Vector2& other) const
+{
+	return fabs(x - other.x) > EPSILON && fabs(y - other.y) > EPSILON;
 }
 
 #pragma region VECTOR_4

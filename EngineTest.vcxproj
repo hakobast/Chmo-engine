@@ -14,6 +14,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sources\Components\Camera.h" />
     <ClInclude Include="Sources\Components\Light.h" />
+    <ClInclude Include="Sources\Components\LineRenderer.h" />
     <ClInclude Include="Sources\Components\MeshRenderer.h" />
     <ClInclude Include="Sources\Components\Renderer.h" />
     <ClInclude Include="Sources\Components\SpriteRenderer.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="Sources\CoreEngine\AndroidAssetLoader.h" />
     <ClInclude Include="Sources\CoreEngine\AndroidDisplay.h" />
     <ClInclude Include="Sources\CoreEngine\AndroidInput.h" />
+    <ClInclude Include="Sources\CoreEngine\Application.h" />
     <ClInclude Include="Sources\CoreEngine\AssetLoader.h" />
     <ClInclude Include="Sources\CoreEngine\AssetManager.h" />
     <ClInclude Include="Sources\CoreEngine\ChmoEngine.h" />
@@ -33,7 +35,7 @@
     <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
     <ClInclude Include="Sources\CoreEngine\GameObject.h" />
-    <ClInclude Include="Sources\CoreEngine\GLMeshDrawer.h" />
+    <ClInclude Include="Sources\CoreEngine\GLDrawer.h" />
     <ClInclude Include="Sources\CoreEngine\GLUTInput.h" />
     <ClInclude Include="Sources\CoreEngine\ImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\LIBS.h" />
@@ -58,6 +60,7 @@
     <ClInclude Include="Sources\Extras\Color.h" />
     <ClInclude Include="Sources\Extras\FileUtils.h" />
     <ClInclude Include="Sources\Extras\GLUtils.h" />
+    <ClInclude Include="Sources\Extras\Math.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
     <ClInclude Include="Sources\Extras\Singleton.h" />
     <ClInclude Include="Sources\Extras\smart_pointer.h" />
@@ -68,12 +71,19 @@
     <ClInclude Include="Sources\Systems\Input.h" />
     <ClInclude Include="Sources\Systems\RenderSystem.h" />
     <ClInclude Include="Sources\Systems\ScreenSystem.h" />
+    <ClInclude Include="Sources\Testings\Bullet.h" />
+    <ClInclude Include="Sources\Testings\Enemy.h" />
+    <ClInclude Include="Sources\Testings\EnemySpawner.h" />
     <ClInclude Include="Sources\Testings\imageloader.h" />
     <ClInclude Include="Sources\Testings\Ship.h" />
+    <ClInclude Include="Sources\Testings\ShipController.h" />
+    <ClInclude Include="Sources\Testings\SimplePool.h" />
+    <ClInclude Include="Sources\Testings\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\Components\Camera.cpp" />
     <ClCompile Include="Sources\Components\Light.cpp" />
+    <ClCompile Include="Sources\Components\LineRenderer.cpp" />
     <ClCompile Include="Sources\Components\MeshRenderer.cpp" />
     <ClCompile Include="Sources\Components\Renderer.cpp" />
     <ClCompile Include="Sources\Components\SpriteRenderer.cpp" />
@@ -83,11 +93,12 @@
     <ClCompile Include="Sources\CoreEngine\AndroidAssetLoader.cpp" />
     <ClCompile Include="Sources\CoreEngine\AndroidDisplay.cpp" />
     <ClCompile Include="Sources\CoreEngine\AndroidInput.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Application.cpp" />
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
     <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
-    <ClCompile Include="Sources\CoreEngine\GLMeshDrawer.cpp" />
+    <ClCompile Include="Sources\CoreEngine\GLDrawer.cpp" />
     <ClCompile Include="Sources\CoreEngine\GLUTInput.cpp" />
     <ClCompile Include="Sources\CoreEngine\Material.cpp" />
     <ClCompile Include="Sources\CoreEngine\Mesh.cpp" />
@@ -107,6 +118,7 @@
     <ClCompile Include="Sources\Extras\Color.cpp" />
     <ClCompile Include="Sources\Extras\FileUtils.cpp" />
     <ClCompile Include="Sources\Extras\GLUtils.cpp" />
+    <ClCompile Include="Sources\Extras\Math.cpp" />
     <ClCompile Include="Sources\Extras\Matrix4.cpp" />
     <ClCompile Include="Sources\Extras\TimeUtils.cpp" />
     <ClCompile Include="Sources\Extras\Vectors.cpp" />
@@ -116,12 +128,15 @@
     <ClCompile Include="Sources\Systems\Input.cpp" />
     <ClCompile Include="Sources\Systems\RenderSystem.cpp" />
     <ClCompile Include="Sources\Systems\ScreenSystem.cpp" />
+    <ClCompile Include="Sources\Testings\Bullet.cpp" />
+    <ClCompile Include="Sources\Testings\Enemy.cpp" />
+    <ClCompile Include="Sources\Testings\EnemySpawner.cpp" />
     <ClCompile Include="Sources\Testings\FPSCounter.cpp" />
     <ClCompile Include="Sources\Testings\GLTestComponent.cpp" />
     <ClCompile Include="Sources\Testings\imageloader.cpp" />
-    <ClCompile Include="Sources\Testings\SecondComponent.cpp" />
     <ClCompile Include="Sources\Testings\Ship.cpp" />
-    <ClCompile Include="Sources\Testings\TestComponent.cpp" />
+    <ClCompile Include="Sources\Testings\ShipController.cpp" />
+    <ClCompile Include="Sources\Testings\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EngineTest.rc" />

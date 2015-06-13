@@ -10,7 +10,7 @@
 
 //TODO implement anisotrop filtering for all platforms
 //TODO implement pixel reading functionality for all platforms
-class Texture2D:public RemovableObject
+class Texture2D : public RemovableObject
 {
 private:
 	bool pixelsSet = false;

@@ -5,6 +5,16 @@
 #include "../Debug/Logger.h"
 #include "AndroidInput.h"
 
+enum MotionAction
+{
+	A_ACTION_DOWN = 0,
+	A_ACTION_UP = 1,
+	A_ACTION_MOVE = 2,
+	A_ACTION_CANCEL = 3,
+	A_ACTION_POINTER_DOWN = 5,
+	A_ACTION_POINTER_UP = 6
+};
+
 void AndroidInput::OnTouchEvent(JNIEnv* env, jobject motionClass)
 {
 	NativeInput::lock();

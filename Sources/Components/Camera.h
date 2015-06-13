@@ -7,6 +7,7 @@
 #include "../CoreEngine/Component.h"
 #include "../Extras/Vectors.h"
 #include "../CoreEngine/Transform.h"
+#include "../Systems/ScreenSystem.h"
 
 
 enum ProjectionMode
@@ -21,10 +22,11 @@ friend class ScreenSystem;
 
 private:
 	ProjectionMode projectionMode_ = PERSPECTIVE;
-	GLfloat _fovy = 60.0f;
-	GLfloat _orthoSize = 5;
-	GLfloat _zNear = 0.1f;
-	GLfloat _zFar = 1000.0f;
+	float _fovy = 60.0f;
+	float orthoSize_ = 5;
+	float _zNear = 0.1f;
+	float _zFar = 1000.0f;
+	Vector2 halfSize_;
 	void Create();
 	void Init();
 	void Update();
@@ -37,14 +39,20 @@ private:
 
 public:
 	static Camera* main;
-	ProjectionMode getProjectionMode();
-	void setProjectionMode(ProjectionMode mode);
-	GLfloat getFOVY();
+
 	void setFOVY(GLfloat fovy);
-	GLfloat getOrthoSize();
+	void setProjectionMode(ProjectionMode mode);
 	void setOrthoSize(GLfloat size);
-	Matrix4& getProjectionMatrix();
-	void getViewMatrix(Matrix4& viewMatrix);
+
+	ProjectionMode	getProjectionMode();
+	float			getFOVY();
+	float			getOrthoSize();
+	Vector2			getHalfSize();
+	Matrix4&		getProjectionMatrix();
+	void			getViewMatrix(Matrix4& viewMatrix);
+
+	void ScreenToWorldPoint(Vector2& screen, Vector3& world);
+
 };
 
 inline ProjectionMode Camera::getProjectionMode()
@@ -61,7 +69,7 @@ inline void Camera::setProjectionMode(ProjectionMode mode)
 	}
 }
 
-inline GLfloat Camera::getFOVY()
+inline float Camera::getFOVY()
 {
 	return _fovy;
 }
@@ -75,14 +83,19 @@ inline void Camera::setFOVY(GLfloat fovy)
 	}
 }
 
-inline GLfloat Camera::getOrthoSize()
+inline float Camera::getOrthoSize()
 {
-	return _orthoSize;
+	return orthoSize_;
+}
+
+inline Vector2 Camera::getHalfSize()
+{
+	return halfSize_;
 }
 
 inline void Camera::setOrthoSize(GLfloat size)
 {
-	_orthoSize = size;
+	orthoSize_ = size;
 	if (projectionMode_ == ORTHOGRAPHIC)
 	{
 		ApplyCameraChanges();
@@ -105,9 +118,26 @@ inline void Camera::getViewMatrix(Matrix4& viewMatrix)
 	rotationMatrix[11] = 0.0f;
 	rotationMatrix[15] = 1.0f;
 
-	translationMatrix.setColumn(3, new GLfloat[3]{-tr->Location[0], -tr->Location[1], -tr->Location[2]}, 3);
+	Vector3 pos = tr->getPosition();
+	translationMatrix.setColumn(3, new GLfloat[3]{-pos[0], -pos[1], -pos[2]}, 3);
 
 	Matrix4::MultiplyMatrices(rotationMatrix, translationMatrix, viewMatrix);
+}
+
+inline void Camera::ScreenToWorldPoint(Vector2& screen, Vector3& world)
+{
+	if (projectionMode_ == ORTHOGRAPHIC)
+	{
+		int width = ScreenSystem::getWidth();
+		int height = ScreenSystem::getHeight();
+
+		Vector3 position = getTransform()->getPosition();
+
+		world.x = position.x - halfSize_.x + 2 * halfSize_.x* screen.x / width;
+		world.y = position.y - halfSize_.y + 2 * halfSize_.y* (height - screen.y) / height;
+	}
+
+	//TODO calc it for projection mode
 }
 
 #endif

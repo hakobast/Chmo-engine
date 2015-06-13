@@ -38,7 +38,6 @@ public:
 	template<class T> static std::vector<T*> FindComponents();
 
 	void sendAction(std::string action, void*const data);
-	void sendMessage(std::string function, void *data);
 	Transform*const getTransform();
     void setActive(bool toogle);
     bool isActive() const;

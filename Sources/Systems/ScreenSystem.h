@@ -2,8 +2,9 @@
 #define SCREEN_SYSTEM_H
 
 #include "../CoreEngine/System.h"
-#include "../Components/Camera.h"
 #include "../Extras/Singleton.h"
+
+class Camera;
 
 class ScreenSystem : public System, private Singleton<ScreenSystem>
 {

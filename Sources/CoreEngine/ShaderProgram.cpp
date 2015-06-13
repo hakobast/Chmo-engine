@@ -44,6 +44,7 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source,
 		GLchar* infoLog = new GLchar[infoLogLength];
 		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
 		Logger::PrintError("Shader compile log: %s", infoLog);
+		
 		delete[] infoLog;
 		return;
 	}

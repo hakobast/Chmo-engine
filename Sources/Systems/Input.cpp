@@ -67,6 +67,11 @@ void Input::GetMousePosition(Vector2& value)
 	instance_->nativeInput_->getMousePosition(value);
 }
 
+Vector2 Input::GetMousePosition()
+{
+	return instance_->nativeInput_->getMousePosition();
+}
+
 int	Input::GetTouchCount()
 {
 	return instance_->nativeInput_->getTouchCount();

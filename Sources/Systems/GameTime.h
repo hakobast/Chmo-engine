@@ -1,18 +1,18 @@
-#ifndef EngineTesting_GameTime_h
-#define EngineTesting_GameTime_h
+#ifndef GAMETIME_H
+#define GAMETIME_H
 
 #include <inttypes.h>
 
 #include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/System.h"
 
+//TODO implement timeScale
 class GameTime :public System
 {
 public:
-	//TODO implement timeScale
-	static GLfloat DeltaTime();
-	static GLfloat TimeSinceGameStarted();
-	static GLuint GetFrame();
+	static float DeltaTime();
+	static float TimeSinceGameStarted();
+	static unsigned int GetFrame();
 	GameTime();
 protected:
 	~GameTime();
@@ -21,23 +21,23 @@ protected:
 private:
 	static GameTime* instance_;
 	uint64_t lastTime_;
-	GLfloat deltaTime_ = 0;
-	GLfloat timeSinceGameStarted_ = 0;
-	GLuint frame_ = 0;
+	float deltaTime_ = 0;
+	float timeSinceGameStarted_ = 0;
+	unsigned int frame_ = 0;
 };
 
 //static functions
-inline GLfloat GameTime::DeltaTime()
+inline float GameTime::DeltaTime()
 {
 	return instance_->deltaTime_;
 }
 
-inline GLfloat GameTime::TimeSinceGameStarted()
+inline float GameTime::TimeSinceGameStarted()
 {
 	return instance_->timeSinceGameStarted_;
 }
 
-inline GLuint GameTime::GetFrame()
+inline unsigned int GameTime::GetFrame()
 {
 	return instance_->frame_;
 }

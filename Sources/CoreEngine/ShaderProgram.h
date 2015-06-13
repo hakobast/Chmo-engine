@@ -6,6 +6,8 @@
 
 #include "LIBS.h"
 #include "../Extras/smart_pointer.h"
+#include "../Extras/GLUtils.h"
+#include "../Debug/Logger.h"
 
 class UniformDesc
 {
@@ -62,8 +64,7 @@ public:
 	void setVertexAttrib4f(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 	void setVertexAttrib4fv(const char* name, const GLfloat* v);
 
-#if defined(_WIN32) || defined(__APPLE__)
-//#if defined(__ANDROID__)
+#ifdef GL_OPENGL
 	void setVertexAttrib1d(const char* name, GLdouble x);
 	void setVertexAttrib1dv(const char* name, const GLdouble* v);
 	void setVertexAttrib1fv(const char* name, const GLfloat* v);
@@ -102,8 +103,6 @@ inline GLuint ShaderProgram::getProgram()
 	return program_;
 }
 
-#include "../Extras/GLUtils.h"
-#include "../Debug/Logger.h"
 inline void ShaderProgram::bind()
 {
 	glUseProgram(program_);
@@ -312,7 +311,7 @@ inline void ShaderProgram::setVertexAttrib3fv(const char* name, const GLfloat* v
 	glVertexAttrib3fv(location, v);
 }
 
-#if defined(_WIN32) || defined(__APPLE__)
+#ifdef GL_OPENGL
 inline void ShaderProgram::setVertexAttrib1d(const char* name, GLdouble x)
 {
 	GLint location = getAttributeLocation(name);

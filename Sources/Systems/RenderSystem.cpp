@@ -55,7 +55,7 @@ void RenderSystem::Update()
 	if (Camera::main == NULL)
 		return;
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -143,8 +143,7 @@ void RenderSystem::removeComponent(Component &c)
 
 bool RenderSystem::isSystemComponent(Component &c)
 {
-	Renderer* r = dynamic_cast<Renderer*>(&c);
-	return r != NULL;
+	return dynamic_cast<Renderer*>(&c) != NULL;
 }
 
 void RenderSystem::sortComponents()

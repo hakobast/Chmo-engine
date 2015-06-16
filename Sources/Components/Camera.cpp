@@ -42,6 +42,9 @@ void Camera::ApplyCameraChanges()
 
 	glViewport(0, 0, width, height);
 
+ 	glMatrixMode(GL_PROJECTION);
+ 	glLoadIdentity();
+
 	float ratio = (float)width / height;
 
 	if (projectionMode_ == ORTHOGRAPHIC)
@@ -50,17 +53,20 @@ void Camera::ApplyCameraChanges()
 		{
 			halfSize_.x = orthoSize_;
 			halfSize_.y = orthoSize_ / ratio;
-			projectionMatrix = Matrix4::setOrthoFrustum(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
+			glOrtho(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
 		}
 		else
 		{
 			halfSize_.x = orthoSize_*ratio;
 			halfSize_.y = orthoSize_;
-			projectionMatrix = Matrix4::setOrthoFrustum(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
+			glOrtho(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
 		}
+		projectionMatrix = Matrix4::setOrthoFrustum(-halfSize_.x, halfSize_.x, -halfSize_.y, halfSize_.y, _zNear, _zFar);
 	}
 	else
 	{
 		projectionMatrix = Matrix4::setFrustum(_fovy, ratio, _zNear, _zFar);
 	}
+
+	glMatrixMode(GL_MODELVIEW);
 }

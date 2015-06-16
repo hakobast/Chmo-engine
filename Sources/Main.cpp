@@ -21,6 +21,10 @@
 #include "Testings/ShipController.h"
 #include "Testings/FPSCounter.cpp"
 #include "Testings/GLTestComponent.cpp"
+#include "Testings/BoxCollider2D.h"
+#include "Testings/CircleCollider2D.h"
+#include "Testings/QuadTree.h"
+#include "Testings/CollisionSystem.h"
 
 #define TARGET_FPS 60
 
@@ -109,8 +113,6 @@ void CreateGame()
 //	light->setLinearAttenuation(0.1f);
 //	light->setSpotCutoff(15.0f);
 	 
-	smart_pointer<Material> mat = 
-		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitLine.vert", "Resources/Shaders/UnlitLine.frag");
 
 	GameObject* camerObj = new GameObject("Camera");
 	//camerObj->addComponent<GLTestComponent>();
@@ -126,8 +128,13 @@ void CreateGame()
 	smart_pointer<Texture2D> texture = LoadTexture("Resources/heightmap2.bmp");
 	smart_pointer<Texture2D> textureTransparent = LoadTexture("Resources/vtr.bmp");
 
-	/*smart_pointer<Material> mat = Material::Unlit();*/
+	smart_pointer<Material> mat =
+		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitSprite.vert", "Resources/Shaders/UnlitSprite.frag");
+
 	mat->addTexture(textureTransparent);
+
+	GameObject* collisionSystemObj = new GameObject("Drawer");
+	CollisionSystem* collisionSystem = collisionSystemObj->addComponent<CollisionSystem>();
 
 	GameObject* enemySpawner = new GameObject("EnemySpawner");
 	enemySpawner->addComponent<EnemySpawner>();

@@ -12,10 +12,11 @@ void Enemy::Update()
 	{
 		transform_->TranslateUp(speed*GameTime::DeltaTime());
 
-		Vector2 rect = Camera::main->getHalfSize()*1.3f;
+		Vector2 rect = Camera::main->getHalfSize()*1.0f;
 		Camera::main->getTransform()->getPosition(camPos_);
 		transform_->getPosition(pos_);
 
+		
 		if (pos_.x > camPos_.x + rect.x ||
 			pos_.x < camPos_.x - rect.x ||
 			pos_.y > camPos_.y + rect.y ||

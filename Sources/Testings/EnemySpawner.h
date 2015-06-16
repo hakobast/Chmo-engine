@@ -33,7 +33,7 @@ private:
 
 	Enemy* createEnemy();
 	void spawnEnemy();
-	void randomize(Enemy* enemy);
+	void randomizeEnemy(Enemy* enemy);
 };
 
 #endif

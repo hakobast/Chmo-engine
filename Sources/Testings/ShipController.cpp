@@ -14,6 +14,9 @@ void ShipController::Init()
 
 void ShipController::Update()
 {
+	if (ship_ == NULL)
+		return;
+
 	if (Input::IsMouseDownNow(Left))
 	{
 		if (Application::CurrentPlatform() == ANDROID_PLATFORM)
@@ -43,13 +46,18 @@ void ShipController::Update()
 	}
 }
 
+void ShipController::OnDisable()
+{
+	if (isEnabled()) // Destroying
+		CollisionSystem::GetInstance().removeCollider(getGameObject()->getComponent<Collider2D>());
+}
+
 void ShipController::OnAction(std::string action, void*const data)
 {
 	if (action == "Collision")
 	{
-		Collider2D* collider = (Collider2D*)data;
-		Logger::Print("ShipController::OnAction %s \n", action.c_str());
+		//Logger::Print("ShipController::OnAction %s \n", action.c_str());
 
-		GameObject::FindComponent<GameController>()->endGame();
+		GameObject::FindComponent<GameController>()->restartGame();
 	}
 }

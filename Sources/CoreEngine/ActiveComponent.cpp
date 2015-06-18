@@ -6,7 +6,7 @@
 
 ActiveComponent::~ActiveComponent()
 {
-	std::cout << "~~~~~~~~~~~~~ ActiveComponent: " << getGameObject()->name << std::endl;
+	//std::cout << "~~~~~~~~~~~~~ ActiveComponent: " << getGameObject()->name << std::endl;
 }
 
 bool ActiveComponent::isEnabled() const

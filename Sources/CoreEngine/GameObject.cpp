@@ -36,14 +36,14 @@ GameObject::GameObject(string name)
 GameObject::~GameObject()
 {
 	components_.clear();
-	cout << "GameObject ~~~~deleted " << name << " ~GameObject()" << endl;
+	//cout << "GameObject ~~~~deleted " << name << " ~GameObject()" << endl;
 }
 
 void GameObject::sendAction(string action, void*const data)
 {
-	for (Component *c : components_)
-	if (dynamic_cast<GameLogic*>(c))
-		((GameLogic*)c)->OnAction(action, data);
+	for (size_t i = 0; i < components_.size(); i++)
+		if (dynamic_cast<GameLogic*>(components_[i]))
+			((GameLogic*)components_[i])->OnAction(action, data);
 }
 
 void GameObject::setActive(bool toogle)
@@ -81,7 +81,10 @@ void GameObject::destroy()
 	{
 		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components_[i]);
 		if (activeComp != NULL)
+		{
+			activeComp->OnDisable();
 			activeComp->_destroy();
+		}
 		Engine::GetInstance().removeComponent(*components_[i]);
 	}
 	components_.erase(components_.begin() + 1, components_.end());

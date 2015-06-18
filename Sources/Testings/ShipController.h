@@ -12,6 +12,7 @@ class ShipController : public GameLogic
 public:
 	virtual void Init();
 	virtual void Update();
+	virtual void OnDisable();
 	virtual void OnAction(std::string action, void*const data);
 private:
 	Ship* ship_;

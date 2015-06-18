@@ -19,11 +19,11 @@ void GameController::Create()
 	camerObj->addComponent<FPSCounter>();
 	camerObj->getTransform()->setPosition(Vector3(0.0f, 0.0f, 10.0f));
 
-	collisionSystem = (new GameObject("CollisionSystem"))->addComponent<CollisionSystem>();
-	enemyManager = (new GameObject("EnemySpawner"))->addComponent<EnemyManager>();
+	collisionSystem_ = (new GameObject("CollisionSystem"))->addComponent<CollisionSystem>();
+	enemyManager_ = (new GameObject("EnemySpawner"))->addComponent<EnemyManager>();
 
-	collisionSystem->setEnabled(false);
-	enemyManager->setEnabled(false);
+	collisionSystem_->setEnabled(false);
+	enemyManager_->setEnabled(false);
 }
 
 void GameController::Update()
@@ -37,26 +37,46 @@ void GameController::Update()
 
 void GameController::startGame()
 {
-	collisionSystem->setEnabled(true);
-	enemyManager->setEnabled(true);
-
-	switch (spaceShipType)
+	if (!isGameStarted_)
 	{
-	case STANDART:
-		createStandartSpaceship();
-		break;
-	case COOL:
-		createCoolSpaceship();
-		break;
+		collisionSystem_->setEnabled(true);
+		enemyManager_->setEnabled(true);
+
+		switch (spaceShipType)
+		{
+		case STANDART:
+			createStandartSpaceship();
+			break;
+		case COOL:
+			createCoolSpaceship();
+			break;
+		}
+
+		isGameStarted_ = true;
 	}
 }
 
 void GameController::endGame()
 {
-	collisionSystem->setEnabled(false);
- 	enemyManager->clearEnemies();
-	enemyManager->setEnabled(false);
- 	GameObject::FindComponent<ShipController>()->getGameObject()->destroy();
+	if (isGameStarted_)
+	{
+		collisionSystem_->setEnabled(false);
+		enemyManager_->clearEnemies();
+		enemyManager_->setEnabled(false);
+
+		GameObject::FindComponent<ShipController>()->getGameObject()->destroy();
+
+		isGameStarted_ = false;
+	}
+}
+
+void GameController::restartGame()
+{
+	if (isGameStarted_)
+	{
+		endGame();
+		startGame();
+	}
 }
 
 void GameController::createCoolSpaceship()

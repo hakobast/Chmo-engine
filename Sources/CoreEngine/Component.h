@@ -36,7 +36,7 @@ public:
 protected:
 	virtual ~Component()
 	{
-		std::cout << "~~~~~~~~~~~~~ Component: " << std::endl;
+		//std::cout << "~~~~~~~~~~~~~ Component: " << std::endl;
 	};
 	bool isInited();
 	System* system;

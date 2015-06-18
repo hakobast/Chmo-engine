@@ -19,7 +19,7 @@ public:
 	Weapon(Color bulletColor = Color::RED, float bulletSpeed = 10);
 	void fire();
 private:
-	int poolInitialSize_ = 30;
+	int poolInitialSize_ = 10;
 	float bulletSpeed_ = 0;
 	Color bulletColor_;
 	smart_pointer<Material> bulletMat_;

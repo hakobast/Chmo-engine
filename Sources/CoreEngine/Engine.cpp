@@ -124,9 +124,9 @@ void Engine::draw()
 	for (System* s : _systems)
 		s->OnEndFrame();
 
-	for (Component* comp : _compDestroyList)
+	for (size_t i = 0; i < _compDestroyList.size(); i++)
 	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(_compDestroyList[i]);
 		if (activeComp != NULL)
 		{
 			if (activeComp->isEnabled())
@@ -134,19 +134,19 @@ void Engine::draw()
 			activeComp->OnDestroy();
 		}
 
-		delete comp;
+		delete _compDestroyList[i];
 	}
 
 	for (GameObject* gmObj : _gmObjDestroyList) //TODO find more effective solution
 	{
 		for (Component* comp : gmObj->components_)
 		{
+			vectorRemove<Component>(_components, comp);
 			delete comp;
 		}
 
 		delete gmObj;
 	}
-
 
 	if (_compInitQueue.size() > 0)
 	{

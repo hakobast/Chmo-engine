@@ -7,7 +7,12 @@
 Weapon::~Weapon()
 {
 	for (Bullet* bullet : bullets_)
+	{
+		if (bullet->isEnabled())
+			release(bullet);
+
 		bullet->getGameObject()->destroy();
+	}
 }
 
 Weapon::Weapon(Color bulletColor, float bulletSpeed)

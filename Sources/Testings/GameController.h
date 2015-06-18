@@ -22,9 +22,11 @@ public:
 
 	void startGame();
 	void endGame();
+	void restartGame();
 private:
-	EnemyManager* enemyManager;
-	CollisionSystem* collisionSystem;
+	EnemyManager* enemyManager_;
+	CollisionSystem* collisionSystem_;
+	bool isGameStarted_ = false;
 
 	void createCoolSpaceship();
 	void createStandartSpaceship();

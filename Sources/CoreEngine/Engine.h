@@ -61,8 +61,8 @@ template<class T>
 T* Engine::FindComponent() const
 {
 	for (Component* comp : _components)
-	if (dynamic_cast<T*>(comp))
-		return (T*)comp;
+		if (dynamic_cast<T*>(comp))
+			return (T*)comp;
 
 	return NULL;
 }
@@ -72,8 +72,8 @@ std::vector<T*> Engine::FindComponents() const
 {
 	std::vector<T*> comps;
 	for (Component* comp : _components)
-	if (dynamic_cast<T*>(comp))
-		comps.push_back((T*)comp);
+		if (dynamic_cast<T*>(comp))
+			comps.push_back((T*)comp);
 
 	return comps;
 }

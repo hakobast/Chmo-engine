@@ -17,7 +17,7 @@ enum MotionAction
 
 void AndroidInput::OnTouchEvent(JNIEnv* env, jobject motionClass)
 {
-	NativeInput::lock();
+	lock();
 	jclass cls = env->GetObjectClass(motionClass);
 	jmethodID method_getPointerCount = env->GetMethodID(cls, "getPointerCount", "()I");
 	jmethodID method_getPointerId = env->GetMethodID(cls, "getPointerId", "(I)I");
@@ -105,7 +105,7 @@ void AndroidInput::OnTouchEvent(JNIEnv* env, jobject motionClass)
 		break;
 	}*/
 
-	NativeInput::unlock();
+	unlock();
 }
 
 #endif

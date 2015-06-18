@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <utility>
-#include "../CoreEngine/ChmoEngine.h"
+#include "EngineInclude.h"
 
 class Weapon;
 
@@ -11,6 +11,7 @@ class Ship : public GameLogic
 {
 public:
 	float speed = 2;
+
 	virtual void Init();
 	virtual void Update();
 	virtual void OnDestroy();

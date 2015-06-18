@@ -4,7 +4,7 @@
 
 void CollisionSystem::Create()
 {
-	quadTree_ = new QuadTree(Vector2::ZERO, Vector2(6.0f,4.5f));
+	quadTree_ = new QuadTree(Vector2::ZERO, Vector2(7.0f,5.0f));
 }
 
 void CollisionSystem::Update()
@@ -14,11 +14,13 @@ void CollisionSystem::Update()
 	for (Collider2D* coll : colliders_)
 		quadTree_->add(coll);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+#if defined(DEBUG_COLLISION) && defined(PLATFORM_WINDOWS)
 
-// 	glColor3f(1.0f, 0.0f, 1.0f);
-// 
-// 	quadTree_->draw();
+ 	glColor3f(1.0f, 0.0f, 1.0f);
+ 
+ 	quadTree_->draw();
+#endif
 }
 
 void CollisionSystem::getPotentialCollisions(Collider2D* collider, std::vector<Collider2D*>* v)

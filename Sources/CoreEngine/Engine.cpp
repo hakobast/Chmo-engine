@@ -211,8 +211,13 @@ void Engine::addComponent(Component &comp, int priority)
 	_compInitQueue.push_back(&comp);
 
 	for (System* s : _systems)
+	{
 		if (s->isSystemComponent(comp))
+		{
 			comp.system = s;
+			break;
+		}
+	}
 
 	comp.Create();
 	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(&comp);

@@ -5,7 +5,7 @@
 #include "BoxCollider2D.h"
 #include "CollisionUtils.h"
 
-bool CircleCollider2D::HasCollision(Collider2D* other)
+bool CircleCollider2D::hasCollision(Collider2D* other)
 {
 	if (dynamic_cast<CircleCollider2D*>(other))
 		return CollisionUtils::CircleToCircle(this, (CircleCollider2D*)other);
@@ -17,7 +17,7 @@ bool CircleCollider2D::HasCollision(Collider2D* other)
 
 void CircleCollider2D::Update()
 {
-#ifdef DEBUG_COLLISION
+#if defined(DEBUG_COLLISION) && defined(PLATFORM_WINDOWS)
 	Vector2 position_ = getTransform()->getPosition();
 
 	glColor3f(0.0f, 1.0f, 0.0f);

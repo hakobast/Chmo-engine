@@ -1,13 +1,15 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "../CoreEngine/ChmoEngine.h"
+#include "EngineInclude.h"
 #include "SimplePool.h"
 
+class Collider2D;
 class Enemy : public GameLogic
 {
-	friend class EnemySpawner;
+	friend class EnemyManager;
 public:
+	bool isSeperated = false;
 	float speed = 0.5f;
 
 	virtual void Init();
@@ -16,9 +18,7 @@ public:
 	void setDirection(Vector3 dir);
 private:
 	Transform* transform_;
-	SimplePool<Enemy>* pool_;
 	Vector3 pos_;
 	Vector3 camPos_;
-	bool isMoving_;
 };
 #endif

@@ -44,18 +44,12 @@ void GameObject::sendAction(string action, void*const data)
 	for (Component *c : components_)
 	if (dynamic_cast<GameLogic*>(c))
 		((GameLogic*)c)->OnAction(action, data);
-}	
+}
 
 void GameObject::setActive(bool toogle)
 {
 	if (isActive_ == toogle)
 		return;
-
-	//if toogle is true we call component's setEnable which check if the 
-	//gameobject is active than call his state-callbacks.
-	//maybe this is bad solution but it works :)
-	if (toogle)
-		isActive_ = toogle;
 
 	for (Component* comp : components_)
 	{
@@ -63,7 +57,7 @@ void GameObject::setActive(bool toogle)
 		if (activeComp != NULL && activeComp->enabled)
 		{
 			activeComp->setEnabled(toogle);
-			activeComp->enabled = true; // restoring component's real state
+			activeComp->enabled = true; // keeping component's real state
 		}
 	}
 

@@ -29,7 +29,10 @@ void GameLogicSystem::Update()
 	//std::cout << "GameLogicSystem:: Update()" << std::endl;
 
 	for (size_t i = 0; i < components.size(); i++)
-		components[i]->Update();
+	{
+		if (components[i]->isEnabled())
+			components[i]->Update();
+	}
 }
 
 void GameLogicSystem::addComponent(Component &c)

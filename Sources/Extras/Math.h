@@ -10,9 +10,13 @@ struct constructor;
 class Math
 {
 public:
+	static const float Pi;
+	static const float Pi2;
+	static const float DegToRad;
+	static const float RadToDeg;
+
 	static float Random(float from, float to);
 	static int Random(int from, int to);
-
 private:
 	static constructor stat_constructor;
 };

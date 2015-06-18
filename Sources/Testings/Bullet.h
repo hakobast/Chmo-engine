@@ -1,7 +1,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include "../CoreEngine/ChmoEngine.h"
+#include "EngineInclude.h"
 #include "SimplePool.h"
 
 class Bullet : public GameLogic
@@ -12,6 +12,7 @@ public:
 
 	virtual void Init();
 	virtual void Update();
+	virtual void OnAction(std::string action, void*const data);
 
 	void setDirection(Vector3 dir);
 private:

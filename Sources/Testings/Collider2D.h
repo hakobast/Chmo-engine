@@ -1,7 +1,7 @@
 #ifndef COLLIDER_H
 #define COLLIDER_H
 
-#include "../CoreEngine/ChmoEngine.h"
+#include "EngineInclude.h"
 
 //#define DEBUG_COLLISION
 
@@ -11,7 +11,7 @@ class BoxCollider2D;
 class Collider2D : public GameLogic
 {
 public:
-	virtual bool HasCollision(Collider2D* other) = 0;
+	virtual bool hasCollision(Collider2D* other) = 0;
 };
 
 #endif

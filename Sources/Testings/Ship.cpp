@@ -1,6 +1,3 @@
-
-#include "../CoreEngine/ChmoEngine.h"
-
 #include "Ship.h"
 #include "Weapon.h"
 

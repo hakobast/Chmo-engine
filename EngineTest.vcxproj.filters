@@ -243,9 +243,6 @@
     <ClInclude Include="Sources\CoreEngine\Enums.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Testings\EnemySpawner.h">
-      <Filter>Header Files\Testing</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\Testings\Enemy.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
@@ -271,6 +268,15 @@
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Testings\CollisionSystem.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\GameController.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\EnemyManager.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\EngineInclude.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
   </ItemGroup>
@@ -431,9 +437,6 @@
     <ClCompile Include="Sources\Testings\Bullet.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Testings\EnemySpawner.cpp">
-      <Filter>Source Files\Testing</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\Testings\Enemy.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
@@ -453,6 +456,15 @@
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Testings\CollisionSystem.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\Component.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\GameController.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\EnemyManager.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
   </ItemGroup>

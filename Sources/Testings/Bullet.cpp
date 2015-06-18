@@ -24,8 +24,17 @@ void Bullet::Update()
 			pos_.y < camPos_.y - rect.y)
 		{
 			isMoving_ = false;
-			pool_->add(this);
+			pool_->release(this);
 		}
+	}
+}
+
+void Bullet::OnAction(std::string action, void*const data)
+{
+	if (action == "Collision")
+	{
+		isMoving_ = false;
+		pool_->release(this);
 	}
 }
 

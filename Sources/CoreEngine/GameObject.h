@@ -42,7 +42,6 @@ public:
     void setActive(bool toogle);
     bool isActive() const;
     void destroy();
-    
 private:
 	bool destroyState_ = false;
     bool isActive_ = true;
@@ -128,7 +127,7 @@ std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
 	return comps;
 }
 
-//**********STATICS********
+////////////STATICS//////////////
 template<class T>
 T* GameObject::FindComponent()
 {

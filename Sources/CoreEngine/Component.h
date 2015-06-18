@@ -3,6 +3,7 @@
 #define EngineTesting_Component_h
 
 #include <typeinfo>
+#include <string>
 #include <iostream>
 
 class Transform;
@@ -30,6 +31,8 @@ public:
 	virtual bool isEnabled() const;
 	GameObject*const getGameObject() const;
 	Transform*const getTransform() const;
+	std::string getName();
+	std::string getTag();
 protected:
 	virtual ~Component()
 	{

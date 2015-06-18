@@ -3,7 +3,7 @@
 #include "CircleCollider2D.h"
 #include "CollisionUtils.h"
 
-bool BoxCollider2D::HasCollision(Collider2D* other)
+bool BoxCollider2D::hasCollision(Collider2D* other)
 {
 	if (dynamic_cast<BoxCollider2D*>(other))
 		return CollisionUtils::BoxToBox(this, (BoxCollider2D*)other);
@@ -15,7 +15,7 @@ bool BoxCollider2D::HasCollision(Collider2D* other)
 
 void BoxCollider2D::Update()
 {
-#ifdef DEBUG_COLLISION
+#if defined(DEBUG_COLLISION) && defined(PLATFORM_WINDOWS)
 	Vector2 position_ = getTransform()->getPosition();
 	Vector2 halfSize_ = size / 2;
 

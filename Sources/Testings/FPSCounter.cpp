@@ -1,8 +1,7 @@
 #ifndef FPSCOUNTER_CPP
 #define FPSCOUNTER_CPP
 
-#include "../CoreEngine/GameLogic.h"
-#include "../Systems/GameTime.h"
+#include "EngineInclude.h"
 
 #include <iostream>
 

@@ -2,14 +2,14 @@
 #define QUAD_TREE_H
 
 #include <vector>
-#include "../CoreEngine/ChmoEngine.h"
+#include "EngineInclude.h"
 
 class Collider2D;
 
 class QuadTree
 {
 private:
-	static const int MAX_OBJECTS_IN_NODE = 2;
+	static const int MAX_OBJECTS_IN_NODE = 10;
 
 	QuadTree* nodes_[4];
 	Vector2 position_;

@@ -16,21 +16,21 @@ bool ActiveComponent::isEnabled() const
 
 void ActiveComponent::setEnabled(bool toogle)
 {
-	if (enabled == toogle || !getGameObject()->isActive())
+	if (toogle == isEnabled())
 		return;
 
 	enabled = toogle;
 	if (enabled)
 	{
 		OnEnable();
-		if (system != NULL && !destroyState)
-			system->addComponent(*this);
+// 		if (system != NULL && !destroyState)
+// 			system->addComponent(*this);
 	}
 	else
 	{
 		OnDisable();
-		if (system != NULL && !destroyState)
-			system->removeComponent(*this);
+// 		if (system != NULL && !destroyState)
+// 			system->removeComponent(*this);
 	}
 }
 

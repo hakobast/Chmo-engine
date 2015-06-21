@@ -1,7 +1,7 @@
 
 
-#ifndef EngineTesting_ActiveComponent_h
-#define EngineTesting_ActiveComponent_h
+#ifndef ACTIVE_COMPONENT_h
+#define ACTIVE_COMPONENT_h
 
 #include <string>
 
@@ -12,19 +12,15 @@ class GameObject;
 class ActiveComponent :public Component
 {
 	friend class GameObject;
-protected:
-	virtual ~ActiveComponent();
 private:
-	bool enabled = true;
-	bool destroyState = false;
-	void _destroy();
+	bool isEnabled_ = true;
 public:
 	virtual void OnEnable(){/* std::cout << "ActiveComponent: OnEnable" << std::endl;*/ };
 	virtual void OnDisable(){ /*std::cout << "ActiveComponent: OnDisable" << std::endl;*/ };
 	virtual void OnDestroy(){};
-	bool isEnabled() const;
-	void destroy();
+	virtual bool isEnabled() const; 
 	void setEnabled(bool toogle);
+	void destroy();
 };
 
 #endif

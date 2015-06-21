@@ -5,9 +5,10 @@
 #include "../Extras/Matrix4.h"
 #include "../CoreEngine/ActiveComponent.h"
 #include "../CoreEngine/Component.h"
-#include "../Extras/Vectors.h"
 #include "../CoreEngine/Transform.h"
 #include "../Systems/ScreenSystem.h"
+#include "../Extras/Vectors.h"
+#include "../Extras/DoubleLinkedList.h"
 
 
 enum ProjectionMode
@@ -36,10 +37,13 @@ private:
 	Matrix4 rotationMatrix; 
 	Matrix4 translationMatrix;
 	Matrix4 projectionMatrix;
+	Node<Camera>* screenSystemNode_;
 
 public:
 	static Camera* main;
 
+	Camera(){ screenSystemNode_ = new Node<Camera>(this); }
+	virtual ~Camera(){ delete screenSystemNode_; screenSystemNode_ = NULL; }
 	void setFOVY(GLfloat fovy);
 	void setProjectionMode(ProjectionMode mode);
 	void setOrthoSize(GLfloat size);

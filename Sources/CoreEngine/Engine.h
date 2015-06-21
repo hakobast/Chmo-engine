@@ -1,11 +1,13 @@
 
-#ifndef EngineTesting_Engine_h
-#define EngineTesting_Engine_h
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include <vector>
+#include <queue>
 #include <iostream>
 #include <string>
 
+#include "../Extras/DoubleLinkedList.h"
 #include "../Extras/Singleton.h"
 
 class System;
@@ -18,62 +20,66 @@ class NativeInput;
 class Engine : public Singleton<Engine>
 {
 friend class GameObject;
+private:
+	DoubleLinkedList<GameObject> gameObjectsList_;
+	std::queue<Component*> componentsToDestroy_;
+	std::queue<GameObject*> gameobjectsToDestroy_;
+	std::vector<System*> _systems;
+	bool isEngineInited_ = false;
+
+	~Engine();
+
+	void Cleanup();
+
 public:
 	Display* display = 0;
 	AssetLoader* assetLoader = 0;
 	NativeInput* nativeInput = 0;
 
-    void addSystem(System &s, int priority);
-    void addGameObject(GameObject &obj);
-    void addComponent(Component &comp, int priority);
-	void removeGameObject(GameObject &obj);
-	void removeComponent(Component &comp);
-	GameObject* FindGameObjectByName(std::string name) const;
-	template<class T> T* FindComponent() const;
-	template<class T> std::vector<T*> FindComponents() const;
+    void addSystem(System* s, int priority);
+    void addGameObject(GameObject* obj);
+    void addComponent(Component* comp);
+	void removeGameObject(GameObject* obj);
+	void removeComponent(Component* comp);
+	GameObject* FindGameObjectByName(std::string name);
+	template<class T> T* FindComponent();
+	template<class T> std::vector<T*> FindComponents();
 
 	void create();
 	void change(int width, int height);
+	void draw();
 	void resume();
 	void pause();
 	void destroy();
-	void draw();
-private:
-	~Engine();
-
-	std::vector<Component*> _compInitList; 
-	std::vector<Component*> _compInitQueue;
-	std::vector<Component*> _compDestroyList;
-	std::vector<GameObject*> _gmObjDestroyList;
-
-    std::vector<Component*> _components;
-    std::vector<GameObject*> _gameObjects;
-    std::vector<System*> _systems;
-	bool isEngineInited_ = false;
-
-	void Cleanup(); //TEMP
 
 	friend void f_Destroy();
-	friend bool pred_initComponents(Component* c);
 };
 
 template<class T>
-T* Engine::FindComponent() const
+T* Engine::FindComponent()
 {
-	for (Component* comp : _components)
-		if (dynamic_cast<T*>(comp))
-			return (T*)comp;
+	for (System* system : _systems)
+	{
+		std::vector<Component*> components = system->getComponents();
+		for (Component* comp : components)
+			if (dynamic_cast<T*>(comp))
+				return (T*)comp;
+	}
 
 	return NULL;
 }
 
 template<class T>
-std::vector<T*> Engine::FindComponents() const
+std::vector<T*> Engine::FindComponents()
 {
 	std::vector<T*> comps;
-	for (Component* comp : _components)
-		if (dynamic_cast<T*>(comp))
-			comps.push_back((T*)comp);
+	for (System* system : _systems)
+	{
+		std::vector<Component*> tempComps = system->getComponents();
+		for (Component* comp : tempComps)
+			if (dynamic_cast<T*>(comp))
+				comps.push_back((T*)comp);
+	}
 
 	return comps;
 }

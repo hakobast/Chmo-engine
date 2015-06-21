@@ -1,7 +1,7 @@
 
 
-#ifndef EngineTesting_GameObject_h
-#define EngineTesting_GameObject_h
+#ifndef GAME_OBJECT_H
+#define GAME_OBJECT_H
 
 #include <vector>
 #include <string>
@@ -9,6 +9,7 @@
 #include "Engine.h"
 #include "Transform.h"
 #include "ActiveComponent.h"
+#include "../Extras/DoubleLinkedList.h"
 
 class Transform;
 
@@ -18,53 +19,74 @@ friend class Component;
 friend class Engine;
 friend class ActiveComponent;
 
-protected:
+private:
+	std::string name_;
+	std::string tag_;
+	bool isActive_ = true;
+	bool isDestroying = false;
+	Transform* transform_ = 0;
+	DoubleLinkedList<Component> componentsList_;
+	Node<GameObject>* node_ = 0;
+
 	~GameObject();
+	void removeComponent(Component* component);
 public:
-    std::string name;
-	std::string tag;
+	static GameObject*							FindGameObjectByName(std::string name);
+	template<class T> static T*					FindComponent();
+	template<class T> static std::vector<T*>	FindComponents();
+
 	GameObject(std::string name);
     
-	template<class T>
-	T* addComponent();
-	template<class T>
-	T* getComponent(bool enabledOnly = false) const;
-	template<class T>
-	std::vector<T*> getComponents(bool enabledOnly = false) const;
+	template<class T> T*				addComponent();
+	template<class T> T*				getComponent(bool enabledOnly = false);
+	template<class T> std::vector<T*>	getComponents(bool enabledOnly = false);
 
-	//statics
-	static GameObject* FindGameObjectByName(std::string name);
-	template<class T> static T* FindComponent();
-	template<class T> static std::vector<T*> FindComponents();
-
-	void sendAction(std::string action, void*const data);
 	Transform*const getTransform();
-    void setActive(bool toogle);
-    bool isActive() const;
-    void destroy();
-private:
-	bool destroyState_ = false;
-    bool isActive_ = true;
-	Transform* transform_;
-    std::vector<Component*> components_;
-	void removeComponent(Component *);
+	std::string		getName();
+	std::string		getTag();
+	void			setName(std::string newName);
+	void			setTag(std::string newTag);
+	void			sendAction	(std::string action, void*const data);
+    void			setActive	(bool toogle);
+    bool			isActive	();
+    void			destroy		();
 
 	friend std::ostream& operator << (std::ostream& stream, const GameObject& obj);
 };
 
 inline std::ostream& operator << (std::ostream& stream, const GameObject& obj)
 {
-	return stream << obj.name << " GameObject(" << obj.components_.size() << ")" << std::endl;
+	return stream << obj.name_ << " GameObject" << std::endl;
 }
 
-inline bool GameObject::isActive()const
+inline std::string GameObject::getName()
 {
-    return isActive_;
+	return name_;
+}
+
+inline std::string GameObject::getTag()
+{
+	return tag_;
+}
+
+inline void GameObject::setName(std::string newName)
+{
+	name_ = newName;
+}
+
+inline void GameObject::setTag(std::string newTag)
+{
+	tag_ = newTag;
 }
 
 inline Transform*const GameObject::getTransform()
 {
 	return transform_;
+}
+
+inline bool GameObject::isActive()
+{
+    return isActive_;
 }
 
 template<class T>
@@ -75,21 +97,27 @@ T* GameObject::addComponent()
 		T *t = new T();
 		Component* baseType = t;
 		baseType->gameObject_ = this;
-		baseType->transform_ = dynamic_cast<Transform*>(components_[0]); // first component of each gameobject is GameTransform
+		baseType->transform_ = getTransform();
 
-		components_.push_back(baseType);
-		Engine::GetInstance().addComponent(*baseType, baseType->priority);
+		componentsList_.addToBack(baseType->node_);
 
-		//if the gameobject is in destroy state added component must be destroyed
-		if (destroyState_)
+		Engine::GetInstance().addComponent(baseType);
+		baseType->Create();
+
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(baseType);
+		if (!isDestroying && activeComp)
 		{
-			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(baseType);
-			if (activeComp != NULL)
-			{
-				activeComp->destroy();
-			}
+			if (isActive())
+				activeComp->OnEnable();
 			else
-				Engine::GetInstance().removeComponent(*baseType);
+				activeComp->OnDisable();
+		}
+		else if (isDestroying) //if the gameobject is in destroy state added component must be destroyed
+		{
+			if (activeComp != NULL)
+				activeComp->destroy();
+			else
+				Engine::GetInstance().removeComponent(baseType);
 		}
 
 		return t;
@@ -99,29 +127,29 @@ T* GameObject::addComponent()
 }
 
 template<class T>
-T* GameObject::getComponent(bool enabledOnly) const
+T* GameObject::getComponent(bool enabledOnly)
 {
-	for (size_t i = 0,len = components_.size(); i < len; i++)
+	DoubleLinkedList<Component>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
 	{
-		if (dynamic_cast<T*>(components_[i]) && (!enabledOnly || components_[i]->isEnabled()))
-		{
-			return (T*)components_[i];
-		}
+		Node<Component>* node = iter.next();
+		if (dynamic_cast<T*>(node->data) && (!enabledOnly || node->data->isEnabled()))
+			return (T*)node->data;
 	}
 
 	return NULL;
 }
 
 template<class T>
-std::vector<T*> GameObject::getComponents(bool enabledOnly)  const
+std::vector<T*> GameObject::getComponents(bool enabledOnly)
 {
-	std::vector<T*const> comps;
-	for (int i = 0; i < components_.size(); i++)
+	std::vector<T*> comps;
+	DoubleLinkedList<Component>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
 	{
-		if (dynamic_cast<T*>(components_[i]) && (!enabledOnly || components_[i]->isEnabled()))
-		{
-			comps.push_back((T*)components_[i]);
-		}
+		Node<Component>* node = iter.next();
+		if (dynamic_cast<T*>(node->data) && (!enabledOnly || node->data->isEnabled()))
+			comps.push_back((T*)node->data);
 	}
 
 	return comps;

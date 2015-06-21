@@ -12,8 +12,6 @@
 #include "../CoreEngine/System.h"
 #include "GameLogicSystem.h"
 
-static bool sortComponents(const GameLogic* lhs, const GameLogic* rhs) { return lhs->priority < rhs->priority; }
-
 GameLogicSystem::~GameLogicSystem()
 {
 	std::cout << "GameLogicSystem:: ~~~deleted~~~" << std::endl;
@@ -28,10 +26,12 @@ void GameLogicSystem::Update()
 {
 	//std::cout << "GameLogicSystem:: Update()" << std::endl;
 
-	for (size_t i = 0; i < components.size(); i++)
+	DoubleLinkedList<GameLogic>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
 	{
-		if (components[i]->isEnabled())
-			components[i]->Update();
+		Node<GameLogic>* node = iter.next();
+		if (node->data->isEnabled())
+			node->data->Update();
 	}
 }
 
@@ -39,10 +39,7 @@ void GameLogicSystem::addComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		GameLogic* gm = dynamic_cast<GameLogic*>(&c);
-		gm->system = this;
-		components.push_back(gm);
-		std::sort(components.begin(), components.end(), sortComponents);
+		addToBuffer(&c);
 	}
 }
 
@@ -50,11 +47,32 @@ void GameLogicSystem::removeComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		vectorRemove<GameLogic>(components, dynamic_cast<GameLogic*>(&c));
+		componentsList_.remove(dynamic_cast<GameLogic*>(&c)->logicSystemNode_);
+		removeFromBuffer(&c);
 	}
 }
 
 bool GameLogicSystem::isSystemComponent(Component &c)
 {
 	return dynamic_cast<GameLogic*>(&c) != NULL;
+}
+
+void GameLogicSystem::OnBufferChange(std::vector<Component*>& components)
+{
+	for (Component* component : components)
+	{
+		component->Init();
+		componentsList_.addToBack(dynamic_cast<GameLogic*>(component)->logicSystemNode_);
+	}
+}
+
+std::vector<Component*> GameLogicSystem::getComponents()
+{
+	vector<Component*> components;
+
+	DoubleLinkedList<GameLogic>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
+		components.push_back(iter.next()->data);
+
+	return components;
 }

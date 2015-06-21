@@ -3,7 +3,7 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
 #include "CircleCollider2D.h"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 
 Vector2 getRectanglePoint(int width, int height, Vector2 center, float angle)
 {
@@ -42,9 +42,11 @@ void EnemyManager::Update()
 		if (enemyCollider->getGameObject()->isActive())
 		{
 			collisions_.clear();
-			CollisionSystem::GetInstance().getPotentialCollisions(enemyCollider, &collisions_);
+			CollisionManager::GetInstance().getPotentialCollisions(enemyCollider, &collisions_);
 			for (Collider2D* collider : collisions_)
 			{
+				if (!enemyCollider->isEnabled())
+					break;
 				if (enemyCollider != collider && collider->getName() != "Enemy" && enemyCollider->hasCollision(collider))
 				{
 					collider->getGameObject()->sendAction("Collision", enemyCollider);
@@ -70,7 +72,7 @@ Enemy* EnemyManager::get()
 	{
 		enemy->getGameObject()->setActive(true);
 		enemy->isSeperated = false;
-		CollisionSystem::GetInstance().addCollider(enemy->getGameObject()->getComponent<Collider2D>());
+		CollisionManager::GetInstance().addCollider(enemy->getGameObject()->getComponent<Collider2D>());
 	}
 
 	return enemy;
@@ -81,7 +83,7 @@ void EnemyManager::release(Enemy* enemy)
 	if (enemy != NULL)
 	{
 		enemy->getGameObject()->setActive(false);
-		CollisionSystem::GetInstance().removeCollider(enemy->getGameObject()->getComponent<Collider2D>());
+		CollisionManager::GetInstance().removeCollider(enemy->getGameObject()->getComponent<Collider2D>());
 
 		enemy->isSeperated = false;
 		SimplePool::release(enemy);
@@ -130,7 +132,7 @@ void EnemyManager::randomizeEnemy(Enemy* enemy)
 
 	float p = 0.0f,rad = 0.0f,step = 0.0f, avRadius = 0.0f;
 	int count = 0, i = 0;
-	do 
+	do
 	{
 		if (count == 0)
 		{
@@ -183,6 +185,7 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 			iRange c = count_;
 
 			//setting values for small enemy generation
+			//TODO keep values as constants in header file
 			setEnemyGenParams({ { 2.0f, 2.5f } }, { { 0.1f, 0.3f } }, { { 0.1, 0.7f } }, { { 1, 6 } });
 
 			int count = Math::Random(1, 3);

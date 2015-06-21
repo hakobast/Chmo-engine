@@ -116,7 +116,7 @@ std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfi
 	std::cout << "***********************************" << std::endl;
 	for (GameObject* obj : gameObjects)
 	{
-		std::cout << "Name: " << obj->name << std::endl;
+		std::cout << "Name: " << obj->getName() << std::endl;
 		std::cout << "Submeshes: " << obj->getComponent<MeshRenderer>()->getMesh()->getSubMeshCount() << std::endl;
 		std::cout << "Materials: " << obj->getComponent<MeshRenderer>()->getSharedMaterials().size() << std::endl;
 	}

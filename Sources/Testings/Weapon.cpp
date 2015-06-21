@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "Weapon.h"
 #include "BoxCollider2D.h"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 
 Weapon::~Weapon()
 {
@@ -30,7 +30,7 @@ Bullet* Weapon::get()
 	if (bullet != NULL)
 	{
 		bullet->getGameObject()->setActive(true);
-		CollisionSystem::GetInstance().addCollider(bullet->getGameObject()->getComponent<Collider2D>());
+		CollisionManager::GetInstance().addCollider(bullet->getGameObject()->getComponent<Collider2D>());
 	}
 
 	return bullet;
@@ -41,7 +41,7 @@ void Weapon::release(Bullet* bullet)
 	if (bullet != NULL)
 	{
 		bullet->getGameObject()->setActive(false);
-		CollisionSystem::GetInstance().removeCollider(bullet->getGameObject()->getComponent<Collider2D>());
+		CollisionManager::GetInstance().removeCollider(bullet->getGameObject()->getComponent<Collider2D>());
 
 		bullet->pool_ = this;
 		SimplePool::release(bullet);

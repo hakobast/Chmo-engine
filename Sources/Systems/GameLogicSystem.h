@@ -5,11 +5,12 @@
 #include <vector>
 #include "../CoreEngine/GameLogic.h"
 #include "../CoreEngine/System.h"
+#include "../Extras/DoubleLinkedList.h"
 
 class GameLogicSystem:public System
 {
 private:
-	std::vector<GameLogic*> components;
+	DoubleLinkedList<GameLogic> componentsList_;
 public:
     ~GameLogicSystem();
     virtual void OnCreate();
@@ -17,6 +18,9 @@ public:
 	virtual void addComponent(Component &c);
 	virtual void removeComponent(Component &c);
 	virtual bool isSystemComponent(Component &c);
+	virtual std::vector<Component*> getComponents();
+protected:
+	virtual void OnBufferChange(std::vector<Component*>& components);
 };
 
 #endif

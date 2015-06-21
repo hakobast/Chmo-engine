@@ -16,7 +16,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::Create()
 {
-	dynamic_cast<RenderSystem*>(system)->sortComponents();
+	dynamic_cast<RenderSystem*>(renderSystem_)->sortComponents();
 }
 
 void MeshRenderer::Init()

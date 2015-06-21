@@ -14,10 +14,11 @@
 using namespace std;
 
 GameObject::GameObject(string name)
+: name_(name)
 {
-	this->name = name;
-
 	//cout << "GameObject: " << name << " GameObject()" << endl;
+
+	node_ = new Node<GameObject>(this);
 
 	//adding Transform component to all gameobjects
 	Transform* trComp = new Transform();
@@ -25,25 +26,30 @@ GameObject::GameObject(string name)
 	trComp->transform_ = trComp;
 
 	transform_ = trComp;
-	components_.push_back(trComp);
+	componentsList_.addToBack(trComp->node_);
 
-	//std::cout << "GameObject() " << name << std::endl;
+	Engine::GetInstance().addComponent(trComp);
+	Engine::GetInstance().addGameObject(this);
 
-	Engine::GetInstance().addComponent(*trComp, trComp->priority);
-	Engine::GetInstance().addGameObject(*this);
+	trComp->Create();
 }
 
 GameObject::~GameObject()
 {
-	components_.clear();
 	//cout << "GameObject ~~~~deleted " << name << " ~GameObject()" << endl;
+	delete node_; node_ = NULL;
 }
 
 void GameObject::sendAction(string action, void*const data)
 {
-	for (size_t i = 0; i < components_.size(); i++)
-		if (dynamic_cast<GameLogic*>(components_[i]))
-			((GameLogic*)components_[i])->OnAction(action, data);
+	DoubleLinkedList<Component>::iterator iter = componentsList_.getIterator();
+
+	while (iter.hasNext())
+	{
+		Node<Component>* node = iter.next();
+		if (dynamic_cast<GameLogic*>(node->data))
+			((GameLogic*)node->data)->OnAction(action, data);
+	}
 }
 
 void GameObject::setActive(bool toogle)
@@ -51,45 +57,57 @@ void GameObject::setActive(bool toogle)
 	if (isActive_ == toogle)
 		return;
 
-	for (Component* comp : components_)
+	isActive_ = toogle;
+
+	DoubleLinkedList<Component>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
 	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
-		if (activeComp != NULL && activeComp->enabled)
+		Node<Component>* node = iter.next();
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(node->data);
+		if (activeComp && activeComp->isEnabled_)
 		{
-			activeComp->setEnabled(toogle);
-			activeComp->enabled = true; // keeping component's real state
+			if (isActive_)
+				activeComp->OnEnable();
+			else
+				activeComp->OnDisable();
 		}
 	}
-
-	isActive_ = toogle;
 }
 
 void GameObject::removeComponent(Component* comp)
 {
-	vectorRemove<Component>(components_, comp);
-	Engine::GetInstance().removeComponent(*comp);
+	if (comp->node_ == NULL)
+		return;
+
+	componentsList_.remove(comp->node_);
+
+	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+	if (activeComp && activeComp->isEnabled())
+		activeComp->OnDisable();
+	 
+	Engine::GetInstance().removeComponent(comp);
 }
 
 void GameObject::destroy()
 {
-	if (destroyState_)
+	if (isDestroying)
 		return;
 
-	destroyState_ = true;
+	std::vector<Component*> tempList;
 
-	for (size_t i = 1, len = components_.size(); i < len; i++)
-	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(components_[i]);
-		if (activeComp != NULL)
-		{
-			activeComp->OnDisable();
-			activeComp->_destroy();
-		}
-		Engine::GetInstance().removeComponent(*components_[i]);
-	}
-	components_.erase(components_.begin() + 1, components_.end());
+	DoubleLinkedList<Component>::iterator iter = componentsList_.getIterator();
 
-	Engine::GetInstance().removeGameObject(*this);
+	if (iter.hasNext()) //	keeping first component(Transform) to delete in last
+		iter.next();
+
+	while (iter.hasNext())
+		removeComponent(iter.next()->data);
+
+	removeComponent(transform_);
+
+	Engine::GetInstance().removeGameObject(this);
+
+	isDestroying = true;
 }
 
 //******static*****

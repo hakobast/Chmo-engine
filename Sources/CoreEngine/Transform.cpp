@@ -12,11 +12,6 @@
 
 using namespace std;
 
-Transform::~Transform()
-{
-	//cout << "~Transform(): " << getName() << endl;
-}
-
 void Transform::getMatrix(Matrix4& matrix, bool calcScale)
 {
 	Vector3 _Right = Right();

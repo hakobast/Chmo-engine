@@ -1,7 +1,7 @@
 
 #include "Enemy.h"
 #include "Collider2D.h"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 
 void Enemy::Init()
 {

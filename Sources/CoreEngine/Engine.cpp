@@ -33,19 +33,6 @@ bool pred_sortSystems(const System* lhs, const System* rhs)
 	return lhs->priority < rhs->priority;
 }
 
-bool pred_initComponents(Component* c)
-{
-	if (c->isEnabled())
-	{
-		for (System* s : Engine::GetInstance()._systems)
-			s->addComponent(*c);
-		c->Init();
-		return true;
-	}
-
-	return false;
-}
-
 void f_Destroy()
 {
 	Engine::GetInstance().destroy();
@@ -87,21 +74,19 @@ void Engine::create()
 		GameTime* timeSystem = new GameTime;
 		AssetManager* assetSystem = new AssetManager;
 
-		addSystem(*assetSystem, 0);
-		addSystem(*inputSystem, 1);
-		addSystem(*gameLogicSystem, 2);
-		addSystem(*screenSystem, 3);
-		addSystem(*renderSystem, 4);
-		addSystem(*timeSystem, 5);
+		addSystem(assetSystem, 0);
+		addSystem(inputSystem, 1);
+		addSystem(gameLogicSystem, 2);
+		addSystem(screenSystem, 3);
+		addSystem(renderSystem, 4);
+		addSystem(timeSystem, 5);
 
 		for (size_t i = 0, len = _systems.size(); i < len; i++)
 			_systems[i]->OnCreate();
 
 		isEngineInited_ = true;
 		Logger::Print("Engine::Inited\n");
-
 	}
-
 }
 
 void Engine::change(int width, int height)
@@ -112,9 +97,6 @@ void Engine::change(int width, int height)
 
 void Engine::draw()
 {
-	if(_compInitList.size() > 0)
-		vectorRemove(_compInitList, pred_initComponents);
-
 	for (System* s : _systems)
 		s->OnStartFrame();
 
@@ -124,38 +106,21 @@ void Engine::draw()
 	for (System* s : _systems)
 		s->OnEndFrame();
 
-	for (size_t i = 0; i < _compDestroyList.size(); i++)
+	while (componentsToDestroy_.size() > 0)
 	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(_compDestroyList[i]);
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front());
 		if (activeComp != NULL)
-		{
-			if (activeComp->isEnabled())
-				activeComp->OnDisable();
 			activeComp->OnDestroy();
-		}
 
-		delete _compDestroyList[i];
+		delete componentsToDestroy_.front();
+		componentsToDestroy_.pop();
 	}
 
-	for (GameObject* gmObj : _gmObjDestroyList) //TODO find more effective solution
+	while (gameobjectsToDestroy_.size() > 0)
 	{
-		for (Component* comp : gmObj->components_)
-		{
-			vectorRemove<Component>(_components, comp);
-			delete comp;
-		}
-
-		delete gmObj;
+		delete gameobjectsToDestroy_.front();
+		gameobjectsToDestroy_.pop();
 	}
-
-	if (_compInitQueue.size() > 0)
-	{
-		_compInitList.insert(_compInitList.end(), _compInitQueue.begin(), _compInitQueue.end());
-		_compInitQueue.clear();
-	}
-
-	_compDestroyList.clear();
-	_gmObjDestroyList.clear();
 }
 
 //TODO load graphic resources
@@ -175,7 +140,7 @@ void Engine::pause()
 	for (size_t i = 0, len = _systems.size(); i < len; i++)
 		_systems[i]->OnPause();
 
-	//TEMPPPPPPPPPPPPPPP
+	//TEMP destroy function sometimes not called, find solution for that and remove this lines
 	delete instance_;
 	instance_ = NULL;
 }
@@ -192,72 +157,69 @@ void Engine::destroy()
 	instance_ = NULL;
 }
 
-void Engine::addSystem(System &s, int priority)
+void Engine::addSystem(System* s, int priority)
 {
-    s.priority = priority;
-    _systems.push_back(&s);
+    s->priority = priority;
+    _systems.push_back(s);
 	std::sort(_systems.begin(), _systems.end(), pred_sortSystems);
 }
 
-void Engine::addGameObject(GameObject &obj)
+void Engine::addGameObject(GameObject* obj)
 {
-    _gameObjects.push_back(&obj);
+	gameObjectsList_.addToBack(obj->node_);
 }
 
-void Engine::addComponent(Component &comp, int priority)
+void Engine::addComponent(Component* comp)
 {
-    comp.priority = priority;
-    _components.push_back(&comp);
-	_compInitQueue.push_back(&comp);
+	for (System* system : _systems)
+		if (system->isSystemComponent(*comp))
+			system->addComponent(*comp);
+}
 
-	for (System* s : _systems)
+void Engine::removeGameObject(GameObject* obj)
+{
+	if (obj->node_ == NULL)
+		return;
+
+	gameObjectsList_.remove(obj->node_);
+	gameobjectsToDestroy_.push(obj);
+}
+
+void Engine::removeComponent(Component* comp)
+{
+	for (System* system : _systems)
+		if (system->isSystemComponent(*comp))
+			system->removeComponent(*comp);
+
+	componentsToDestroy_.push(comp);
+}
+
+GameObject* Engine::FindGameObjectByName(std::string name)
+{
+	DoubleLinkedList<GameObject>::iterator iter = gameObjectsList_.getIterator();
+	while (iter.hasNext())
 	{
-		if (s->isSystemComponent(comp))
-		{
-			comp.system = s;
-			break;
-		}
+		Node<GameObject>* node = iter.next();
+		if (node->data->getName() == name)
+			return node->data;
 	}
-
-	comp.Create();
-	ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(&comp);
-	if (activeComp != NULL && activeComp->isEnabled())
-		activeComp->OnEnable();
-}
-
-void Engine::removeGameObject(GameObject &obj)
-{
-	vectorRemove<GameObject>(_gameObjects, &obj);
-	_gmObjDestroyList.push_back(&obj);
-}
-
-void Engine::removeComponent(Component &comp)
-{
-	vectorRemove<Component>(_components, &comp);
-	vectorRemove<Component>(_compInitList, &comp);
-	vectorRemove<Component>(_compInitQueue, &comp);
-	_compDestroyList.push_back(&comp);
-}
-
-GameObject* Engine::FindGameObjectByName(std::string name) const
-{
-	for (GameObject* obj : _gameObjects)
-		if (obj->name == name)
-			return obj;
 
 	return NULL;
 }
 
 void Engine::Cleanup()
 {
-	for (GameObject* gmObj : _gameObjects)
+	//TEMP this will call components callbacks in wrong order
+	DoubleLinkedList<GameObject>::iterator gameObjectIter = gameObjectsList_.getIterator();
+	while (gameObjectIter.hasNext())
 	{
-		std::cout << "<<<<<<DELETING GAMEOBJECT>>>>>>>>> -------- " << gmObj->name << std::endl;
+		Node<GameObject>* gameObjectNode = gameObjectIter.next();
 
-		for (Component* comp : gmObj->components_)
+		DoubleLinkedList<Component>::iterator componentIter = gameObjectNode->data->componentsList_.getIterator();
+		while (componentIter.hasNext())
 		{
-			std::cout << "<<<<<<DELETING COMPONENT>>>>>>>>> " << std::endl;
-			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(comp);
+			Node<Component>* componentNode = componentIter.next();
+			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentNode->data);
 			if (activeComp != NULL)
 			{
 				if (activeComp->isEnabled())
@@ -265,12 +227,9 @@ void Engine::Cleanup()
 				activeComp->OnDestroy();
 			}
 
-			delete comp;
+			delete componentNode->data;
 		}
 
-		delete gmObj;
+		delete gameObjectNode->data;
 	}
-
-	_gameObjects.clear();
-	_components.clear();
 }

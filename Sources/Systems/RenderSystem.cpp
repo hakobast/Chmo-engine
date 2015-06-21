@@ -55,7 +55,7 @@ void RenderSystem::Update()
 	if (Camera::main == NULL)
 		return;
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -76,28 +76,24 @@ void RenderSystem::Update()
  			for (size_t r = 0, rlen = mat->sharingInfo_.size(); r < rlen; r++)
  			{
 				Renderer* rend = mat->sharingInfo_[r].rend;
-				Transform* transform = rend->getTransform();
+				if (rend->isEnabled())
+				{
+					Transform* transform = rend->getTransform();
 
-				transform->getMatrix(ModelMatrix, true);
-				Matrix4::MultiplyMatrices(ViewMatrix, ModelMatrix, ModelViewMatrix);
-				Matrix4::MultiplyMatrices(ProjectionMatrix, ModelViewMatrix, ModelViewProjectionMatrix);
+					transform->getMatrix(ModelMatrix, true);
+					Matrix4::MultiplyMatrices(ViewMatrix, ModelMatrix, ModelViewMatrix);
+					Matrix4::MultiplyMatrices(ProjectionMatrix, ModelViewMatrix, ModelViewProjectionMatrix);
 
-				//TEMPPPPPPPPPP
-				GLint loc = mat->getShader()->getUniformLocation("ModelViewProjectionMatrix");
-				glUniformMatrix4fv(loc, 1, false, &ModelViewProjectionMatrix[0]);
+					//TEMP create wrapper functions to pass values to shader
+					GLint loc = mat->getShader()->getUniformLocation("ModelViewProjectionMatrix");
+					glUniformMatrix4fv(loc, 1, false, &ModelViewProjectionMatrix[0]);
 
-				rend->Render(mat->sharingInfo_[r].materialIndex);
+					rend->Render(mat->sharingInfo_[r].materialIndex);
+				}
  			}
 		}
  		mat->unbind();
  	}
-
-	//Checking if renderer inited performing sharing
-	if (componentsToShare.size() > 0)
-	{
-		std::vector<std::pair< smart_pointer<Material>, MaterialShareInfo>>::iterator iter = std::remove_if(componentsToShare.begin(), componentsToShare.end(), pred_ShareMaterial);
-		componentsToShare.erase(iter, componentsToShare.end());
-	}
 
 // 	Renderer* r = NULL;
 // 
@@ -121,23 +117,31 @@ void RenderSystem::Update()
 	glDisable(GL_BLEND);
 }
 
+void RenderSystem::OnEndFrame()
+{
+	System::OnEndFrame();
+
+	for (std::pair< smart_pointer<Material>, MaterialShareInfo> pair : componentsToShare)
+		pair.first->share(MaterialShareInfo(pair.second.rend, pair.second.materialIndex));
+
+	componentsToShare.clear();
+}
+
 void RenderSystem::addComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		Renderer* r = dynamic_cast<Renderer*>(&c);
-		r->system = this;
-		components.push_back(r);
-		sortComponents();
+		dynamic_cast<Renderer*>(&c)->renderSystem_ = this;
+		addToBuffer(&c);
 	}
 }
 
 void RenderSystem::removeComponent(Component &c)
 {
-	//implement component checking
 	if (isSystemComponent(c))
 	{
-		vectorRemove<Renderer>(components, dynamic_cast<Renderer*>(&c));
+		componentsList_.remove(dynamic_cast<Renderer*>(&c)->renderSystemNode_);
+		removeFromBuffer(&c);
 	}
 }
 
@@ -146,55 +150,54 @@ bool RenderSystem::isSystemComponent(Component &c)
 	return dynamic_cast<Renderer*>(&c) != NULL;
 }
 
+void RenderSystem::OnBufferChange(std::vector<Component*>& components)
+{
+	for (Component* component : components)
+	{
+		component->Init();
+		componentsList_.addToBack(dynamic_cast<Renderer*>(component)->renderSystemNode_);
+	}
+
+	sortComponents();
+}
+
+std::vector<Component*> RenderSystem::getComponents()
+{
+	vector<Component*> components;
+
+	DoubleLinkedList<Renderer>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
+		components.push_back(iter.next()->data);
+
+	return components;
+}
+
 void RenderSystem::sortComponents()
 {
-	std::sort(components.begin(), components.end(),sortRenderers);
+	
 }
 
 void RenderSystem::addMaterialForRenderer(smart_pointer<Material> mat, Renderer* rend, int materialIndex)
 {
-	if (rend->isInited())
-	{
-		mat->share(MaterialShareInfo(rend, materialIndex));
-	}
-	else
-	{
-		componentsToShare.push_back(std::pair< smart_pointer<Material>, MaterialShareInfo>(mat, MaterialShareInfo(rend, materialIndex)));
-	}
+	componentsToShare.push_back(std::pair< smart_pointer<Material>, MaterialShareInfo>(mat, MaterialShareInfo(rend, materialIndex)));
 }
 
 void RenderSystem::removeMaterialForRenderer(smart_pointer<Material> mat, Renderer* rend, int materialIndex)
 {
-	if (rend->isInited())
+	std::vector<std::pair< smart_pointer<Material>, MaterialShareInfo>>::iterator iter;
+	for (iter = componentsToShare.begin(); iter != componentsToShare.end(); iter++)
 	{
-		mat->unshare(MaterialShareInfo(rend, materialIndex));
-	}
-	else
-	{
-		std::vector<std::pair< smart_pointer<Material>, MaterialShareInfo>>::iterator iter;
-		for (iter = componentsToShare.begin(); iter != componentsToShare.end(); iter++)
+		if (iter->first == mat && iter->second.rend == rend && iter->second.materialIndex == materialIndex)
 		{
-			if (iter->first == mat && iter->second.rend == rend && iter->second.materialIndex == materialIndex)
-			{
-				componentsToShare.erase(iter);
-				break;
-			}
+			componentsToShare.erase(iter);
+			return;
 		}
 	}
+
+	mat->unshare(MaterialShareInfo(rend, materialIndex));
 }
 
 int RenderSystem::getMaterialSharesCount(smart_pointer<Material> mat)
 {
 	return mat->getSharesCount();
-}
-
-bool RenderSystem::pred_ShareMaterial(std::pair< smart_pointer<Material>, MaterialShareInfo> info)
-{
-	if (info.second.rend->isInited())
-	{
-		info.second.rend->getRenderSystem()->addMaterialForRenderer(info.first, info.second.rend, info.second.materialIndex);
-		return true;
-	}
-
-	return false;
 }

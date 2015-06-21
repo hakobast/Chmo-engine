@@ -1,7 +1,7 @@
 
 #include "GameController.h"
 #include "FPSCounter.cpp"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 #include "BoxCollider2D.h"
 #include "ShipController.h"
 #include "EnemyManager.h"
@@ -19,27 +19,33 @@ void GameController::Create()
 	camerObj->addComponent<FPSCounter>();
 	camerObj->getTransform()->setPosition(Vector3(0.0f, 0.0f, 10.0f));
 
-	collisionSystem_ = (new GameObject("CollisionSystem"))->addComponent<CollisionSystem>();
+	collisionManager_ = (new GameObject("CollisionManager"))->addComponent<CollisionManager>();
 	enemyManager_ = (new GameObject("EnemySpawner"))->addComponent<EnemyManager>();
 
-	collisionSystem_->setEnabled(false);
+	collisionManager_->setEnabled(false);
 	enemyManager_->setEnabled(false);
 }
 
 void GameController::Update()
 {
 	if (Input::IsKeyDownNow(e))
+	{
+		Logger::Print("END GAME\n");
 		endGame();
+	}
 
 	if (Input::IsKeyDownNow(s))
+	{
+		Logger::Print("START GAME\n");
 		startGame();
+	}
 }
 
 void GameController::startGame()
 {
 	if (!isGameStarted_)
 	{
-		collisionSystem_->setEnabled(true);
+		collisionManager_->setEnabled(true);
 		enemyManager_->setEnabled(true);
 
 		switch (spaceShipType)
@@ -60,7 +66,7 @@ void GameController::endGame()
 {
 	if (isGameStarted_)
 	{
-		collisionSystem_->setEnabled(false);
+		collisionManager_->setEnabled(false);
 		enemyManager_->clearEnemies();
 		enemyManager_->setEnabled(false);
 
@@ -136,8 +142,8 @@ void GameController::createStandartSpaceship()
 
 	GameObject* obj = new GameObject("StandartSpaceship");
 	obj->addComponent<ShipController>();
-	BoxCollider2D* collider = obj->addComponent<BoxCollider2D>();
 	Ship* ship = obj->addComponent<Ship>();
+	BoxCollider2D* collider = obj->addComponent<BoxCollider2D>();
 
 	smart_pointer<Material> mat =
 		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitLine.vert", "Resources/Shaders/UnlitLine.frag");

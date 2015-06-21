@@ -6,14 +6,14 @@
 #include "EngineInclude.h"
 #include "Collider2D.h"
 #include "CollisionUtils.h"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 
 using namespace std;
 
 class GLTestComponent : public GameLogic
 {
 public:
-	CollisionSystem* collisionSystem;
+	CollisionManager* collisionSystem;
 	Collider2D* first;
 	Collider2D* second;
 

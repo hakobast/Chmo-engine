@@ -8,6 +8,7 @@
 
 #include "../CoreEngine/System.h"
 #include "../Extras/smart_pointer.h"
+#include "../Extras/DoubleLinkedList.h"
 
 class Renderer;
 class Material;
@@ -23,22 +24,26 @@ public:
 class RenderSystem :public System
 {
 private:
-	std::vector<Renderer*> components;
+	DoubleLinkedList<Renderer> componentsList_;
 	std::vector<std::pair< smart_pointer<Material>, MaterialShareInfo>> componentsToShare;
-	static bool pred_ShareMaterial(std::pair< smart_pointer<Material>, MaterialShareInfo> info);
-protected:
+public:
 	~RenderSystem();
+	RenderSystem();
+
 	virtual void OnCreate();
 	virtual void Update();
+	virtual void OnEndFrame();
 	virtual void addComponent(Component &c);
 	virtual void removeComponent(Component &c);
 	virtual bool isSystemComponent(Component &c);
-public:
-	RenderSystem();
+	virtual std::vector<Component*> getComponents();
+
 	void sortComponents();
 	void addMaterialForRenderer(smart_pointer<Material> mat, Renderer* rend, int matIndex = 0);
 	void removeMaterialForRenderer(smart_pointer<Material> mat, Renderer* rend, int matIndex = 0);
 	int getMaterialSharesCount(smart_pointer<Material> mat);
+protected:
+	virtual void OnBufferChange(std::vector<Component*>& components);
 };
 
 #endif

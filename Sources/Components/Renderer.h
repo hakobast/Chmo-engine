@@ -6,6 +6,7 @@
 #include "../Systems/RenderSystem.h"
 #include "../CoreEngine/Material.h"
 #include "../Extras/smart_pointer.h"
+#include "../Extras/DoubleLinkedList.h"
 
 enum SortingLayer
 {
@@ -18,8 +19,11 @@ class Renderer : public ActiveComponent
 {
 friend class RenderSystem;
 private:
+	Node<Renderer>* renderSystemNode_;
+
 	void initAttributes(int materialIndex);
 protected:
+	RenderSystem* renderSystem_;
 	int sortingLayer = Default;
 	int layerOrder = 0;
 
@@ -30,8 +34,6 @@ protected:
 	std::vector<int> bitangAttribLocations;
 
 	std::vector<smart_pointer<Material>> materials;
-
-	RenderSystem* getRenderSystem();
 public:
 	/* SHADER ATTRIBUTES */
 	static const char* vertexAttribName;
@@ -44,8 +46,9 @@ public:
 	static std::map<const char*, unsigned int> SmallAttributes;
 	static std::map<const char*, unsigned int> StandartAttributes;
 
-	virtual void OnEnable();
-	virtual void OnDisable();
+	Renderer(){ renderSystemNode_ = new Node<Renderer>(this); }
+	~Renderer(){ delete renderSystemNode_; renderSystemNode_ = NULL; }
+	virtual void OnDestroy();
 	virtual void Render(int materialIndex = 0) = 0;
 
 	int getSortingLayer() const;
@@ -65,11 +68,6 @@ public:
 	void setMainTexture(smart_pointer<Texture2D> texture); 
 };
 
-inline RenderSystem* Renderer::getRenderSystem()
-{
-	return dynamic_cast<RenderSystem*>(system);
-}
-
 inline int Renderer::getLayerOrder() const
 {
 	return layerOrder;
@@ -85,14 +83,14 @@ inline void Renderer::setSortingLayer(int layer, int order)
 	sortingLayer = layer;
 	layerOrder = order;
 	if (isEnabled())
-		dynamic_cast<RenderSystem*>(system)->sortComponents();
+		renderSystem_->sortComponents();
 }
 
 inline void Renderer::setLayerOrder(int order)
 {
 	layerOrder = order;
 	if (isEnabled())
-		dynamic_cast<RenderSystem*>(system)->sortComponents();
+		renderSystem_->sortComponents();
 }
 
 inline std::vector<smart_pointer<Material>>& Renderer::getSharedMaterials()

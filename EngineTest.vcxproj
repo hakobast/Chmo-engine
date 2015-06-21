@@ -58,6 +58,7 @@
     <ClInclude Include="Sources\Debug\Logger.h" />
     <ClInclude Include="Sources\Debug\StandaloneLog.h" />
     <ClInclude Include="Sources\Extras\Color.h" />
+    <ClInclude Include="Sources\Extras\DoubleLinkedList.h" />
     <ClInclude Include="Sources\Extras\FileUtils.h" />
     <ClInclude Include="Sources\Extras\GLUtils.h" />
     <ClInclude Include="Sources\Extras\Math.h" />
@@ -75,7 +76,7 @@
     <ClInclude Include="Sources\Testings\Bullet.h" />
     <ClInclude Include="Sources\Testings\CircleCollider2D.h" />
     <ClInclude Include="Sources\Testings\Collider2D.h" />
-    <ClInclude Include="Sources\Testings\CollisionSystem.h" />
+    <ClInclude Include="Sources\Testings\CollisionManager.h" />
     <ClInclude Include="Sources\Testings\CollisionUtils.h" />
     <ClInclude Include="Sources\Testings\Enemy.h" />
     <ClInclude Include="Sources\Testings\EnemyManager.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="Sources\CoreEngine\Mesh.cpp" />
     <ClCompile Include="Sources\CoreEngine\NativeInput.cpp" />
     <ClCompile Include="Sources\CoreEngine\ShaderProgram.cpp" />
+    <ClCompile Include="Sources\CoreEngine\System.cpp" />
     <ClCompile Include="Sources\CoreEngine\Texture2D.cpp" />
     <ClCompile Include="Sources\CoreEngine\TextureAnimationClip.cpp" />
     <ClCompile Include="Sources\CoreEngine\TextureAtlas.cpp" />
@@ -140,7 +142,7 @@
     <ClCompile Include="Sources\Testings\BoxCollider2D.cpp" />
     <ClCompile Include="Sources\Testings\Bullet.cpp" />
     <ClCompile Include="Sources\Testings\CircleCollider2D.cpp" />
-    <ClCompile Include="Sources\Testings\CollisionSystem.cpp" />
+    <ClCompile Include="Sources\Testings\CollisionManager.cpp" />
     <ClCompile Include="Sources\Testings\Enemy.cpp" />
     <ClCompile Include="Sources\Testings\EnemyManager.cpp" />
     <ClCompile Include="Sources\Testings\FPSCounter.cpp" />

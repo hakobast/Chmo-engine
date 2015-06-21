@@ -2,14 +2,14 @@
 #include "Ship.h"
 #include "ShipController.h"
 #include "Weapon.h"
-#include "CollisionSystem.h"
+#include "CollisionManager.h"
 #include "Collider2D.h"
 #include "GameController.h"
 
 void ShipController::Init()
 {
 	ship_ = getGameObject()->getComponent<Ship>();
-	CollisionSystem::GetInstance().addCollider(getGameObject()->getComponent<Collider2D>());
+	CollisionManager::GetInstance().addCollider(getGameObject()->getComponent<Collider2D>());
 }
 
 void ShipController::Update()
@@ -49,7 +49,7 @@ void ShipController::Update()
 void ShipController::OnDisable()
 {
 	if (isEnabled()) // Destroying
-		CollisionSystem::GetInstance().removeCollider(getGameObject()->getComponent<Collider2D>());
+		CollisionManager::GetInstance().removeCollider(getGameObject()->getComponent<Collider2D>());
 }
 
 void ShipController::OnAction(std::string action, void*const data)

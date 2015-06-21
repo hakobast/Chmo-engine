@@ -8,17 +8,16 @@ void ScreenSystem::OnScreenChange(int width, int height)
 	this->width = width;
 	this->height = height;
 
-	for (Camera* cam : components)
-		cam->ApplyCameraChanges();
+	DoubleLinkedList<Camera>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
+		iter.next()->data->ApplyCameraChanges();
 }
 
 void ScreenSystem::addComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		Camera* gm = dynamic_cast<Camera*>(&c);
-		gm->system = this;
-		components.push_back(gm);
+		addToBuffer(&c);
 	}
 }
 
@@ -26,13 +25,32 @@ void ScreenSystem::removeComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		Camera* gm = dynamic_cast<Camera*>(&c);
-		vectorRemove<Camera>(components, gm);
+		componentsList_.remove(dynamic_cast<Camera*>(&c)->screenSystemNode_);
+		removeFromBuffer(&c);
 	}
 }
 
 bool ScreenSystem::isSystemComponent(Component &c)
 {
-	Camera* gm = dynamic_cast<Camera*>(&c);
-	return gm != NULL;
+	return dynamic_cast<Camera*>(&c) != NULL;
+}
+
+void ScreenSystem::OnBufferChange(std::vector<Component*>& components)
+{
+	for (Component* component : components)
+	{
+		component->Init();
+		componentsList_.addToBack(dynamic_cast<Camera*>(component)->screenSystemNode_);
+	}
+}
+
+std::vector<Component*> ScreenSystem::getComponents()
+{
+	vector<Component*> components;
+
+	DoubleLinkedList<Camera>::iterator iter = componentsList_.getIterator();
+	while (iter.hasNext())
+		components.push_back(iter.next()->data);
+
+	return components;
 }

@@ -9,7 +9,7 @@
 class QuadTree;
 class Collider2D;
 
-class CollisionSystem : public GameLogic, public Singleton<CollisionSystem>
+class CollisionManager : public GameLogic, public Singleton<CollisionManager>
 {
 private:
 	std::vector<Collider2D*> colliders_;
@@ -25,18 +25,18 @@ public:
 	void getColliders(std::vector<Collider2D*>* v);
 };
 
-inline void CollisionSystem::addCollider(Collider2D* collider)
+inline void CollisionManager::addCollider(Collider2D* collider)
 {
 	if (collider != NULL)
 		colliders_.push_back(collider);
 }
 
-inline void CollisionSystem::removeCollider(Collider2D* collider)
+inline void CollisionManager::removeCollider(Collider2D* collider)
 {
 	colliders_.erase(std::remove(colliders_.begin(), colliders_.end(), collider), colliders_.end());
 }
 
-inline void CollisionSystem::getColliders(std::vector<Collider2D*>* v)
+inline void CollisionManager::getColliders(std::vector<Collider2D*>* v)
 {
 	v->insert(v->begin(), colliders_.begin(), colliders_.end());
 }

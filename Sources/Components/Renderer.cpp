@@ -28,17 +28,10 @@ std::map<const char*, unsigned int> Renderer::SmallAttributes{
 	{ texCoordAttribName, 1 },
 };
 
-//TODO Test this functions because thies may cause a bug 
-void Renderer::OnEnable()
+void Renderer::OnDestroy()
 {
  	for (size_t i = 0, len = materials.size(); i < len; i++)
- 		getRenderSystem()->addMaterialForRenderer(materials[i], this, i);
-}
-
-void Renderer::OnDisable()
-{
- 	for (size_t i = 0, len = materials.size(); i < len; i++)
- 		getRenderSystem()->removeMaterialForRenderer(materials[i], this, i);
+ 		renderSystem_->removeMaterialForRenderer(materials[i], this, i);
 }
 
 //TODO implement material and shader copy constructor to remove comment
@@ -96,7 +89,7 @@ void Renderer::addMaterial(smart_pointer<Material> mat)
 		return;
 
 	materials.push_back(mat);
-	getRenderSystem()->addMaterialForRenderer(mat, this, materials.size() - 1);
+	renderSystem_->addMaterialForRenderer(mat, this, materials.size() - 1);
 	initAttributes(materials.size() - 1);
 }
 
@@ -108,14 +101,14 @@ void Renderer::setMaterial(smart_pointer<Material> mat, int index)
 	if (index < (int)materials.size())
 	{
 		materials[index] = mat;
-		getRenderSystem()->removeMaterialForRenderer(materials[index], this, index);
-		getRenderSystem()->addMaterialForRenderer(mat, this, index);
+		renderSystem_->removeMaterialForRenderer(materials[index], this, index);
+		renderSystem_->addMaterialForRenderer(mat, this, index);
 		initAttributes(index);
 	}
 	else
 	{
 		materials.push_back(mat);
-		getRenderSystem()->addMaterialForRenderer(mat, this, materials.size() - 1);
+		renderSystem_->addMaterialForRenderer(mat, this, materials.size() - 1);
 		initAttributes(materials.size() - 1);
 	}
 }

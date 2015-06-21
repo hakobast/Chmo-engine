@@ -10,7 +10,7 @@ enum SpaceshipType
 };
 
 class EnemyManager;
-class CollisionSystem;
+class CollisionManager;
 
 class GameController : public GameLogic
 {
@@ -25,7 +25,7 @@ public:
 	void restartGame();
 private:
 	EnemyManager* enemyManager_;
-	CollisionSystem* collisionSystem_;
+	CollisionManager* collisionManager_;
 	bool isGameStarted_ = false;
 
 	void createCoolSpaceship();

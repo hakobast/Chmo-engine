@@ -267,9 +267,6 @@
     <ClInclude Include="Sources\Testings\CollisionUtils.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Testings\CollisionSystem.h">
-      <Filter>Header Files\Testing</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\Testings\GameController.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
@@ -277,6 +274,12 @@
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Testings\EngineInclude.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Extras\DoubleLinkedList.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\CollisionManager.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
   </ItemGroup>
@@ -455,9 +458,6 @@
     <ClCompile Include="Sources\Testings\CircleCollider2D.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Testings\CollisionSystem.cpp">
-      <Filter>Source Files\Testing</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\CoreEngine\Component.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
@@ -465,6 +465,12 @@
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Testings\EnemyManager.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CoreEngine\System.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\CollisionManager.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
   </ItemGroup>

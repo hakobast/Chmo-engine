@@ -19,24 +19,23 @@ private:
 	Vector3 scaleLocal_;
 	Vector3 up_;
 	Vector3 forward_;
+public:
 	Transform() :
 		location_(Vector3(0.0f, 0.0f, 0.0f)),
 		up_(Vector3(0.0f, 1.0f, 0.0f)),
-		forward_(Vector3(0.0f,0.0f,1.0f)),
-		scaleLocal_(Vector3(1.0f,1.0f,1.0f)){};
-protected:
-	~Transform();
-public:
-	void getPosition(Vector3& v) const;
+		forward_(Vector3(0.0f, 0.0f, 1.0f)),
+		scaleLocal_(Vector3(1.0f, 1.0f, 1.0f)){};
+
+	void	getPosition(Vector3& v) const;
 	Vector3 getPosition() const;
-	void setPosition(Vector3 newPos);
-	void getScale(Vector3& v) const;
+	void	setPosition(Vector3 newPos);
+	void	getScale(Vector3& v) const;
 	Vector3 getScale() const;
-	void setScale(Vector3 newScale);
+	void	setScale(Vector3 newScale);
 	Vector3 Right() const;
 	Vector3 Up() const;
 	Vector3 Forward() const;
-	void getMatrix(Matrix4& matrix, bool calcScale = false);
+	void	getMatrix(Matrix4& matrix, bool calcScale = false);
 
 	void Translate(GLfloat x, GLfloat y, GLfloat z);
 	void TranslateForward(GLfloat step);

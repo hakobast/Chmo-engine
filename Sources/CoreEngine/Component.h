@@ -1,50 +1,44 @@
 
-#ifndef EngineTesting_Component_h
-#define EngineTesting_Component_h
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 #include <typeinfo>
 #include <string>
 #include <iostream>
 
+#include "../Extras/DoubleLinkedList.h"
+
 class Transform;
 class GameObject;
 class System;
 
-enum ComponentState
-{
-	Enabled,
-	Disabled,
-	ParentDisabled,
-	Destroying,
-};
-
 class Component
 {
 	friend class GameObject;
-	friend class System;
 	friend class Engine;
+private:
+	GameObject*		gameObject_ = 0;
+	Transform*		transform_ = 0;
+	Node<Component>* node_ = 0;
+
 public:
-    int priority;
+	Component();
+	virtual ~Component();
 	virtual void Create(){};
-	virtual void Init(){ inited_ = true; };
+	virtual void Init(){};
 	virtual void Update(){};
 	virtual bool isEnabled() const;
-	GameObject*const getGameObject() const;
-	Transform*const getTransform() const;
-	std::string getName();
-	std::string getTag();
-protected:
-	virtual ~Component()
-	{
-		//std::cout << "~~~~~~~~~~~~~ Component: " << std::endl;
-	};
-	bool isInited();
-	System* system;
-private:
-	bool inited_ = false;
-	ComponentState state_ = ComponentState::Disabled;
-	GameObject* gameObject_;
-	Transform* transform_;
+
+	/////////////Implement Generic methods/////////////////
+
+	///////////////////////////////////////////////////////
+
+	GameObject*const	getGameObject() const;
+	Transform*const		getTransform() const;
+	std::string			getName();
+	std::string			getTag();
+	void				setName(std::string newName);
+	void				setTag(std::string newTag);
 
 friend std::ostream& operator << (std::ostream& stream, const Component& obj);
 };
@@ -55,13 +49,8 @@ inline std::ostream& operator << (std::ostream& stream, const Component& obj)
 }
 
 inline bool Component::isEnabled() const
-{ 
-	return true; 
-}
-
-inline bool Component::isInited()
 {
-	return inited_;
+	return true; 
 }
 
 inline GameObject*const Component::getGameObject() const

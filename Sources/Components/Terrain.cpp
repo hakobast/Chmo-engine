@@ -210,20 +210,20 @@ void Terrain::Update(){}
 
 void Terrain::Render(int materialIndex)
 {
-	glEnableVertexAttribArray(vertexAttribLocations[materialIndex]);
-	glEnableVertexAttribArray(texCoordAttribLocations[materialIndex]);
-	glEnableVertexAttribArray(normalAttribLocations[materialIndex]);
+	glEnableVertexAttribArray(Material::AllAttributes[Material::vertexAttribName]);
+	glEnableVertexAttribArray(Material::AllAttributes[Material::texCoordAttribName]);
+	glEnableVertexAttribArray(Material::AllAttributes[Material::normalAttribName]);
 
 	if (isVBOSupported())
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
-		glVertexAttribPointer(vertexAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(Material::AllAttributes[Material::vertexAttribName], 3, GL_FLOAT, false, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, texture_vbo_id);
-		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 2, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(Material::AllAttributes[Material::texCoordAttribName], 2, GL_FLOAT, false, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, normal_vbo_id);
-		glVertexAttribPointer(normalAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(Material::AllAttributes[Material::normalAttribName], 3, GL_FLOAT, false, 0, 0);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 
@@ -231,16 +231,16 @@ void Terrain::Render(int materialIndex)
 	}
 	else
 	{
-		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, verts);
-		glVertexAttribPointer(texCoordAttribLocations[materialIndex], 2, GL_FLOAT, false, 0, textures);
-		glVertexAttribPointer(normalAttribLocations[materialIndex], 3, GL_FLOAT, false, 0, norms);
+		glVertexAttribPointer(Material::AllAttributes[Material::vertexAttribName], 3, GL_FLOAT, false, 0, verts);
+		glVertexAttribPointer(Material::AllAttributes[Material::texCoordAttribName], 2, GL_FLOAT, false, 0, textures);
+		glVertexAttribPointer(Material::AllAttributes[Material::normalAttribName], 3, GL_FLOAT, false, 0, norms);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, getVertsCount());
 	}
 
-	glDisableVertexAttribArray(vertexAttribLocations[materialIndex]);
-	glDisableVertexAttribArray(texCoordAttribLocations[materialIndex]);
-	glDisableVertexAttribArray(normalAttribLocations[materialIndex]);
+	glDisableVertexAttribArray(Material::AllAttributes[Material::vertexAttribName]);
+	glDisableVertexAttribArray(Material::AllAttributes[Material::texCoordAttribName]);
+	glDisableVertexAttribArray(Material::AllAttributes[Material::normalAttribName]);
 
 	/*glBegin(GL_TRIANGLE_STRIP);
 	for (int z = 0; z < length - 1; z++)

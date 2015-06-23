@@ -30,8 +30,10 @@ RenderSystem::RenderSystem()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_POINT_SPRITE);
+	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
 	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_TEXTURE_2D);
 	//glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
 }
@@ -55,8 +57,6 @@ void RenderSystem::Update()
 	if (Camera::main == NULL)
 		return;
 	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -84,10 +84,7 @@ void RenderSystem::Update()
 					Matrix4::MultiplyMatrices(ViewMatrix, ModelMatrix, ModelViewMatrix);
 					Matrix4::MultiplyMatrices(ProjectionMatrix, ModelViewMatrix, ModelViewProjectionMatrix);
 
-					//TEMP create wrapper functions to pass values to shader
-					GLint loc = mat->getShader()->getUniformLocation("ModelViewProjectionMatrix");
-					glUniformMatrix4fv(loc, 1, false, &ModelViewProjectionMatrix[0]);
-
+					mat->getShader()->setUniformMatrix4fv("ModelViewProjectionMatrix", 1, false, &ModelViewProjectionMatrix[0]);
 					rend->Render(mat->sharingInfo_[r].materialIndex);
 				}
  			}
@@ -115,6 +112,13 @@ void RenderSystem::Update()
 // 	}
 
 	glDisable(GL_BLEND);
+}
+
+void RenderSystem::OnStartFrame()
+{
+	System::OnStartFrame();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderSystem::OnEndFrame()

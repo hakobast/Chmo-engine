@@ -28,6 +28,18 @@ private:
 	void unshare(MaterialShareInfo shareInfo);
 
 public:
+	////////////// SHADER STANDERT ATTRIBUTES ////////////////
+	static const char* vertexAttribName;
+	static const char* texCoordAttribName;
+	static const char* normalAttribName;
+	static const char* tangentAttribName;
+	static const char* bitangentAttribName;
+	
+	static std::map<const char*, unsigned int> AllAttributes;
+	static std::map<const char*, unsigned int> SmallAttributes;
+	static std::map<const char*, unsigned int> StandartAttributes;
+	/////////////////////////////////////////////////////////
+
 	static smart_pointer<Material> Diffuse();
 	static smart_pointer<Material> Unlit();
 
@@ -48,8 +60,10 @@ public:
 	smart_pointer<Texture2D>&		getMainTexture();
 	smart_pointer<ShaderProgram>&	getShader();
 
-	void	setColor(Color c, const char* propertyName = "Color");
+	void	setColor(Color c,		const char* propertyName = "Color");
+	void	setFloat(float value,	const char* propertyName);
 	Color	getColor(const char* propertyName = "Color");
+	float	getFloat(const char* propertyName);
 	const char* name;
 };
 

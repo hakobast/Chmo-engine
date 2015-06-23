@@ -32,6 +32,7 @@ public:
 
 	virtual void OnCreate();
 	virtual void Update();
+	virtual void OnStartFrame();
 	virtual void OnEndFrame();
 	virtual void addComponent(Component &c);
 	virtual void removeComponent(Component &c);

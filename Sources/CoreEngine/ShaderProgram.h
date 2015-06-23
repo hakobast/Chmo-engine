@@ -131,153 +131,116 @@ inline GLint ShaderProgram::getAttributeLocation(const char* name)
 inline void ShaderProgram::setUniform1f(const char* name, GLfloat v0)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform1f(location, v0);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform1fv(const char* name, GLsizei count, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform1fv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform1i(const char* name, GLint v0)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform1i(location, v0);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform1iv(const char* name, GLsizei count, const GLint* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform1iv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform2f(const char* name, GLfloat v0, GLfloat v1)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform2f(location, v0, v1);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform2fv(const char* name, GLsizei count, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform2fv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform2i(const char* name, GLint v0, GLint v1)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform2i(location, v0, v1);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform2iv(const char* name, GLsizei count, const GLint* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform2iv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform3f(const char* name, GLfloat v0, GLfloat v1, GLfloat v2)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform3f(location, v0, v1, v2);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform3fv(const char* name, GLsizei count, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform3fv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform3i(const char* name, GLint v0, GLint v1, GLint v2)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform3i(location, v0, v1, v2);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform3iv(const char* name, GLsizei count, const GLint* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform3iv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform4f(const char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
 	GLint location = getUniformLocation(name);
-	bind();
+
 	glUniform4f(location, v0, v1, v2, v3);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform4fv(const char* name, GLsizei count, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform4fv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform4i(const char* name, GLint v0, GLint v1, GLint v2, GLint v3)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform4i(location, v0, v1, v2, v3);
-	unbind();
 }
 
 inline void ShaderProgram::setUniform4iv(const char* name, GLsizei count, const GLint* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniform4iv(location, count, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniformMatrix2fv(const char* name, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniformMatrix2fv(location, count, transpose, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniformMatrix3fv(const char* name, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniformMatrix3fv(location, count, transpose, value);
-	unbind();
 }
 
 inline void ShaderProgram::setUniformMatrix4fv(const char* name, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
 	GLint location = getUniformLocation(name);
-	bind();
 	glUniformMatrix4fv(location, count, transpose, value);
-	unbind();
 }
 
 /* ATTRIBUTES */

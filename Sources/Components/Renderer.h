@@ -20,31 +20,13 @@ class Renderer : public ActiveComponent
 friend class RenderSystem;
 private:
 	Node<Renderer>* renderSystemNode_;
-
-	void initAttributes(int materialIndex);
 protected:
 	RenderSystem* renderSystem_;
 	int sortingLayer = Default;
 	int layerOrder = 0;
 
-	std::vector<int> vertexAttribLocations;
-	std::vector<int> texCoordAttribLocations;
-	std::vector<int> normalAttribLocations;
-	std::vector<int> tangAttribLocations;
-	std::vector<int> bitangAttribLocations;
-
 	std::vector<smart_pointer<Material>> materials;
 public:
-	/* SHADER ATTRIBUTES */
-	static const char* vertexAttribName;
-	static const char* texCoordAttribName;
-	static const char* normalAttribName;
-	static const char* tangentAttribName;
-	static const char* bitangentAttribName;
-	/* SHADER ATTRIBUTES */
-	static std::map<const char*, unsigned int> AllAttributes;
-	static std::map<const char*, unsigned int> SmallAttributes;
-	static std::map<const char*, unsigned int> StandartAttributes;
 
 	Renderer(){ renderSystemNode_ = new Node<Renderer>(this); }
 	~Renderer(){ delete renderSystemNode_; renderSystemNode_ = NULL; }

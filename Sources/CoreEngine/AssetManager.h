@@ -34,42 +34,34 @@ public:
 	virtual void OnPause();
 	virtual void OnDestroy();
 
+	static smart_pointer<Texture2D> LoadTexture(const char* filename,
+		bool generateMipmaps = false,
+		bool custom = false,
+		GLenum internalFormat = GL_RGB,
+		GLenum format = GL_RGB,
+		GLenum dataType = GL_UNSIGNED_BYTE);
+
+	static smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
+		int* regions, int textures_count,
+		bool generateMipmaps = false,
+		bool custom = false,
+		GLenum internalFormat = GL_RGB,
+		GLenum format = GL_RGB,
+		GLenum dataType = GL_UNSIGNED_BYTE);
+
+	static smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
+		int rows, int columns, int tilesCount,
+		bool generateMipmaps = false,
+		bool custom = false,
+		GLenum internalFormat = GL_RGB,
+		GLenum format = GL_RGB,
+		GLenum dataType = GL_UNSIGNED_BYTE);
+
 	static smart_pointer<Material> LoadMaterial(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath);
-
-	smart_pointer<Material> material(const char* name, const char* vertexShaderPath, const char* fragmentShaderPath);
-
 };
 
-inline smart_pointer<Material> AssetManager::LoadMaterial(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath)
-{
-	return AssetManager::instance_->material(name, vertexShaderRelativePath, fragmentShaderRelativePath);
-}
-
-std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);
-std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor* descriptor = NULL);
-std::vector<smart_pointer<Material>> LoadMtl(const char* filename);
-
-smart_pointer<Texture2D> LoadTexture(const char* filename,
-									bool generateMipmaps = false,
-									bool custom = false,
-									GLenum internalFormat = GL_RGB,
-									GLenum format = GL_RGB,
-									GLenum dataType = GL_UNSIGNED_BYTE);
-
-smart_pointer<Texture2D> LoadTextureAtlas(const char* filename,
-											int* regions, int textures_count,
-											bool generateMipmaps = false,
-											bool custom = false,
-											GLenum internalFormat = GL_RGB,
-											GLenum format = GL_RGB,
-											GLenum dataType = GL_UNSIGNED_BYTE);
-
-smart_pointer<Texture2D> LoadTextureTiled(const char* filename,
-											int rows, int columns, int tilesCount,
-											bool generateMipmaps = false,
-											bool custom = false,
-											GLenum internalFormat = GL_RGB,
-											GLenum format = GL_RGB,
-											GLenum dataType = GL_UNSIGNED_BYTE);
+// std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);
+// std::vector<smart_pointer<Mesh>> LoadMesh(const char* filename, ModelDescriptor* descriptor = NULL);
+// std::vector<smart_pointer<Material>> LoadMtl(const char* filename);
 
 #endif

@@ -21,7 +21,9 @@ LineRenderer::LineRenderer()
 
 void LineRenderer::Render(int materialIndex)
 {
+	glLineWidth(width_);
 	drawer_->draw();
+	glLineWidth(1.0f);
 }
 
 void LineRenderer::setPointsCount(int count)

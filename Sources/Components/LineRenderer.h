@@ -23,14 +23,17 @@ public:
 	void setPoint		(int index, Vector3 position);
 	void setPointsCount	(int count);
 	void setColor		(Color c);
+	void setWidth		(float width);
 
 	std::vector<Vector3>	getPoints();
 	int						getPointsCount();
 	Color					getColor();
+	float					getWidth();
 private:
+	std::vector<Vector3> points_;
 	GLDrawer* drawer_ = 0;
 	int pointsCount_ = 0;
-	std::vector<Vector3> points_;
+	float width_ = 1;
 };
 
 inline std::vector<Vector3> LineRenderer::getPoints()
@@ -59,4 +62,13 @@ inline Color LineRenderer::getColor()
 	return Color::BLACK;
 }
 
+inline float LineRenderer::getWidth()
+{
+	return width_;
+}
+
+inline void LineRenderer::setWidth(float width)
+{
+	width_ = width;
+}
 #endif

@@ -14,12 +14,12 @@ void CollisionManager::Update()
 	for (Collider2D* coll : colliders_)
 		 quadTree_->add(coll);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #if defined(DEBUG_COLLISION) && defined(PLATFORM_WINDOWS)
 
  	glColor3f(1.0f, 0.0f, 1.0f);
- 
+	
  	quadTree_->draw();
+	
 #endif
 }
 

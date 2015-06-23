@@ -3,7 +3,7 @@
 
 #include "EngineInclude.h"
 
-#define DEBUG_COLLISION
+//#define DEBUG_COLLISION
 
 class CircleCollider2D;
 class BoxCollider2D;

@@ -55,15 +55,16 @@ Bullet* Weapon::createBullet()
 	LineRenderer* lineRend = bulletObject->addComponent<LineRenderer>();
 	BoxCollider2D* collider = bulletObject->addComponent<BoxCollider2D>();
 
-	lineRend->setMainMaterial(bulletMat_);
 
 	std::vector<Vector3> points;
 	points.push_back(Vector3(0.0f, 0.1f, 0.0f));
 	points.push_back(Vector3(0.0f, -0.1f, 0.0f));
 
+	lineRend->setMainMaterial(bulletMat_);
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
 	lineRend->setColor(bulletColor_);
+	lineRend->setWidth(2.0f);
 
 	collider->size = Vector2(0.05f, 0.2f);
 	bullet->speed = bulletSpeed_;

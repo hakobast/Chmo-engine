@@ -282,6 +282,15 @@
     <ClInclude Include="Sources\Testings\CollisionManager.h">
       <Filter>Header Files\Testing</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\Components\ParticleRenderer.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Extras\GLVertexAttribute.h">
+      <Filter>Header Files\Extras</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Testings\EnemyParticle.h">
+      <Filter>Header Files\Testing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CoreEngine\Utils.cpp">
@@ -471,6 +480,12 @@
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Testings\CollisionManager.cpp">
+      <Filter>Source Files\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Components\ParticleRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Testings\EnemyParticle.cpp">
       <Filter>Source Files\Testing</Filter>
     </ClCompile>
   </ItemGroup>

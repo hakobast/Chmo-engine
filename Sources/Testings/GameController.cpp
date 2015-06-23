@@ -125,6 +125,7 @@ void GameController::createCoolSpaceship()
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
 	lineRend->setColor(Color::PURPLE);
+	lineRend->setWidth(2.0f);
 
 	ship->addWeapon(new Weapon(Color::YELLOW), Vector3(-0.3f, -0.2f, 0.0f), Vector3::UP);
 	ship->addWeapon(new Weapon(Color::YELLOW), Vector3(0.3f, -0.2f, 0.0f), Vector3::UP);
@@ -153,6 +154,7 @@ void GameController::createStandartSpaceship()
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
 	lineRend->setColor(Color::GREEN);
+	lineRend->setWidth(2.0f);
 
 	ship->addWeapon(new Weapon(Color::RED), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
 

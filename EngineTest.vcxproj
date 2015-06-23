@@ -16,6 +16,7 @@
     <ClInclude Include="Sources\Components\Light.h" />
     <ClInclude Include="Sources\Components\LineRenderer.h" />
     <ClInclude Include="Sources\Components\MeshRenderer.h" />
+    <ClInclude Include="Sources\Components\ParticleRenderer.h" />
     <ClInclude Include="Sources\Components\Renderer.h" />
     <ClInclude Include="Sources\Components\SpriteRenderer.h" />
     <ClInclude Include="Sources\Components\Terrain.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Sources\Extras\DoubleLinkedList.h" />
     <ClInclude Include="Sources\Extras\FileUtils.h" />
     <ClInclude Include="Sources\Extras\GLUtils.h" />
+    <ClInclude Include="Sources\Extras\GLVertexAttribute.h" />
     <ClInclude Include="Sources\Extras\Math.h" />
     <ClInclude Include="Sources\Extras\Matrix4.h" />
     <ClInclude Include="Sources\Extras\Singleton.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="Sources\Testings\CollisionUtils.h" />
     <ClInclude Include="Sources\Testings\Enemy.h" />
     <ClInclude Include="Sources\Testings\EnemyManager.h" />
+    <ClInclude Include="Sources\Testings\EnemyParticle.h" />
     <ClInclude Include="Sources\Testings\EngineInclude.h" />
     <ClInclude Include="Sources\Testings\GameController.h" />
     <ClInclude Include="Sources\Testings\imageloader.h" />
@@ -94,6 +97,7 @@
     <ClCompile Include="Sources\Components\Light.cpp" />
     <ClCompile Include="Sources\Components\LineRenderer.cpp" />
     <ClCompile Include="Sources\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Sources\Components\ParticleRenderer.cpp" />
     <ClCompile Include="Sources\Components\Renderer.cpp" />
     <ClCompile Include="Sources\Components\SpriteRenderer.cpp" />
     <ClCompile Include="Sources\Components\Terrain.cpp" />
@@ -145,6 +149,7 @@
     <ClCompile Include="Sources\Testings\CollisionManager.cpp" />
     <ClCompile Include="Sources\Testings\Enemy.cpp" />
     <ClCompile Include="Sources\Testings\EnemyManager.cpp" />
+    <ClCompile Include="Sources\Testings\EnemyParticle.cpp" />
     <ClCompile Include="Sources\Testings\FPSCounter.cpp" />
     <ClCompile Include="Sources\Testings\GameController.cpp" />
     <ClCompile Include="Sources\Testings\GLTestComponent.cpp" />

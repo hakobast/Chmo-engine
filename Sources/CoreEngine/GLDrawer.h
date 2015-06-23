@@ -2,9 +2,11 @@
 #define GL_DRAWER_H
 
 #include <stdio.h>
+#include <map>
 
 #include "LIBS.h"
 #include "Enums.h"
+#include "../Extras/GLVertexAttribute.h"
 
 class GLDrawer
 {
@@ -21,6 +23,8 @@ public:
 	void setBitangentData	(GLsizei size, GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage = GL_STATIC_DRAW);
 	void setNormalData					  (GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage = GL_STATIC_DRAW);
 	void setIndexData		(GLuint count, GLuint* data, GLenum VBOUsage = GL_STATIC_DRAW);
+
+	void setAttributeData(int id, GLuint index, GLsizei size, GLuint count, GLsizeiptr valueBytes, GLenum valueType, void* data, GLenum VBOUsage = GL_STATIC_DRAW);
 
 	GLfloat* getVertexData();
 	GLfloat* getTexCoordData();
@@ -48,50 +52,53 @@ public:
 	GLuint getTangentIndex();
 	GLuint getBitangentIndex();
 
+	const GLVertexAttribute*const getAttribute(int id) const;
+
 	void draw();
 	void updateBuffers();
 private:
-	bool hasVAOSupport;
-	bool hasVBOSupport;
-	
-	GLfloat* vertexData_;		GLuint vertexCount_ = 0;	GLuint vertexSize_;		GLuint vertexBufferId_;		GLuint vertexIndex_;		GLboolean vertexNormalized_;	GLenum vertexVBOUsage;		bool isVertexDirty_ = false;
-	GLfloat* texCoordData_;		GLuint texCoordCount_ = 0;	GLuint texCoordSize_;	GLuint texCoordBufferId_;	GLuint texCoordIndex_;		GLboolean texCoordNormalized_;	GLenum texCoordVBOUsage;	bool isTexCoordDirty_ = false;
-	GLfloat* normalData_;		GLuint normalCount_ = 0;	GLuint normalSize_;		GLuint normalBufferId_;		GLuint normalIndex_;		GLboolean normalNormalized_;	GLenum normalVBOUsage;		bool isNormalDirty_ = false;
-	GLfloat* tangentData_;		GLuint tangentCount_ = 0;	GLuint tangentSize_;	GLuint tangentBufferId_;	GLuint tangentIndex_;		GLboolean tangentNormalized_;	GLenum tangentVBOUsage;		bool isTangentDirty_ = false;
-	GLfloat* bitangentData_;	GLuint bitangentCount_ = 0; GLuint bitangentSize_;  GLuint bitangentBufferId_;	GLuint bitangentIndex_;		GLboolean bitangentNormalized_; GLenum bitangentVBOUsage;	bool isBitangentDirty_ = false;
-	GLuint*  indexData_;		GLuint indexCount_ = 0;		GLuint indexBufferId_;	GLenum indexVBOUsage;		bool isIndexDataReadable_;	GLboolean isIndexDirty_;
+	GLVertexAttribute vertexAttribute_;
+	GLVertexAttribute texCoordAttribute_;
+	GLVertexAttribute normalAttribute_;
+	GLVertexAttribute tangentAttribute_;
+	GLVertexAttribute bitangentAttribute_;
+	GLVertexAttribute indexAttribute_;
+	std::map<int, GLVertexAttribute> customAttributes_;
+
+	bool hasVAOSupport_;
+	bool hasVBOSupport_;
 
 	bool isDirty();
 };
 
 inline bool GLDrawer::isDirty()
 {
-	return isVertexDirty_ || isTexCoordDirty_ || isNormalDirty_ || isTangentDirty_ || isBitangentDirty_ || isIndexDirty_;
+	return vertexAttribute_.isDirty || texCoordAttribute_.isDirty || normalAttribute_.isDirty || tangentAttribute_.isDirty || bitangentAttribute_.isDirty || indexAttribute_.isDirty;
 }
 
 inline GLuint GLDrawer::getVertexCount() const
 {
-	return vertexCount_;
+	return vertexAttribute_.count;
 }
 
 inline GLuint GLDrawer::getTexCoordCount() const
 {
-	return texCoordCount_;
+	return texCoordAttribute_.count;
 }
 
 inline GLuint GLDrawer::getNormalCount() const
 {
-	return normalCount_;
+	return normalAttribute_.count;
 }
 
 inline GLuint GLDrawer::getTangentCount() const
 {
-	return tangentCount_;
+	return tangentAttribute_.count;
 }
 
 inline GLuint GLDrawer::getBitangentCount() const
 {
-	return bitangentCount_;
+	return bitangentAttribute_.count;
 }
 
 inline GLfloat* GLDrawer::getVertexData()
@@ -104,7 +111,7 @@ inline GLfloat* GLDrawer::getVertexData()
 // 
 // 	return data;
 
-	return vertexData_;
+	return (GLfloat*)vertexAttribute_.data;
 }
 
 inline GLfloat* GLDrawer::getTexCoordData()
@@ -117,7 +124,7 @@ inline GLfloat* GLDrawer::getTexCoordData()
 // 
 // 	return data;
 
-	return texCoordData_;
+	return (GLfloat*)texCoordAttribute_.data;
 }
 
 inline GLfloat* GLDrawer::getNormalData()
@@ -128,7 +135,7 @@ inline GLfloat* GLDrawer::getNormalData()
 // 	GLfloat* data = new GLfloat[normalCount_ * normalSize_];
 // 	memcpy(data, normalData_, normalCount_ * normalSize_ * sizeof(GLfloat));
 
-	return normalData_;
+	return (GLfloat*)normalAttribute_.data;
 }
 
 inline GLfloat* GLDrawer::getTangentData()
@@ -139,7 +146,7 @@ inline GLfloat* GLDrawer::getTangentData()
 // 	GLfloat* data = new GLfloat[tangentCount_ * tangentSize_];
 // 	memcpy(data, tangentData_, tangentCount_ * tangentSize_ * sizeof(GLfloat));
 
-	return tangentData_;
+	return (GLfloat*)tangentAttribute_.data;
 }
 
 inline GLfloat* GLDrawer::getBitangentData()
@@ -150,7 +157,7 @@ inline GLfloat* GLDrawer::getBitangentData()
 // 	GLfloat* data = new GLfloat[bitangentCount_ * bitangentSize_];
 // 	memcpy(data, bitangentData_, bitangentCount_ * bitangentSize_ * sizeof(GLfloat));
 
-	return bitangentData_;
+	return (GLfloat*)bitangentAttribute_.data;
 }
 
 inline GLuint* GLDrawer::getIndexData()
@@ -161,57 +168,66 @@ inline GLuint* GLDrawer::getIndexData()
 // 	GLuint* data = new GLuint[indexCount_];
 // 	memcpy(data, indexData_, indexCount_ * sizeof(GLuint));
 
-	return indexData_;
+	return (GLuint*)indexAttribute_.data;
 }
 
 inline void GLDrawer::setVertexIndex(GLuint index)
 {
-	vertexIndex_ = index;
+	vertexAttribute_.index = index;
 }
 
 inline void GLDrawer::setTexCoordIndex(GLuint index)
 {
-	texCoordIndex_ = index;
+	texCoordAttribute_.index = index;
 }
 
 inline void GLDrawer::setNormalIndex(GLuint index)
 {
-	normalIndex_ = index;
+	normalAttribute_.index = index;
 }
 
 inline void GLDrawer::setTangentIndex(GLuint index)
 {
-	tangentIndex_ = index;
+	tangentAttribute_.index = index;
 }
 
 inline void GLDrawer::setBitangentIndex(GLuint index)
 {
-	bitangentIndex_ = index;
+	bitangentAttribute_.index = index;
 }
 
 inline GLuint GLDrawer::getVertexIndex()
 {
-	return vertexIndex_;
+	return vertexAttribute_.index;
 }
 
 inline GLuint GLDrawer::getTexCoordIndex()
 {
-	return texCoordIndex_;
+	return texCoordAttribute_.index;
 }
 
 inline GLuint GLDrawer::getNormalIndex()
 {
-	return normalIndex_;
+	return normalAttribute_.index;
 }
 
 inline GLuint GLDrawer::getTangentIndex()
 {
-	return tangentIndex_;
+	return tangentAttribute_.index;
 }
 
 inline GLuint GLDrawer::getBitangentIndex()
 {
-	return bitangentIndex_;
+	return bitangentAttribute_.index;
+}
+
+inline const GLVertexAttribute*const GLDrawer::getAttribute(int id) const
+{
+	std::map<int, GLVertexAttribute>::const_iterator iter = customAttributes_.find(id);
+	if (iter != customAttributes_.end())
+		return &iter->second;
+
+	return NULL;
 }
 
 #endif

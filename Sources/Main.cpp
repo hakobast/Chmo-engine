@@ -48,5 +48,6 @@ int main(int argc, char **argv)
 void CreateGame()
 {
 	GameController* gameController = (new GameObject("GameController"))->addComponent<GameController>();
+	gameController->spaceShipType = STANDART;
 	gameController->startGame();
 }

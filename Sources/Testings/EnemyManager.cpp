@@ -2,6 +2,7 @@
 #include <math.h>
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "EnemyParticle.h"
 #include "CircleCollider2D.h"
 #include "CollisionManager.h"
 
@@ -107,6 +108,7 @@ Enemy* EnemyManager::createEnemy()
 		AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitLine.vert", "Resources/Shaders/UnlitLine.frag");
 
 	lineRend->setMainMaterial(mat);
+	lineRend->setWidth(2.0f);
 	enemies_.push_back(enemy);
 
 	return enemy;
@@ -174,7 +176,9 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 	{
 		if (enemy->isSeperated) //instantiate particles
 		{
-			
+			GameObject* obj = new GameObject("ParticleEmitter");
+			obj->addComponent<EnemyParticle>()->setColor(enemy->getGameObject()->getComponent<LineRenderer>()->getColor());
+			obj->getTransform()->setPosition(enemy-> getTransform()->getPosition());
 		}
 		else // instantiate small enemies
 		{

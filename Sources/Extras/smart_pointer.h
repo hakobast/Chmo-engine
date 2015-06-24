@@ -127,7 +127,7 @@ public:
 		return smart_pointer<T>(data_copy);
     }
 
-	inline bool isEmpty() //TODO this function can be operator
+	inline bool isEmpty() //#TODO this function can be operator
 	{
 		return data == NULL;
 	}

@@ -9,6 +9,7 @@ class SimplePool
 public:
 	virtual T*		get();
 	virtual void	release(T* obj);
+	int size();
 private:
 	std::queue<T*> queue_;
 };
@@ -33,6 +34,12 @@ inline void SimplePool<T>::release(T* obj)
 	{
 		queue_.push(obj);
 	}
+}
+
+template<class T>
+inline int SimplePool<T>::size()
+{
+	return queue_.size();
 }
 
 #endif

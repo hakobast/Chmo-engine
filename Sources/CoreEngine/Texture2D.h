@@ -8,8 +8,8 @@
 #include "../Extras/smart_pointer.h"
 #include "TextureRegion.h"
 
-//TODO implement anisotrop filtering for all platforms
-//TODO implement pixel reading functionality for all platforms
+//#TODO implement anisotrop filtering for all platforms
+//#TODO implement pixel reading functionality for all platforms
 class Texture2D : public RemovableObject
 {
 private:

@@ -9,8 +9,8 @@ void EnemyParticle::Create()
 
 	particleRenderer = getGameObject()->addComponent<ParticleRenderer>();
 	particleRenderer->setMainMaterial(mat);
-	particleRenderer->setParticleCount(10);
-	particleRenderer->setParticleSize(1.0f);
+	particleRenderer->setParticleCount(8);
+	particleRenderer->setParticleSize(3.0f);
 }
 
 void EnemyParticle::Update()

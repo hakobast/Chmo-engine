@@ -16,7 +16,7 @@ public:
 		frames++;
 		if (time >= 1)
 		{
-			std::cout << "FPS:" << frames << std::endl;
+			Logger::Print("FPS:: %d\n", frames);
 			frames = 0;
 			time = 0;
 		}

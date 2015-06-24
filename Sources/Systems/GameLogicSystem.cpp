@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include "../CoreEngine/System.h"
+#include "GameTime.h"
 #include "GameLogicSystem.h"
 
 GameLogicSystem::~GameLogicSystem()

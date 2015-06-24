@@ -2,6 +2,7 @@
 #define PARTICLE_RENDERER_H
 
 #include "Renderer.h"
+#include "../Extras/Vectors.h"
 
 class GLDrawer;
 
@@ -20,7 +21,8 @@ public:
 private:
 	GLDrawer* drawer_ = 0;
 	int particleCount_ = 0;
-	float time_;
+	float time_ = 0;
+	std::vector<Vector3> particlePositions_;
 	std::vector<float> particleIndices_;
 };
 

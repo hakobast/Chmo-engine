@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "../CoreEngine/Application.h"
 #include "RenderSystem.h"
 #include "../Debug/Logger.h"
 #include "../CoreEngine/Transform.h"
@@ -30,8 +31,10 @@ RenderSystem::RenderSystem()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	glEnable(GL_CULL_FACE);
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
 	glEnable(GL_POINT_SPRITE);
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+#endif
 
 	//glEnable(GL_DEPTH_TEST);
 	//glShadeModel(GL_SMOOTH);
@@ -53,7 +56,7 @@ void RenderSystem::Update()
 {
 	//std::cout << "RenderSystem:: Update() " << std::endl;
 
-	//TODO apply multiple cameras
+	//#TODO get enabled cameras from ScreenSystem and apply multiple cameras
 	if (Camera::main == NULL)
 		return;
 	

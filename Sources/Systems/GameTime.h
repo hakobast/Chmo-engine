@@ -6,7 +6,7 @@
 #include "../CoreEngine/LIBS.h"
 #include "../CoreEngine/System.h"
 
-//TODO implement timeScale
+//#TODO implement timeScale
 class GameTime :public System
 {
 public:

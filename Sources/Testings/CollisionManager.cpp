@@ -4,7 +4,7 @@
 
 void CollisionManager::Create()
 {
-	quadTree_ = new QuadTree(Vector2::ZERO, Vector2(7.0f,5.0f));
+	quadTree_ = new QuadTree(Vector2::ZERO, Camera::main->getHalfSize());
 }
 
 void CollisionManager::Update()
@@ -31,4 +31,5 @@ void CollisionManager::getPotentialCollisions(Collider2D* collider, std::vector<
 void CollisionManager::OnDestroy()
 {
 	delete quadTree_;
+	instance_ = NULL;
 }

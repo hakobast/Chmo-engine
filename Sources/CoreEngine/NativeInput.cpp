@@ -6,7 +6,7 @@
 #include "../Extras/Vectors.h"
 #include "NativeInput.h"
 
-//TODO make it class member
+//#TODO make it class member
 std::mutex mtx;
 
 NativeInput::NativeInput()

@@ -1,5 +1,5 @@
 
-#ifndef __ANDROID__ //TODO implement lighting without using fixed function pipeline
+#ifndef __ANDROID__ //#TODO implement lighting without using fixed function pipeline
 
 #include "Light.h"
 

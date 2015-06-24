@@ -8,7 +8,7 @@
 #include "Weapon.h"
 #include "Ship.h"
 
-void GameController::Create()
+void GameController::Init()
 {
 	GameObject* camerObj = new GameObject("Camera");
 	Camera* camera = camerObj->addComponent<Camera>();
@@ -24,6 +24,8 @@ void GameController::Create()
 
 	collisionManager_->setEnabled(false);
 	enemyManager_->setEnabled(false);
+
+	startGame();
 }
 
 void GameController::Update()

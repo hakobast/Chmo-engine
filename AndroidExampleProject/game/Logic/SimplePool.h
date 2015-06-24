@@ -7,8 +7,9 @@ template<class T>
 class SimplePool
 {
 public:
-	virtual T* get();
-	virtual void add(T* obj);
+	virtual T*		get();
+	virtual void	release(T* obj);
+	int size();
 private:
 	std::queue<T*> queue_;
 };
@@ -27,12 +28,18 @@ inline T* SimplePool<T>::get()
 }
 
 template<class T>
-inline void SimplePool<T>::add(T* obj)
+inline void SimplePool<T>::release(T* obj)
 {
 	if (obj != NULL)
 	{
 		queue_.push(obj);
 	}
+}
+
+template<class T>
+inline int SimplePool<T>::size()
+{
+	return queue_.size();
 }
 
 #endif

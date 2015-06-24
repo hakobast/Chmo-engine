@@ -1,3 +1,5 @@
+#version 110
+
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelViewMatrix;
 

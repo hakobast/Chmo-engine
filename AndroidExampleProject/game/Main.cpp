@@ -1,9 +1,9 @@
 
 #include "Logic/EngineInclude.h"
-#include "Logic/HelloEngine.cpp"
+#include "Logic/GameController.h"
 
 void Main()
 {
-	GameObject* helloAndroidObj = new GameObject("HelloAndroid");
-	helloAndroidObj->addComponent<HelloEngine>();
+	GameController* gameController = (new GameObject("GameController"))->addComponent<GameController>();
+	gameController->spaceShipType = STANDART;
 }

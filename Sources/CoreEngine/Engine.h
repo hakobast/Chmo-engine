@@ -7,10 +7,10 @@
 #include <iostream>
 #include <string>
 
+#include "System.h"
 #include "../Extras/DoubleLinkedList.h"
 #include "../Extras/Singleton.h"
 
-class System;
 class Component;
 class GameObject;
 class Display;
@@ -24,13 +24,12 @@ private:
 	DoubleLinkedList<GameObject> gameObjectsList_;
 	std::queue<Component*> componentsToDestroy_;
 	std::queue<GameObject*> gameobjectsToDestroy_;
-	std::vector<System*> _systems;
+	std::vector<System*> systems_;
 	bool isEngineInited_ = false;
 
 	~Engine();
 
 	void Cleanup();
-
 public:
 	Display* display = 0;
 	AssetLoader* assetLoader = 0;
@@ -58,7 +57,7 @@ public:
 template<class T>
 T* Engine::FindComponent()
 {
-	for (System* system : _systems)
+	for (System* system : systems_)
 	{
 		std::vector<Component*> components = system->getComponents();
 		for (Component* comp : components)
@@ -73,7 +72,7 @@ template<class T>
 std::vector<T*> Engine::FindComponents()
 {
 	std::vector<T*> comps;
-	for (System* system : _systems)
+	for (System* system : systems_)
 	{
 		std::vector<Component*> tempComps = system->getComponents();
 		for (Component* comp : tempComps)

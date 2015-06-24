@@ -17,7 +17,7 @@ class GameController : public GameLogic
 public:
 	SpaceshipType spaceShipType = STANDART;
 
-	virtual void Create();
+	virtual void Init();
 	virtual void Update();
 
 	void startGame();

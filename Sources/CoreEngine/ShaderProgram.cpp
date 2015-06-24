@@ -28,24 +28,31 @@ ShaderProgram::~ShaderProgram()
 }
 
 void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source, int length)
-{
-	GLint lengths[] = { length };
-	
+{	
 	GLuint shader = glCreateShader(shader_type);
-	glShaderSource(shader, 1, &source, lengths);
+	glShaderSource(shader, 1, &source, &length);
 	glCompileShader(shader);
-
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-		GLchar* infoLog = new GLchar[infoLogLength];
-		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
-		Logger::PrintError("Shader compile log: %s", infoLog);
 		
-		delete[] infoLog;
+		if (infoLogLength > 0)
+		{
+			GLchar* infoLog = new GLchar[infoLogLength];
+			glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+			Logger::PrintError("Shader compilation log: %s\n", infoLog);
+
+			delete[] infoLog;
+		}
+		else
+		{
+			Logger::PrintError("Shader compilation error\n");
+		}
+
+		glDeleteShader(shader);
 		return;
 	}
 
@@ -80,10 +87,20 @@ void ShaderProgram::createAndLinkProgram()
 	{
 		GLint infoLogLength;
 		glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &infoLogLength);
-		GLchar* infoLog = new GLchar[infoLogLength];
-		glGetProgramInfoLog(program_, infoLogLength, NULL, infoLog);
-		Logger::PrintError("Program link log: %s", infoLog);
-		delete[] infoLog;
+		if (infoLogLength > 1)
+		{
+			GLchar* infoLog = new GLchar[infoLogLength];
+			glGetProgramInfoLog(program_, infoLogLength, NULL, infoLog);
+			Logger::PrintError("Program linking log: %s\n", infoLog);
+
+			delete[] infoLog;
+		}
+		else
+		{
+			Logger::PrintError("Program linking error\n");
+		}
+
+		glDeleteProgram(program_);
 	}
 
 	glDeleteShader(shaders_[VERTEX_SHADER]);

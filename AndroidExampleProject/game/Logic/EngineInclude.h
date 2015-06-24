@@ -1,5 +1,5 @@
-#ifndef ENGINE_INCLUDE_H
-#define ENGINE_INCLUDE_H
+#ifndef ENGINE_INCLUDE
+#define ENGINE_INCLUDE
 
 #include "../../../Sources/CoreEngine/ChmoEngine.h"
 

@@ -24,7 +24,7 @@ public:
 	void setNormalData					  (GLboolean normalized, GLuint count, GLfloat* data, GLenum VBOUsage = GL_STATIC_DRAW);
 	void setIndexData		(GLuint count, GLuint* data, GLenum VBOUsage = GL_STATIC_DRAW);
 
-	void setAttributeData(int id, GLuint index, GLsizei size, GLuint count, GLsizeiptr valueBytes, GLenum valueType, void* data, GLenum VBOUsage = GL_STATIC_DRAW);
+	void setCustomAttribute(int id, GLuint index, GLsizei size, GLuint count, GLsizeiptr valueBytes, GLenum valueType, void* data, GLenum VBOUsage = GL_STATIC_DRAW);
 
 	GLfloat* getVertexData();
 	GLfloat* getTexCoordData();
@@ -63,7 +63,7 @@ private:
 	GLVertexAttribute tangentAttribute_;
 	GLVertexAttribute bitangentAttribute_;
 	GLVertexAttribute indexAttribute_;
-	std::map<int, GLVertexAttribute> customAttributes_;
+	std::map<int, GLVertexAttribute*> customAttributes_;
 
 	bool hasVAOSupport_;
 	bool hasVBOSupport_;
@@ -223,9 +223,9 @@ inline GLuint GLDrawer::getBitangentIndex()
 
 inline const GLVertexAttribute*const GLDrawer::getAttribute(int id) const
 {
-	std::map<int, GLVertexAttribute>::const_iterator iter = customAttributes_.find(id);
+	std::map<int, GLVertexAttribute*>::const_iterator iter = customAttributes_.find(id);
 	if (iter != customAttributes_.end())
-		return &iter->second;
+		return iter->second;
 
 	return NULL;
 }

@@ -44,10 +44,8 @@ Engine::~Engine()
 
 	Cleanup(); //TEMP
 
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-	{
-		delete _systems[i];
-	}
+	for (size_t i = 0, len = systems_.size(); i < len; i++)
+		delete systems_[i];
 
 	delete display;
 	delete assetLoader;
@@ -67,8 +65,8 @@ void Engine::create()
 			printf("GLEW Inited!\n");
 #endif
 
-		RenderSystem* renderSystem = new RenderSystem; //renderer system
-		GameLogicSystem* gameLogicSystem = new GameLogicSystem;	//gamelogic system
+		RenderSystem* renderSystem = new RenderSystem;
+		GameLogicSystem* gameLogicSystem = new GameLogicSystem;
 		ScreenSystem* screenSystem = new ScreenSystem;
 		Input* inputSystem = new Input(nativeInput);
 		GameTime* timeSystem = new GameTime;
@@ -81,8 +79,8 @@ void Engine::create()
 		addSystem(renderSystem, 4);
 		addSystem(timeSystem, 5);
 
-		for (size_t i = 0, len = _systems.size(); i < len; i++)
-			_systems[i]->OnCreate();
+		for (size_t i = 0, len = systems_.size(); i < len; i++)
+			systems_[i]->OnCreate();
 
 		isEngineInited_ = true;
 		Logger::Print("Engine::Inited\n");
@@ -91,19 +89,19 @@ void Engine::create()
 
 void Engine::change(int width, int height)
 {
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-		_systems[i]->OnScreenChange(width,height);
+	for (size_t i = 0, len = systems_.size(); i < len; i++)
+		systems_[i]->OnScreenChange(width,height);
 }
 
 void Engine::draw()
 {
-	for (System* s : _systems)
+	for (System* s : systems_)
 		s->OnStartFrame();
 
-	for (System* s : _systems)
+	for (System* s : systems_)
 		s->Update();
 
-	for (System* s : _systems)
+	for (System* s : systems_)
 		s->OnEndFrame();
 
 	while (componentsToDestroy_.size() > 0)
@@ -123,35 +121,35 @@ void Engine::draw()
 	}
 }
 
-//TODO load graphic resources
+//#TODO load graphic resources
 void Engine::resume()
 {
 	Logger::PrintError("ENGINE::Resume");
 
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-		_systems[i]->OnResume();
+	for (size_t i = 0, len = systems_.size(); i < len; i++)
+		systems_[i]->OnResume();
 }
 
-//TODO unload graphic resources
+//#TODO unload graphic resources
 void Engine::pause() 
 {
 	Logger::PrintError("ENGINE::Pause");
 
-	for (size_t i = 0, len = _systems.size(); i < len; i++)
-		_systems[i]->OnPause();
+	for (size_t i = 0, len = systems_.size(); i < len; i++)
+		systems_[i]->OnPause();
 
 	//TEMP destroy function sometimes not called, find solution for that and remove this lines
 	delete instance_;
 	instance_ = NULL;
 }
 
-//TODO cleanup objects, resources and destroy engine
+//#TODO cleanup objects, resources and destroy engine
 void Engine::destroy()
 {
 	Logger::PrintError("ENGINE::Destroy");
 
- 	for (size_t i = 0, len = _systems.size(); i < len; i++)
- 		_systems[i]->OnDestroy();
+ 	for (size_t i = 0, len = systems_.size(); i < len; i++)
+ 		systems_[i]->OnDestroy();
 
 	delete instance_;
 	instance_ = NULL;
@@ -160,8 +158,8 @@ void Engine::destroy()
 void Engine::addSystem(System* s, int priority)
 {
     s->priority = priority;
-    _systems.push_back(s);
-	std::sort(_systems.begin(), _systems.end(), pred_sortSystems);
+    systems_.push_back(s);
+	std::sort(systems_.begin(), systems_.end(), pred_sortSystems);
 }
 
 void Engine::addGameObject(GameObject* obj)
@@ -171,7 +169,7 @@ void Engine::addGameObject(GameObject* obj)
 
 void Engine::addComponent(Component* comp)
 {
-	for (System* system : _systems)
+	for (System* system : systems_)
 		if (system->isSystemComponent(*comp))
 			system->addComponent(*comp);
 }
@@ -187,7 +185,7 @@ void Engine::removeGameObject(GameObject* obj)
 
 void Engine::removeComponent(Component* comp)
 {
-	for (System* system : _systems)
+	for (System* system : systems_)
 		if (system->isSystemComponent(*comp))
 			system->removeComponent(*comp);
 
@@ -209,27 +207,42 @@ GameObject* Engine::FindGameObjectByName(std::string name)
 
 void Engine::Cleanup()
 {
-	//TEMP this will call components callbacks in wrong order
+	//#TEMP this will call components callbacks in wrong order
+//	DoubleLinkedList<GameObject>::iterator gameObjectIter = gameObjectsList_.getIterator();
+// 	while (gameObjectIter.hasNext())
+// 	{
+// 		Node<GameObject>* gameObjectNode = gameObjectIter.next();
+// 
+// 		DoubleLinkedList<Component>::iterator componentIter = gameObjectNode->data->componentsList_.getIterator();
+// 		while (componentIter.hasNext())
+// 		{
+// 			Node<Component>* componentNode = componentIter.next();
+// 			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentNode->data);
+// 			if (activeComp != NULL)
+// 			{
+// 				if (activeComp->isEnabled())
+// 					activeComp->OnDisable();
+// 			}
+// 		}
+// 	}
+
 	DoubleLinkedList<GameObject>::iterator gameObjectIter = gameObjectsList_.getIterator();
 	while (gameObjectIter.hasNext())
+		gameObjectIter.next()->data->destroy();
+
+	while (componentsToDestroy_.size() > 0)
 	{
-		Node<GameObject>* gameObjectNode = gameObjectIter.next();
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front());
+		if (activeComp != NULL)
+			activeComp->OnDestroy();
 
-		DoubleLinkedList<Component>::iterator componentIter = gameObjectNode->data->componentsList_.getIterator();
-		while (componentIter.hasNext())
-		{
-			Node<Component>* componentNode = componentIter.next();
-			ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentNode->data);
-			if (activeComp != NULL)
-			{
-				if (activeComp->isEnabled())
-					activeComp->OnDisable();
-				activeComp->OnDestroy();
-			}
+		delete componentsToDestroy_.front();
+		componentsToDestroy_.pop();
+	}
 
-			delete componentNode->data;
-		}
-
-		delete gameObjectNode->data;
+	while (gameobjectsToDestroy_.size() > 0)
+	{
+		delete gameobjectsToDestroy_.front();
+		gameobjectsToDestroy_.pop();
 	}
 }

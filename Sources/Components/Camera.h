@@ -141,7 +141,7 @@ inline void Camera::ScreenToWorldPoint(Vector2& screen, Vector3& world)
 		world.y = position.y - halfSize_.y + 2 * halfSize_.y* (height - screen.y) / height;
 	}
 
-	//TODO calc it for projection mode
+	//#TODO calc value for projection mode
 }
 
 #endif

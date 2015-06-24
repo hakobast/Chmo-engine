@@ -9,7 +9,7 @@ void Renderer::OnDestroy()
  		renderSystem_->removeMaterialForRenderer(materials[i], this, i);
 }
 
-//TODO implement material and shader copy constructor to remove comment
+//#TODO implement material and shader copy constructor to remove comment
 std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {
 	/*for (size_t i = 0, len = materials.size(); i < len; i++)
@@ -37,7 +37,7 @@ smart_pointer<Material>& Renderer::getSharedMaterial(int index)
 	return smart_pointer<Material>::null();
 }
 
-//TODO implement material and shader copy constructor to remove comment
+//#TODO implement material and shader copy constructor to remove comment
 smart_pointer<Material>& Renderer::getMaterial(int index)
 {
 	/*if (index < (int)materials.size())

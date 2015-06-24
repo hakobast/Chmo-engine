@@ -1,0 +1,35 @@
+#ifndef FPSCOUNTER_CPP
+#define FPSCOUNTER_CPP
+
+#include "EngineInclude.h"
+
+#include <iostream>
+
+class FPSCounter : public GameLogic
+{
+	GLfloat time = 0;
+	int frames = 0;
+public:
+	void Update()
+	{
+		time += GameTime::DeltaTime();
+		frames++;
+		if (time >= 1)
+		{
+			Logger::Print("FPS:: %d\n", frames);
+			frames = 0;
+			time = 0;
+		}
+	}
+
+	void OnEnable()
+	{
+		std::cout << "FPSCounter: OnEnable" << std::endl;
+	}
+
+	void OnDisable()
+	{
+		std::cout << "FPSCounter: OnDisable" << std::endl;
+	}
+};
+#endif

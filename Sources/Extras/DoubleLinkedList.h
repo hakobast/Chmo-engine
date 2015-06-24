@@ -4,7 +4,7 @@
 template<class T>
 class Node
 {
-	template<class T> friend class DoubleLinkedList;
+	template<class K> friend class DoubleLinkedList;
 private:
 	Node* prevNode = 0;
 	Node* nextNode = 0;
@@ -20,7 +20,7 @@ class DoubleLinkedList
 public:
 	class iterator
 	{
-		template<class T> friend class DoubleLinkedList;
+		template<class P> friend class DoubleLinkedList;
 	public:
 		void		reset();
 		bool		hasNext();

@@ -43,7 +43,6 @@ void Weapon::release(Bullet* bullet)
 		bullet->getGameObject()->setActive(false);
 		CollisionManager::GetInstance().removeCollider(bullet->getGameObject()->getComponent<Collider2D>());
 
-		bullet->pool_ = this;
 		SimplePool::release(bullet);
 	}
 }
@@ -68,6 +67,7 @@ Bullet* Weapon::createBullet()
 
 	collider->size = Vector2(0.05f, 0.2f);
 	bullet->speed = bulletSpeed_;
+	bullet->pool_ = this;
 
 	bullets_.push_back(bullet);
 
@@ -80,7 +80,8 @@ void Weapon::fire()
 	if (bullet == NULL)
 	{
 		Logger::Print("Weapon:: Create new Bullet\n");
-		release(createBullet());
+		SimplePool::release(createBullet());
+		//release(createBullet());
 		bullet = get();
 	}
 

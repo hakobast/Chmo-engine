@@ -48,7 +48,7 @@ void ShipController::Update()
 
 void ShipController::OnDisable()
 {
-	if (isEnabled()) // Destroying
+	if (isEnabled()) // means destroying
 		CollisionManager::GetInstance().removeCollider(getGameObject()->getComponent<Collider2D>());
 }
 

@@ -2,8 +2,6 @@
 #include "Collider2D.h"
 #include "CollisionUtils.h"
 
-#include "../Debug/Logger.h"
-
 QuadTree::~QuadTree()
 {
 	clear();
@@ -28,6 +26,7 @@ void QuadTree::draw()
 		nodes_[3]->draw();
 	}
 
+#if defined(DEBUG_COLLISION) && defined(PLATFORM_WINDOWS)
 	glBegin(GL_LINE_STRIP);
 
 	glVertex3f(position_.x - halfSize_.x, position_.y + halfSize_.y, -1.0f);
@@ -37,6 +36,7 @@ void QuadTree::draw()
 	glVertex3f(position_.x - halfSize_.x, position_.y + halfSize_.y, -1.0f);
 
 	glEnd();
+#endif
 }
 
 void QuadTree::add(Collider2D* collider)

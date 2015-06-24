@@ -18,7 +18,7 @@ enum AnimationType
 
 class TextureAnimator;
 
-class TextureAnimationClip: public RemovableObject //TODO make it inherited from base AnimationClip
+class TextureAnimationClip: public RemovableObject
 {
 friend class TextureAnimator;
 private:

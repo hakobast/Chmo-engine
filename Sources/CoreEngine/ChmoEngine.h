@@ -25,7 +25,7 @@
 #include "../Systems/Input.h"
 
 #ifdef GL_OPENGL 
-#include "../Components/Light.h" //TODO implement functionality for OpenGL ES
+#include "../Components/Light.h" //#TODO implement functionality for OpenGL ES
 #endif
 
 #include "../Components/Camera.h"

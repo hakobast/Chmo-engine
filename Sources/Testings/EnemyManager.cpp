@@ -46,8 +46,9 @@ void EnemyManager::Update()
 			CollisionManager::GetInstance().getPotentialCollisions(enemyCollider, &collisions_);
 			for (Collider2D* collider : collisions_)
 			{
-				if (!enemyCollider->isEnabled())
+				if (!enemyCollider->isEnabled() || !collider->isEnabled())
 					break;
+
 				if (enemyCollider != collider && collider->getName() != "Enemy" && enemyCollider->hasCollision(collider))
 				{
 					collider->getGameObject()->sendAction("Collision", enemyCollider);
@@ -69,6 +70,7 @@ void EnemyManager::setEnemyGenParams(fRange speed, fRange radius, fRange step, i
 Enemy* EnemyManager::get()
 {
 	Enemy* enemy = SimplePool::get();
+	//Logger::Print("GET ENemy\n");
 	if (enemy != NULL)
 	{
 		enemy->getGameObject()->setActive(true);
@@ -83,6 +85,7 @@ void EnemyManager::release(Enemy* enemy)
 {
 	if (enemy != NULL)
 	{
+		//Logger::Print("Release ENemy\n");
 		enemy->getGameObject()->setActive(false);
 		CollisionManager::GetInstance().removeCollider(enemy->getGameObject()->getComponent<Collider2D>());
 
@@ -120,7 +123,8 @@ Enemy* EnemyManager::spawnEnemy()
 	if (enemy == NULL)
 	{
 		Logger::Print("EnemySpawner:: Create new Enemy\n");
-		release(createEnemy());
+		SimplePool::release(createEnemy());
+		//release(createEnemy());
 		enemy = get();
 	}
 	randomizeEnemy(enemy);
@@ -172,13 +176,14 @@ void EnemyManager::randomizeEnemy(Enemy* enemy)
 
 void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 {
+//	Logger::Print("OnEnemyCollision %s\n", other->getName().c_str());
 	if (other->getName() == "Bullet")
 	{
 		if (enemy->isSeperated) //instantiate particles
 		{
-			GameObject* obj = new GameObject("ParticleEmitter");
+			GameObject* obj = new GameObject("EnemyParticle");
 			obj->addComponent<EnemyParticle>()->setColor(enemy->getGameObject()->getComponent<LineRenderer>()->getColor());
-			obj->getTransform()->setPosition(enemy-> getTransform()->getPosition());
+			obj->getTransform()->setPosition(enemy->getTransform()->getPosition());
 		}
 		else // instantiate small enemies
 		{
@@ -189,7 +194,7 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 			iRange c = count_;
 
 			//setting values for small enemy generation
-			//TODO keep values as constants in header file
+			//#TODO keep values as constants in header file
 			setEnemyGenParams({ { 2.0f, 2.5f } }, { { 0.1f, 0.3f } }, { { 0.1, 0.7f } }, { { 1, 6 } });
 
 			int count = Math::Random(1, 3);
@@ -206,6 +211,5 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 			setEnemyGenParams(s, r, st, c); 
 		}
 	}
-
 	release(enemy);
 }

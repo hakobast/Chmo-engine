@@ -21,11 +21,15 @@ void Ship::Update()
 	}
 }
 
-void Ship::OnDestroy()
+void Ship::OnDisable()
 {
-	std::vector<std::pair<Weapon*, Vector3>>::iterator iter;
-	for (iter = weapons_.begin(); iter != weapons_.end(); iter++)
-		delete iter->first;
+	if (isEnabled())// means destroying
+	{
+		std::vector<std::pair<Weapon*, Vector3>>::iterator iter;
+		for (iter = weapons_.begin(); iter != weapons_.end(); iter++)
+			delete iter->first;
+		weapons_.clear();
+	}
 }
 
 void Ship::moveTo(Vector3 dest)

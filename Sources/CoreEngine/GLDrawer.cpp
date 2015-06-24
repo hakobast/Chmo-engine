@@ -11,6 +11,16 @@ GLDrawer::~GLDrawer()
 	if (tangentAttribute_.bufferId != 0)	 glDeleteBuffers(1, &tangentAttribute_.bufferId);
 	if (bitangentAttribute_.bufferId != 0) glDeleteBuffers(1, &bitangentAttribute_.bufferId);
 	if (indexAttribute_.bufferId != 0)	 glDeleteBuffers(1, &indexAttribute_.bufferId);
+
+	std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.begin();
+	for (iter = customAttributes_.begin(); iter != customAttributes_.end(); iter++)
+	{
+		GLVertexAttribute* attribute = iter->second;
+		if (attribute->bufferId != 0)
+			glDeleteBuffers(1, &attribute->bufferId);
+
+		delete attribute;
+	}
 }
 
 GLDrawer::GLDrawer(GLenum drawingMode, DataUsage dataUsage)
@@ -45,15 +55,16 @@ void GLDrawer::draw()
 	{
 		if (isDirty())
 			updateBuffers();
-		
-		std::map<int, GLVertexAttribute>::iterator iter = customAttributes_.begin();
+
+		std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.begin();
 		for (iter = customAttributes_.begin(); iter != customAttributes_.end(); iter++)
 		{
-			GLVertexAttribute& attribute = iter->second;
-			if (attribute.count > 0)
+			GLVertexAttribute* attribute = iter->second;
+			if (attribute->count > 0)
 			{
-				glEnableVertexAttribArray(attribute.index);
-				glVertexAttribPointer(attribute.index, attribute.size, attribute.valueType, attribute.isNormalized, 0, attribute.data);
+				glEnableVertexAttribArray(attribute->index);
+				glBindBuffer(GL_ARRAY_BUFFER, attribute->bufferId);
+				glVertexAttribPointer(attribute->index, attribute->size, attribute->valueType, attribute->isNormalized, 0, 0);
 			}
 		}
 
@@ -104,14 +115,14 @@ void GLDrawer::draw()
 	}
 	else if (dataUsage == VAO)
 	{
-		std::map<int, GLVertexAttribute>::iterator iter = customAttributes_.begin();
+		std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.begin();
 		for (iter = customAttributes_.begin(); iter != customAttributes_.end(); iter++)
 		{
-			GLVertexAttribute& attribute = iter->second;
-			if (attribute.count > 0)
+			GLVertexAttribute* attribute = iter->second;
+			if (attribute->count > 0)
 			{
-				glEnableVertexAttribArray(attribute.index);
-				glVertexAttribPointer(attribute.index, attribute.size, attribute.valueType, attribute.isNormalized, 0, attribute.data);
+				glEnableVertexAttribArray(attribute->index);
+				glVertexAttribPointer(attribute->index, attribute->size, attribute->valueType, attribute->isNormalized, 0, attribute->data);
 			}
 		}
 
@@ -158,13 +169,13 @@ void GLDrawer::draw()
 	if (tangentAttribute_.count > 0)	glDisableVertexAttribArray(tangentAttribute_.index);
 	if (bitangentAttribute_.count > 0)	glDisableVertexAttribArray(bitangentAttribute_.index);
 
-	std::map<int, GLVertexAttribute>::iterator iter = customAttributes_.begin();
+	std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.begin();
 	for (iter = customAttributes_.begin(); iter != customAttributes_.end(); iter++)
 	{
-		GLVertexAttribute& attribute = iter->second;
-		if (attribute.count > 0)
+		GLVertexAttribute* attribute = iter->second;
+		if (attribute->count > 0)
 		{
-			glDisableVertexAttribArray(attribute.index);
+			glDisableVertexAttribArray(attribute->index);
 		}
 	}
 }
@@ -273,22 +284,22 @@ void GLDrawer::updateBuffers()
 		indexAttribute_.isDirty = false;
 	}
 
-	std::map<int, GLVertexAttribute>::iterator iter = customAttributes_.begin();
+	std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.begin();
 	for (iter = customAttributes_.begin(); iter != customAttributes_.end(); iter++)
 	{
-		GLVertexAttribute& attribute = iter->second;
-		if (attribute.isDirty)
+		GLVertexAttribute* attribute = iter->second;
+		if (attribute->isDirty)
 		{
-			if (attribute.bufferId == 0)
+			if (attribute->bufferId == 0)
 			{
-				glGenBuffers(1, &attribute.bufferId);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attribute.bufferId);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, attribute.count * attribute.size * attribute.valueBytes, attribute.data, attribute.VBOUsage);
+				glGenBuffers(1, &attribute->bufferId);
+				glBindBuffer(GL_ARRAY_BUFFER, attribute->bufferId);
+				glBufferData(GL_ARRAY_BUFFER, attribute->count * attribute->size * attribute->valueBytes, attribute->data, attribute->VBOUsage);
 			}
 			else
 			{
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attribute.bufferId);
-				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, attribute.count * attribute.size * attribute.valueBytes, indexAttribute_.data);
+				glBindBuffer(GL_ARRAY_BUFFER, attribute->bufferId);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, attribute->count * attribute->size * attribute->valueBytes, attribute->data);
 			}
 		}
 	}
@@ -407,14 +418,14 @@ void GLDrawer::setIndexData(GLuint count, GLuint* data, GLenum VBOUsage)
 	indexAttribute_.isDirty = indexAttribute_.count > 0;
 }
 
-void GLDrawer::setAttributeData(int id, GLuint index, GLsizei size, GLuint count, GLsizeiptr valueBytes, GLenum valueType, void* data, GLenum VBOUsage)
+void GLDrawer::setCustomAttribute(int id, GLuint index, GLsizei size, GLuint count, GLsizeiptr valueBytes, GLenum valueType, void* data, GLenum VBOUsage)
 {
 	GLVertexAttribute* attribute = NULL;
-	std::map<int, GLVertexAttribute>::iterator iter = customAttributes_.find(id);
+	std::map<int, GLVertexAttribute*>::iterator iter = customAttributes_.find(id);
 	if (iter != customAttributes_.end())
 	{
-		attribute = &iter->second;
-		if (count != attribute->count || VBOUsage != attribute->VBOUsage)
+		attribute = iter->second;
+		if (count*size != attribute->count*attribute->size || VBOUsage != attribute->VBOUsage)
 		{
 			if (attribute->bufferId != 0)
 			{
@@ -424,10 +435,9 @@ void GLDrawer::setAttributeData(int id, GLuint index, GLsizei size, GLuint count
 		}
 	}
 
-	if (iter == customAttributes_.end()) // attribute not found, creating new
+	if (attribute == NULL) // attribute not found, creating new
 	{
-		GLVertexAttribute newAttrib;
-		attribute = &newAttrib;
+		attribute = new GLVertexAttribute;
 	}
 
 	attribute->size = size;
@@ -441,6 +451,6 @@ void GLDrawer::setAttributeData(int id, GLuint index, GLsizei size, GLuint count
 
 	if (iter == customAttributes_.end())
 	{
-		customAttributes_.insert(std::pair<int, GLVertexAttribute>(id, *attribute));
+		customAttributes_.insert(std::pair<int, GLVertexAttribute*>(id, attribute));
 	}
 }

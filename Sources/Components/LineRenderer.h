@@ -9,7 +9,7 @@
 
 class GLDrawer;
 
-//TODO create functions to set line width
+//#TODO triangulate line to avoid pixelated view
 
 class LineRenderer : public Renderer
 {

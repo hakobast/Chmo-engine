@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "Utils.h"
 
+////////////////// Making some built-in shader attributes /////////////////////////
 const char* Material::vertexAttribName = "InVertex";
 const char* Material::texCoordAttribName = "InTexCoord0";
 const char* Material::normalAttribName = "InNormal";
@@ -30,6 +31,7 @@ std::map<const char*, unsigned int> Material::SmallAttributes{
 	{ vertexAttribName, 0 },
 	{ texCoordAttribName, 1 },
 };
+////////////////////////////////////////////////////////////////////////////////
 
 std::vector<Material*> Material::allMaterials_;
 
@@ -55,7 +57,7 @@ smart_pointer<Material> Material::Unlit()
 Material::Material(const Material& other) :name(other.name)
 {
 	textures_ = other.textures_;
-	shader_ = other.shader_; //TODO implement shader duplication
+	shader_ = other.shader_; //#TODO implement shader duplication
 }
 
 Material::Material(const char* name,

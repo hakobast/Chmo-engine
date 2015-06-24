@@ -9,7 +9,7 @@ LineRenderer::~LineRenderer()
 
 LineRenderer::LineRenderer()
 {
-	drawer_ = new GLDrawer(GL_LINE_STRIP, VAO);
+	drawer_ = new GLDrawer(GL_LINE_STRIP, VBO);
 
 	//TEMP get this data from shader
 	drawer_->setVertexIndex(0);

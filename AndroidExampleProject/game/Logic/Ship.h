@@ -11,9 +11,10 @@ class Ship : public GameLogic
 {
 public:
 	float speed = 2;
+
 	virtual void Init();
 	virtual void Update();
-	virtual void OnDestroy();
+	virtual void OnDisable();
 
 	Weapon* getWeapon		(int index);
 	void	addWeapon		(Weapon* weapon, Vector3 localPosition, Vector3 direction);

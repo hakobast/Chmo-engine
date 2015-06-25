@@ -42,3 +42,8 @@ void ParticleRenderer::setParticleCount(int count)
 		drawer_->setCustomAttribute(0, loc, 1, particleCount_, sizeof(float), GL_FLOAT, particleIndices_.data());
 	}
 }
+
+void ParticleRenderer::reset()
+{
+	time_ = 0;
+}

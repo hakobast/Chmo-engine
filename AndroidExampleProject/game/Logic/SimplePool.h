@@ -24,13 +24,13 @@ inline T* SimplePool<T>::get()
 		return obj;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 template<class T>
 inline void SimplePool<T>::release(T* obj)
 {
-	if (obj != NULL)
+	if (obj != nullptr)
 	{
 		queue_.push(obj);
 	}

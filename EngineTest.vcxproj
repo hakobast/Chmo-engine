@@ -83,6 +83,7 @@
     <ClInclude Include="Sources\Testings\Enemy.h" />
     <ClInclude Include="Sources\Testings\EnemyManager.h" />
     <ClInclude Include="Sources\Testings\EnemyParticle.h" />
+    <ClInclude Include="Sources\Testings\EnemyParticlePool.h" />
     <ClInclude Include="Sources\Testings\EngineInclude.h" />
     <ClInclude Include="Sources\Testings\GameController.h" />
     <ClInclude Include="Sources\Testings\imageloader.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Sources\Testings\Enemy.cpp" />
     <ClCompile Include="Sources\Testings\EnemyManager.cpp" />
     <ClCompile Include="Sources\Testings\EnemyParticle.cpp" />
+    <ClCompile Include="Sources\Testings\EnemyParticlePool.cpp" />
     <ClCompile Include="Sources\Testings\FPSCounter.cpp" />
     <ClCompile Include="Sources\Testings\GameController.cpp" />
     <ClCompile Include="Sources\Testings\GLTestComponent.cpp" />

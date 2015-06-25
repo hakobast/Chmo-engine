@@ -5,6 +5,7 @@
 #include "EnemyParticle.h"
 #include "CircleCollider2D.h"
 #include "CollisionManager.h"
+#include "EnemyParticlePool.h"
 
 Vector2 getRectanglePoint(int width, int height, Vector2 center, float angle)
 {
@@ -20,11 +21,18 @@ Vector2 getRectanglePoint(int width, int height, Vector2 center, float angle)
 	return point;
 }
 
+EnemyManager::~EnemyManager()
+{
+	delete particlePool_;
+}
+
 void EnemyManager::Init()
 {
 	setEnemyGenParams({ { 0.7f, 1.5f } }, { { 0.3f, 0.6f } }, { { 0.1, 0.7f } }, { { 1, 6 } });
 	for (int i = 0; i < poolInitialSize_; i++) 
 		release(createEnemy());
+
+	particlePool_ = new EnemyParticlePool(20);
 }
 
 void EnemyManager::Update()
@@ -182,9 +190,9 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 	{
 		if (enemy->isSeperated) //instantiate particles
 		{
-			GameObject* obj = new GameObject("EnemyParticle");
-			obj->addComponent<EnemyParticle>()->setColor(enemy->getGameObject()->getComponent<LineRenderer>()->getColor());
-			obj->getTransform()->setPosition(enemy->getTransform()->getPosition());
+			EnemyParticle* particle = particlePool_->get();
+			particle->setColor(enemy->getGameObject()->getComponent<LineRenderer>()->getColor());
+			particle->getTransform()->setPosition(enemy->getTransform()->getPosition());
 		}
 		else // instantiate small enemies
 		{

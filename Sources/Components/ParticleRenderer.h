@@ -14,6 +14,7 @@ public:
 
 	virtual void Render(int materialIndex = 0);
 
+	void	reset();
 	void	setParticleCount(int count);
 	int		getParticleCount();
 	void	setParticleSize(float size);

@@ -7,7 +7,9 @@
 #include "SimplePool.h"
 
 class Enemy;
+class EnemyParticle;
 class Collider2D;
+class EnemyParticlePool;
 
 class EnemyManager : public GameLogic, private SimplePool<Enemy>
 {
@@ -15,6 +17,7 @@ class EnemyManager : public GameLogic, private SimplePool<Enemy>
 	typedef std::array<int, 2> iRange;
 
 public:
+	virtual ~EnemyManager();
 	virtual void Init();
 	virtual void Update();
 	
@@ -24,6 +27,7 @@ private:
 	float t_;
 	float enemySpawnInterval_ = 1.5f;
 	int poolInitialSize_ = 20;
+	EnemyParticlePool* particlePool_;
 	std::vector<Enemy*> enemies_;
 	std::vector<Collider2D*> collisions_;
 

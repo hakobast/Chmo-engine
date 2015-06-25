@@ -19,8 +19,14 @@ void EnemyParticle::Update()
 
 	if (time_ >= duration)
 	{
-		getGameObject()->destroy();
+		pool_->release(this);
 	}
+}
+
+void EnemyParticle::reset()
+{
+	time_ = 0;
+	particleRenderer->reset();
 }
 
 void EnemyParticle::setColor(Color color)

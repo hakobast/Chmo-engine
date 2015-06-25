@@ -17,15 +17,16 @@ void ShipController::Update()
 	if (ship_ == NULL)
 		return;
 
-	if (Input::IsMouseDownNow(Left))
-	{
 		if (Application::CurrentPlatform() == ANDROID_PLATFORM)
 		{
-			Vector2 screen = Input::GetTouch(0)->getPosition();
-			Vector3 dest;
-			Camera::main->ScreenToWorldPoint(screen, dest);
+			if (Input::GetTouchCount() > 0)
+			{
+				Vector2 screen = Input::GetTouch(0)->getPosition();
+				Vector3 dest;
+				Camera::main->ScreenToWorldPoint(screen, dest);
 
-			ship_->moveTo(dest);
+				ship_->moveTo(dest);
+			}
 		}
 		else
 		{
@@ -35,7 +36,6 @@ void ShipController::Update()
 
 			ship_->moveTo(dest);
 		}
-	}
 
 	t_ += GameTime::DeltaTime();
 	if (t_ >= fireInterval_)

@@ -75,6 +75,7 @@ Enemy* EnemyManager::get()
 	{
 		enemy->getGameObject()->setActive(true);
 		enemy->isSeperated = false;
+		enemy->isUsed = true;
 		CollisionManager::GetInstance().addCollider(enemy->getGameObject()->getComponent<Collider2D>());
 	}
 
@@ -90,6 +91,7 @@ void EnemyManager::release(Enemy* enemy)
 		CollisionManager::GetInstance().removeCollider(enemy->getGameObject()->getComponent<Collider2D>());
 
 		enemy->isSeperated = false;
+		enemy->isUsed = false;
 		SimplePool::release(enemy);
 	}
 }
@@ -97,7 +99,8 @@ void EnemyManager::release(Enemy* enemy)
 void EnemyManager::clearEnemies()
 {
 	for (Enemy* enemy : enemies_)
-		release(enemy);
+		if (enemy->isUsed)
+			release(enemy);
 }
 
 Enemy* EnemyManager::createEnemy()
@@ -122,9 +125,8 @@ Enemy* EnemyManager::spawnEnemy()
 	Enemy* enemy = get();
 	if (enemy == NULL)
 	{
-		Logger::Print("EnemySpawner:: Create new Enemy\n");
+		//Logger::Print("EnemySpawner:: Create new Enemy\n");
 		SimplePool::release(createEnemy());
-		//release(createEnemy());
 		enemy = get();
 	}
 	randomizeEnemy(enemy);
@@ -134,8 +136,8 @@ Enemy* EnemyManager::spawnEnemy()
 
 void EnemyManager::randomizeEnemy(Enemy* enemy)
 {
+	//generation enemy shape
 	std::vector<Vector3> points;
-
 	float p = 0.0f,rad = 0.0f,step = 0.0f, avRadius = 0.0f;
 	int count = 0, i = 0;
 	do
@@ -143,10 +145,10 @@ void EnemyManager::randomizeEnemy(Enemy* enemy)
 		if (count == 0)
 		{
 			rad = Math::Random(radius_[0], radius_[1]);
-			avRadius += rad;
-			i++;
 			step = Math::Random(step_[0], step_[1]);
 			count = Math::Random(count_[0], count_[1]);
+			avRadius += rad;
+			i++;
 		}
 
 		points.push_back(Vector3(cos(p), sin(p),0.0f)*rad);
@@ -160,23 +162,22 @@ void EnemyManager::randomizeEnemy(Enemy* enemy)
 	LineRenderer* lineRend = enemy->getGameObject()->getComponent<LineRenderer>();
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
-	lineRend->setColor(Color(Math::Random(0.1f, 1.0f), Math::Random(0.3f, 1.0f), Math::Random(0.1f, 1.0f)));
+	lineRend->setColor(Color(Math::Random(0.3f, 1.0f), Math::Random(0.3f, 1.0f), Math::Random(0.3f, 1.0f)));
 
-	enemy->getGameObject()->getComponent<CircleCollider2D>()->radius = avRadius/i;
-
+	//generating enemy spawn position
 	Vector2 rect = Camera::main->getHalfSize();
 	Vector3 camPos = Camera::main->getTransform()->getPosition();
 	Vector3 point = getRectanglePoint((int)(rect.x * 2.5f), (int)(rect.y * 2.5f), camPos, (float)Math::Random(0, 360));
 	Vector3 dir = (camPos - point).normalize() + Vector3(Math::Random(-1.0f, 1.0f), Math::Random(-1.0f, 1.0f), 0.0f).normalize();
 
 	enemy->speed = Math::Random(speed_[0], speed_[1]);
+	enemy->getGameObject()->getComponent<CircleCollider2D>()->radius = avRadius/i;
 	enemy->getTransform()->setPosition(point);
 	enemy->setDirection(dir);
 }
 
 void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 {
-//	Logger::Print("OnEnemyCollision %s\n", other->getName().c_str());
 	if (other->getName() == "Bullet")
 	{
 		if (enemy->isSeperated) //instantiate particles
@@ -210,6 +211,6 @@ void EnemyManager::OnEnemyCollision(Enemy* enemy, Collider2D* other)
 			//restoring normal values
 			setEnemyGenParams(s, r, st, c); 
 		}
+		release(enemy);
 	}
-	release(enemy);
 }

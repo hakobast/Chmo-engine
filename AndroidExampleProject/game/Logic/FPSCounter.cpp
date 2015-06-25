@@ -16,20 +16,10 @@ public:
 		frames++;
 		if (time >= 1)
 		{
-			Logger::Print("FPS:: %d\n", frames);
+			Logger::Print("FPS:: %1.1f\n", frames/time);
 			frames = 0;
 			time = 0;
 		}
-	}
-
-	void OnEnable()
-	{
-		std::cout << "FPSCounter: OnEnable" << std::endl;
-	}
-
-	void OnDisable()
-	{
-		std::cout << "FPSCounter: OnDisable" << std::endl;
 	}
 };
 #endif

@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -23,6 +24,9 @@ public class ChmoEngineBridge implements Renderer{
 	public ChmoEngineBridge(Activity activity)
 	{
 		activity_ = activity;
+		//TODO handle opengl context lost(working on)
+		activity_.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+		
 		ActivityManager activityManager = (ActivityManager)activity_.getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 		

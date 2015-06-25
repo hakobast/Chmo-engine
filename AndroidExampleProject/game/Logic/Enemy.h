@@ -10,6 +10,7 @@ class Enemy : public GameLogic
 	friend class EnemyManager;
 public:
 	bool isSeperated = false;
+	bool isUsed = false;
 	float speed = 0.5f;
 
 	virtual void Init();

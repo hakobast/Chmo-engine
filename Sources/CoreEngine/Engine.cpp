@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <assert.h>
 #include <iostream>
 
 #include "Engine.h"
@@ -40,9 +41,27 @@ void f_Destroy()
 
 Engine::~Engine()
 {
-	Logger::PrintError("Engine::DELETED\n");
+	Logger::PrintError("Engine::Deleted\n");
 
-	Cleanup(); //TEMP
+	DoubleLinkedList<GameObject>::iterator gameObjectIter = gameObjectsList_.getIterator();
+	while (gameObjectIter.hasNext())
+		gameObjectIter.next()->data->destroy();
+
+	while (componentsToDestroy_.size() > 0)
+	{
+		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front());
+		if (activeComp != NULL)
+			activeComp->OnDestroy();
+
+		delete componentsToDestroy_.front();
+		componentsToDestroy_.pop();
+	}
+
+	while (gameobjectsToDestroy_.size() > 0)
+	{
+		delete gameobjectsToDestroy_.front();
+		gameobjectsToDestroy_.pop();
+	}
 
 	for (size_t i = 0, len = systems_.size(); i < len; i++)
 		delete systems_[i];
@@ -61,8 +80,7 @@ void Engine::create()
 	{
 #if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
 		atexit(f_Destroy);
-		if (glewInit() == GLEW_OK)
-			printf("GLEW Inited!\n");
+		assert(glewInit() == GLEW_OK);
 #endif
 
 		RenderSystem* renderSystem = new RenderSystem;
@@ -124,7 +142,7 @@ void Engine::draw()
 //#TODO load graphic resources
 void Engine::resume()
 {
-	Logger::PrintError("ENGINE::Resume");
+	Logger::PrintError("Engine::Resume");
 
 	for (size_t i = 0, len = systems_.size(); i < len; i++)
 		systems_[i]->OnResume();
@@ -133,7 +151,7 @@ void Engine::resume()
 //#TODO unload graphic resources
 void Engine::pause() 
 {
-	Logger::PrintError("ENGINE::Pause");
+	Logger::PrintError("Engine::Pause");
 
 	for (size_t i = 0, len = systems_.size(); i < len; i++)
 		systems_[i]->OnPause();
@@ -146,7 +164,7 @@ void Engine::pause()
 //#TODO cleanup objects, resources and destroy engine
 void Engine::destroy()
 {
-	Logger::PrintError("ENGINE::Destroy");
+	Logger::PrintError("Engine::Destroy");
 
  	for (size_t i = 0, len = systems_.size(); i < len; i++)
  		systems_[i]->OnDestroy();
@@ -225,24 +243,4 @@ void Engine::Cleanup()
 // 			}
 // 		}
 // 	}
-
-	DoubleLinkedList<GameObject>::iterator gameObjectIter = gameObjectsList_.getIterator();
-	while (gameObjectIter.hasNext())
-		gameObjectIter.next()->data->destroy();
-
-	while (componentsToDestroy_.size() > 0)
-	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front());
-		if (activeComp != NULL)
-			activeComp->OnDestroy();
-
-		delete componentsToDestroy_.front();
-		componentsToDestroy_.pop();
-	}
-
-	while (gameobjectsToDestroy_.size() > 0)
-	{
-		delete gameobjectsToDestroy_.front();
-		gameobjectsToDestroy_.pop();
-	}
 }

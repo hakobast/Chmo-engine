@@ -1,10 +1,41 @@
 #include "Color.h"
 
-const Color Color::BLACK(0.0f, 0.0f, 0.0f, 1.0f);
-const Color Color::WHITE(1.0f, 1.0f, 1.0f, 1.0f);
-const Color Color::RED(1.0f, 0.0f, 0.0f, 1.0f);
-const Color Color::GREEN(0.0f, 1.0f, 0.0f, 1.0f);
-const Color Color::BLUE(0.0f, 0.0f, 1.0f, 1.0f);
-const Color Color::YELLOW(1.0f, 1.0f, 0.0f, 1.0f);
-const Color Color::PURPLE(1.0f, 0.0f, 1.0f, 1.0f);
-const Color Color::CYAN(0.0f, 1.0f, 1.0f, 1.0f);
+Color Color::BLACK()
+{
+	return Color(0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+Color Color::WHITE()
+{
+	return Color(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+Color Color::RED()
+{
+	return Color(1.0f, 0.0f, 0.0f, 1.0f);
+}
+
+Color Color::GREEN()
+{
+	return Color(0.0f, 1.0f, 0.0f, 1.0f);
+}
+
+Color Color::BLUE()
+{
+	return Color(0.0f, 0.0f, 1.0f, 1.0f);
+}
+
+Color Color::YELLOW()
+{
+	return Color(1.0f, 1.0f, 0.0f, 1.0f);
+}
+
+Color Color::PURPLE()
+{
+	return Color(1.0f, 0.0f, 1.0f, 1.0f);
+}
+
+Color Color::CYAN()
+{
+	return Color(0.0f, 1.0f, 1.0f, 1.0f);
+}

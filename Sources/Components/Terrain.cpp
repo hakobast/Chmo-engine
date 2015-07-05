@@ -203,7 +203,7 @@ void Terrain::Create()
 
 void Terrain::Init()
 {
-	Component::Init();
+
 }
 
 void Terrain::Update(){}

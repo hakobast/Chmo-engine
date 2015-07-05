@@ -39,16 +39,16 @@ inline void SpriteRenderer::setColor(Color c)
 {
 	smart_pointer<Material>& mat = getSharedMaterial();
 	if (!mat.isEmpty())
-		mat->setColor(c);
+		mat->setColor("Color",c);
 }
 
 inline Color SpriteRenderer::getColor()
 {
 	smart_pointer<Material>& mat = getSharedMaterial();
 	if (!mat.isEmpty())
-		return mat->getColor();
+		return mat->getColor("Color");
 
-	return Color::BLACK;
+	return Color::BLACK();
 }
 
 #endif

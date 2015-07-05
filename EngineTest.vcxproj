@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Sources\Components\BitmapFontRenderer.h" />
     <ClInclude Include="Sources\Components\Camera.h" />
     <ClInclude Include="Sources\Components\Light.h" />
     <ClInclude Include="Sources\Components\LineRenderer.h" />
@@ -33,6 +34,8 @@
     <ClInclude Include="Sources\CoreEngine\Display.h" />
     <ClInclude Include="Sources\CoreEngine\Engine.h" />
     <ClInclude Include="Sources\CoreEngine\Enums.h" />
+    <ClInclude Include="Sources\CoreEngine\FntParser.h" />
+    <ClInclude Include="Sources\CoreEngine\Font.h" />
     <ClInclude Include="Sources\CoreEngine\FreeImageImageReader.h" />
     <ClInclude Include="Sources\CoreEngine\GameLogic.h" />
     <ClInclude Include="Sources\CoreEngine\GameObject.h" />
@@ -91,9 +94,11 @@
     <ClInclude Include="Sources\Testings\Ship.h" />
     <ClInclude Include="Sources\Testings\ShipController.h" />
     <ClInclude Include="Sources\Testings\SimplePool.h" />
+    <ClInclude Include="Sources\Testings\TestComponent.h" />
     <ClInclude Include="Sources\Testings\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Components\BitmapFontRenderer.cpp" />
     <ClCompile Include="Sources\Components\Camera.cpp" />
     <ClCompile Include="Sources\Components\Light.cpp" />
     <ClCompile Include="Sources\Components\LineRenderer.cpp" />
@@ -111,6 +116,8 @@
     <ClCompile Include="Sources\CoreEngine\AssetManager.cpp" />
     <ClCompile Include="Sources\CoreEngine\Component.cpp" />
     <ClCompile Include="Sources\CoreEngine\Engine.cpp" />
+    <ClCompile Include="Sources\CoreEngine\FntParser.cpp" />
+    <ClCompile Include="Sources\CoreEngine\Font.cpp" />
     <ClCompile Include="Sources\CoreEngine\FreeImageImageReader.cpp" />
     <ClCompile Include="Sources\CoreEngine\GameObject.cpp" />
     <ClCompile Include="Sources\CoreEngine\GLDrawer.cpp" />
@@ -159,6 +166,7 @@
     <ClCompile Include="Sources\Testings\QuadTree.cpp" />
     <ClCompile Include="Sources\Testings\Ship.cpp" />
     <ClCompile Include="Sources\Testings\ShipController.cpp" />
+    <ClCompile Include="Sources\Testings\TestComponent.cpp" />
     <ClCompile Include="Sources\Testings\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>

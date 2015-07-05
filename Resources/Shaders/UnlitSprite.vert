@@ -1,3 +1,5 @@
+#version 100
+
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelViewMatrix;
 
@@ -9,10 +11,6 @@ varying vec2 OutTexCoord0;
 
 void main()
 {
-//	gl_TexCoord[0] = gl_MultiTexCoord0;
-//	gl_Position = gl_ModelViewProjectionMatrix*gl_Vertex;
-	
-//	vec4 pos = ModelViewProjectionMatrix*InVertex;
 	gl_Position = ModelViewProjectionMatrix*InVertex;
 	OutTexCoord0 = InTexCoord0;
 	

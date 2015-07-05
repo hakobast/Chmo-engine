@@ -9,21 +9,21 @@ void Renderer::OnDestroy()
  		renderSystem_->removeMaterialForRenderer(materials[i], this, i);
 }
 
-//#TODO implement material and shader copy constructor to remove comment
 std::vector<smart_pointer<Material>>& Renderer::getMaterials()
 {
-	/*for (size_t i = 0, len = materials.size(); i < len; i++)
-	{
-		if (getRenderSystem()->getMaterialSharesCount(materials[i]) > 1)
-		{
-			materials[i] = materials[i].clone();
-			getRenderSystem()->addMaterialForRenderer(materials[i], this, i);
-		}
-	}
+ 	for (size_t i = 0, len = materials.size(); i < len; i++)
+ 	{
+ 		if (renderSystem_->getMaterialSharesCount(materials[i]) > 1)
+ 		{
+			renderSystem_->removeMaterialForRenderer(materials[i], this, i);
+ 			materials[i] = materials[i].clone();
+			renderSystem_->addMaterialForRenderer(materials[i], this, i);
+ 		}
+ 	}
+ 
+ 	return materials;
 
-	return materials;*/
-
-	return getSharedMaterials();
+	//return getSharedMaterials();
 }
 
 smart_pointer<Material>& Renderer::getSharedMaterial(int index)
@@ -33,29 +33,29 @@ smart_pointer<Material>& Renderer::getSharedMaterial(int index)
 		return materials[index];
 	}
 
-	std::cout << "There is no material at index: " << index << std::endl;
+	Logger::PrintError("There is no material at index: %d\n", index);
 	return smart_pointer<Material>::null();
 }
 
-//#TODO implement material and shader copy constructor to remove comment
 smart_pointer<Material>& Renderer::getMaterial(int index)
 {
-	/*if (index < (int)materials.size())
+	if (index < (int)materials.size())
 	{
-		if (getRenderSystem()->getMaterialSharesCount(materials[index]) > 1)
+		if (renderSystem_->getMaterialSharesCount(materials[index]) > 1)
 		{
-			printf("getMaterial:: unsharing material\n");
+			Logger::Print("getMaterial:: unsharing material\n");
+			renderSystem_->removeMaterialForRenderer(materials[index], this, index);
 			materials[index] = materials[index].clone();
-			getRenderSystem()->addMaterialForRenderer(materials[index], this, index);
+			renderSystem_->addMaterialForRenderer(materials[index], this, index);
 		}
 
 		return materials[index];
 	}
 
 	std::cout << "There is no material at index: " << index << std::endl;
-	return smart_pointer<Material>::null();*/
+	return smart_pointer<Material>::null();
 
-	return getSharedMaterial(index);
+	//return getSharedMaterial(index);
 }
 
 void Renderer::addMaterial(smart_pointer<Material> mat)

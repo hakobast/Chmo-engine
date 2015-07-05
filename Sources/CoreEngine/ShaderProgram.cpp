@@ -9,8 +9,8 @@
 
 ShaderProgram::ShaderProgram(std::map<const char*, unsigned int> attributes) :attributes_(attributes)
 {
-	shaders_[VERTEX_SHADER] = 0;
-	shaders_[FRAGMENT_SHADER] = 0;
+	shaders_[VERTEX_SHADER] = 0;	shaderSources[VERTEX_SHADER] = 0;
+	shaders_[FRAGMENT_SHADER] = 0;	shaderSources[FRAGMENT_SHADER] = 0;
 	//_shaders[GEOMETRY_SHADER] = 0;
 }
 
@@ -19,12 +19,10 @@ ShaderProgram::~ShaderProgram()
 	glDeleteProgram(program_);
 	program_ = -1;
 
-// 	if (shaders_[VERTEX_SHADER] != 0)
-// 		glDeleteShader(shaders_[VERTEX_SHADER]);
-// 	if (shaders_[FRAGMENT_SHADER] != 0)
-// 		glDeleteShader(shaders_[FRAGMENT_SHADER]);
-// 	if (_shaders[GEOMETRY_SHADER] != 0)
-// 		glDeleteShader(_shaders[GEOMETRY_SHADER]);
+	if (shaderSources[VERTEX_SHADER] != NULL)
+		delete shaderSources[VERTEX_SHADER];
+	if (shaderSources[FRAGMENT_SHADER] != NULL)
+		delete shaderSources[FRAGMENT_SHADER];
 }
 
 void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source, int length)
@@ -57,9 +55,19 @@ void ShaderProgram::loadShaderFromString(GLenum shader_type, const char* source,
 	}
 
 	if (shader_type == GL_VERTEX_SHADER)
+	{
 		shaders_[VERTEX_SHADER] = shader;
+		shaderSources[VERTEX_SHADER] = new char[length];
+		sourceLengths[VERTEX_SHADER] = length;
+		memcpy(shaderSources[VERTEX_SHADER], source, length);
+	}
 	else if (shader_type == GL_FRAGMENT_SHADER)
+	{
 		shaders_[FRAGMENT_SHADER] = shader;
+		shaderSources[FRAGMENT_SHADER] = new char[length];
+		sourceLengths[FRAGMENT_SHADER] = length;
+		memcpy(shaderSources[FRAGMENT_SHADER], source, length);
+	}
 // 	else if (shader_type == GL_GEOMETRY_SHADER)
 // 		_shaders[GEOMETRY_SHADER] = shader;
 }
@@ -109,7 +117,7 @@ void ShaderProgram::createAndLinkProgram()
 }
 
 
-std::vector<UniformDesc> ShaderProgram::getUniforms(GLenum typeFilter)
+std::vector<UniformDesc> ShaderProgram::getUniforms(GLenum typeFilter) const
 {
 	std::vector<UniformDesc> uniforms;
 
@@ -120,8 +128,7 @@ std::vector<UniformDesc> ShaderProgram::getUniforms(GLenum typeFilter)
 		int name_len = -1, num = -1;
 		GLenum type = GL_ZERO;
 		char name[100];
-		glGetActiveUniform(getProgram(), GLuint(i), sizeof(name)-1,
-			&name_len, &num, &type, name);
+		glGetActiveUniform(getProgram(), GLuint(i), sizeof(name)-1, &name_len, &num, &type, name);
 		name[name_len] = 0;
 
 		if (typeFilter == -1 || typeFilter == type)

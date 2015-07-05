@@ -51,7 +51,6 @@ void RenderSystem::OnCreate()
 	std::cout << "RenderSystem:: Init()" << std::endl;
 }
 
-
 void RenderSystem::Update()
 {
 	//std::cout << "RenderSystem:: Update() " << std::endl;
@@ -67,8 +66,6 @@ void RenderSystem::Update()
 
 	Matrix4& ProjectionMatrix = Camera::main->getProjectionMatrix();
 	Camera::main->getViewMatrix(ViewMatrix);
-
-	//std::cout << "MATERIALS " << Material::allMaterials.size() << std::endl;
 
  	for (size_t i = 0, len = Material::allMaterials_.size(); i < len; i++)
  	{
@@ -138,7 +135,7 @@ void RenderSystem::addComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		dynamic_cast<Renderer*>(&c)->renderSystem_ = this;
+		static_cast<Renderer*>(&c)->renderSystem_ = this;
 		addToBuffer(&c);
 	}
 }
@@ -147,7 +144,7 @@ void RenderSystem::removeComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		componentsList_.remove(dynamic_cast<Renderer*>(&c)->renderSystemNode_);
+		componentsList_.remove(static_cast<Renderer*>(&c)->renderSystemNode_);
 		removeFromBuffer(&c);
 	}
 }
@@ -162,7 +159,7 @@ void RenderSystem::OnBufferChange(std::vector<Component*>& components)
 	for (Component* component : components)
 	{
 		component->Init();
-		componentsList_.addToBack(dynamic_cast<Renderer*>(component)->renderSystemNode_);
+		componentsList_.addToBack(static_cast<Renderer*>(component)->renderSystemNode_);
 	}
 
 	sortComponents();

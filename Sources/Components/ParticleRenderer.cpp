@@ -16,8 +16,8 @@ ParticleRenderer::ParticleRenderer()
 
 void ParticleRenderer::Render(int materialIndex /* = 0 */)
 {
-	getSharedMaterial()->getShader()->setUniform1f("count", (float)particleCount_);
-	getSharedMaterial()->getShader()->setUniform1f("time", time_);
+	getSharedMaterial(materialIndex)->getShader()->setUniform1f("count", (float)particleCount_);
+	getSharedMaterial(materialIndex)->getShader()->setUniform1f("time", time_);
 	drawer_->draw();
 
 	time_ += GameTime::DeltaTime();

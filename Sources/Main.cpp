@@ -15,7 +15,7 @@
 #include "CoreEngine/GLUTInput.h"
 #include "CoreEngine/WinAssetLoader.h"
 
-#include "Testings/GameController.h"
+#include "Testings/TestComponent.h"
 
 #define TARGET_FPS 60
 
@@ -47,6 +47,5 @@ int main(int argc, char **argv)
 
 void CreateGame()
 {
-	GameController* gameController = (new GameObject("GameController"))->addComponent<GameController>();
-	gameController->spaceShipType = STANDART;
+	TestComponent* test = (new GameObject("Test"))->addComponent<TestComponent>();
 }

@@ -34,6 +34,7 @@
 #include "../Components/SpriteRenderer.h"
 #include "../Components/LineRenderer.h"
 #include "../Components/ParticleRenderer.h"
+#include "../Components/BitmapFontRenderer.h"
 #include "../Components/Terrain.h"
 #include "../Components/TextureAnimator.h"
 

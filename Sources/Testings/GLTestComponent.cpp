@@ -25,7 +25,7 @@ public:
 	smart_pointer<Texture2D> textureTransparent;
 	void Create()
 	{
-		textureTransparent = LoadTexture("Resources/vtr.bmp");
+		textureTransparent = AssetManager::LoadTexture("Resources/vtr.bmp");
 
 		//cout << "GLTestComponent:: Create" << endl;
 	}
@@ -43,13 +43,13 @@ public:
 			std::vector<Collider2D*> colliders;
 			collisionSystem->getColliders(&colliders);
 			for (Collider2D* coll : colliders)
-				coll->getGameObject()->getComponent<SpriteRenderer>()->setColor(Color::WHITE);
+				coll->getGameObject()->getComponent<SpriteRenderer>()->setColor(Color::WHITE());
 
 			colliders.clear();
 			collisionSystem->getPotentialCollisions(first, &colliders);
 			for (Collider2D* coll : colliders)
 			{
-				coll->getGameObject()->getComponent<SpriteRenderer>()->setColor(Color::GREEN);
+				coll->getGameObject()->getComponent<SpriteRenderer>()->setColor(Color::GREEN());
 			}
 		}
 
@@ -58,7 +58,7 @@ public:
 			Logger::Print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			smart_pointer<Material> mat =
 				AssetManager::LoadMaterial("Unlit", "Resources/Shaders/UnlitSprite.vert", "Resources/Shaders/UnlitSprite.frag");
-			mat->addTexture(textureTransparent);
+			mat->setMainTexture(textureTransparent);
 
 			GameObject* obj2 = new GameObject("SecondGameObject");
 

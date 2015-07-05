@@ -16,6 +16,9 @@
 #include "../Extras/smart_pointer.h"
 #include "../Extras/Singleton.h"
 
+class Font;
+class BitmapFontRenderer;
+
 struct ModelDescriptor
 {
 	std::string matfile;
@@ -58,6 +61,7 @@ public:
 		GLenum dataType = GL_UNSIGNED_BYTE);
 
 	static smart_pointer<Material> LoadMaterial(const char* name, const char* vertexShaderRelativePath, const char* fragmentShaderRelativePath);
+	static smart_pointer<Font> LoadFont(const char* relativePath);
 };
 
 // std::vector<GameObject*> LoadModel(const char* modelfile, const char* materialfile);

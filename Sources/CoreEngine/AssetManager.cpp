@@ -10,6 +10,9 @@
 #include "../Extras/Vectors.h"
 #include "../Extras/smart_pointer.h"
 #include "../Components/MeshRenderer.h"
+#include "../Components/BitmapFontRenderer.h"
+#include "FntParser.h"
+#include "Font.h"
 #include "../Debug/Logger.h"
 #include "FreeImageImageReader.h"
 #include "Engine.h"
@@ -126,7 +129,6 @@ smart_pointer<Texture2D> AssetManager::LoadTexture(const char* filename,
 		default:
 			return smart_pointer<Texture2D>::null();
 		}
-
 	}
 
 	return texture;
@@ -140,12 +142,22 @@ smart_pointer<Material> AssetManager::LoadMaterial(const char* name, const char*
 	smart_pointer<Material> mat(new Material(name,
 		(char*)vertexShaderAsset.data, vertexShaderAsset.length,
 		(char*)fragmentShaderAsset.data, fragmentShaderAsset.length));
-	mat->setColor(Color::WHITE);
+	mat->setColor("Color", Color::WHITE());
 
 	Engine::GetInstance().assetLoader->releaseAsset(&vertexShaderAsset);
 	Engine::GetInstance().assetLoader->releaseAsset(&fragmentShaderAsset);
 
 	return mat;
+}
+
+smart_pointer<Font> AssetManager::LoadFont(const char* relativePath)
+{
+	AssetFile fontAsset = Engine::GetInstance().assetLoader->loadAsset(relativePath);
+	Font* font = FntParser::parseText((char*)fontAsset.data, fontAsset.length);
+	
+	Engine::GetInstance().assetLoader->releaseAsset(&fontAsset);
+
+	return smart_pointer<Font>(font);
 }
 
 // bool hasAttributes(std::vector<Vector3>& verts, std::vector<Vector3>& norms, std::vector<Vector2>& texcoord, Vector3& p, Vector3& n, Vector2& t, unsigned int& index);

@@ -36,7 +36,7 @@ inline void ParticleRenderer::setParticleSize(float size)
 {
 	smart_pointer<Material>& mat = getSharedMaterial();
 	if (!mat.isEmpty())
-		return mat->setFloat(size, "size");
+		return mat->setFloat("size", size);
 }
 
 inline float ParticleRenderer::getParticleSize()

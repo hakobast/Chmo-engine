@@ -20,10 +20,11 @@ FreeImageImageReader::FreeImageImageReader(const void* data, unsigned int size)
 
 	if (!dib)
 		return;
-
+	
 	data_ = FreeImage_GetBits(dib);
 	width_ = FreeImage_GetWidth(dib);
 	height_ = FreeImage_GetHeight(dib);
+	
 	parseFormat(fif);
 }
 

@@ -16,7 +16,7 @@ AssetFile AndroidAssetLoader::loadAsset(const char* relativePath)
 		AAsset* asset = AAssetManager_open(assetManager_,relativePath, AASSET_MODE_STREAMING);
 		if(asset != NULL)
 		{
-			return AssetFile(AAsset_getLength(asset),AAsset_getBuffer(asset), asset);
+			return AssetFile(AAsset_getLength(asset), AAsset_getBuffer(asset), asset);
 		}
 	}
 

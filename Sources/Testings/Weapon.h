@@ -16,7 +16,7 @@ public:
 	Vector3 position;
 
 	~Weapon();
-	Weapon(Color bulletColor = Color::RED, float bulletSpeed = 10);
+	Weapon(Color bulletColor = Color::RED(), float bulletSpeed = 10);
 	void fire();
 private:
 	int poolInitialSize_ = 10;

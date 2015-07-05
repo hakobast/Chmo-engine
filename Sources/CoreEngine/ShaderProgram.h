@@ -6,23 +6,26 @@
 
 #include "LIBS.h"
 #include "../Extras/smart_pointer.h"
+#include "../Extras/Color.h"
+#include "../Extras/Matrix4.h"
+#include "../Extras/Vectors.h"
 #include "../Extras/GLUtils.h"
 #include "../Debug/Logger.h"
 
 class UniformDesc
 {
 public:
-	UniformDesc(const char* name, GLenum type) : type(type), name(name)
+	UniformDesc(const char* name, GLenum type) : type(type)
 	{
-		
+		strcpy(this->name, name);
 	};
-
-	const char* name;
+	char name[100];
 	GLenum type;
 };
 
 class ShaderProgram : public RemovableObject
 {
+	friend class Material;
 public:
 	ShaderProgram(std::map<const char*,unsigned int> attributes);
 	~ShaderProgram();
@@ -30,11 +33,25 @@ public:
 	void createAndLinkProgram();
 	void bind();
 	void unbind();
-	GLuint getProgram();
+	GLuint getProgram() const;
 	const std::map<const char*, unsigned int> getAttributes() const;
-	std::vector<UniformDesc> getUniforms(GLenum typeFilter = -1);
-	GLint getUniformLocation(const char* name);
-	GLint getAttributeLocation(const char* name);
+	std::vector<UniformDesc> getUniforms(GLenum typeFilter = -1) const;
+	GLint getUniformLocation(const char* name) const;
+	GLint getAttributeLocation(const char* name) const;
+
+	void setFloat	(const char* name, float value);
+	void setVec2	(const char* name, Vector2& value);
+	void setVec3	(const char* name, Vector3& value);
+	void setVec4	(const char* name, Vector4& value);
+	void setColor	(const char* name, Color& value);
+	void setMatrix4	(const char* name, Matrix4& value);
+
+	float	getFloat	(const char* name);
+	Vector2 getVec2		(const char* name);
+	Vector3 getVec3		(const char* name);
+	Vector4 getVec4		(const char* name);
+	Color	getColor	(const char* name);
+	Matrix4 getMatrix4	(const char* name);
 
 	void setUniform1f(const char* name, GLfloat v0);
 	void setUniform1fv(const char* name, GLsizei count, const GLfloat* value);
@@ -96,9 +113,11 @@ private:
 	std::map<const char*, unsigned int> attributes_;
 	GLuint program_;
 	GLuint shaders_[2];
+	char* shaderSources[2];
+	int sourceLengths[2];
 };
 
-inline GLuint ShaderProgram::getProgram()
+inline GLuint ShaderProgram::getProgram() const
 {
 	return program_;
 }
@@ -118,14 +137,111 @@ inline const std::map<const char*, unsigned int> ShaderProgram::getAttributes() 
 	return attributes_;
 }
 
-inline GLint ShaderProgram::getUniformLocation(const char* name)
+inline GLint ShaderProgram::getUniformLocation(const char* name) const
 {
 	return glGetUniformLocation(program_, name);
 }
 
-inline GLint ShaderProgram::getAttributeLocation(const char* name)
+inline GLint ShaderProgram::getAttributeLocation(const char* name) const
 {
 	return glGetAttribLocation(program_, name);
+}
+
+inline void ShaderProgram::setFloat(const char* name, float value)
+{
+	bind();
+	setUniform1f(name, value);
+	unbind();
+}
+
+inline void ShaderProgram::setVec2(const char* name, Vector2& value)
+{
+	bind();
+	setUniform2f(name, value.x, value.y);
+	unbind();
+}
+
+inline void ShaderProgram::setVec3(const char* name, Vector3& value)
+{
+	bind();
+	setUniform3f(name, value.x, value.y, value.z);
+	unbind();
+}
+
+inline void ShaderProgram::setVec4(const char* name, Vector4& value)
+{
+
+	bind();
+	setUniform4f(name, value.x, value.y, value.z, value.w);
+	unbind();
+}
+
+inline void ShaderProgram::setColor(const char* name, Color& value)
+{
+	bind();
+	setUniform4f(name, value.getR(), value.getG(), value.getB(), value.getA());
+	unbind();
+}
+
+inline void ShaderProgram::setMatrix4(const char* name, Matrix4& value)
+{
+	bind();
+	setUniformMatrix4fv(name, 1, false, &value[0]);
+	unbind();
+}
+
+inline float ShaderProgram::getFloat(const char* name)
+{
+	float value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, &value);
+
+	return value;
+}
+
+inline Vector2 ShaderProgram::getVec2(const char* name)
+{
+	Vector2 value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, value.getPointer());
+
+	return value;
+}
+
+inline Vector3 ShaderProgram::getVec3(const char* name)
+{
+	Vector3 value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, value.getPointer());
+
+	return value;
+}
+
+inline Vector4 ShaderProgram::getVec4(const char* name)
+{
+	Vector4 value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, value.getPointer());
+
+	return value;
+}
+
+inline Color ShaderProgram::getColor(const char* name)
+{
+	Vector4 value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, value.getPointer());
+
+	return Color(value.x, value.y, value.z, value.w);
+}
+
+inline Matrix4 ShaderProgram::getMatrix4(const char* name)
+{
+	Matrix4 value;
+	GLuint loc = getUniformLocation(name);
+	glGetUniformfv(program_, loc, &value[0]);
+
+	return value;
 }
 
 inline void ShaderProgram::setUniform1f(const char* name, GLfloat v0)

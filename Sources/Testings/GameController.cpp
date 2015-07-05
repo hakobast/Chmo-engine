@@ -126,12 +126,12 @@ void GameController::createCoolSpaceship()
 	lineRend->setMainMaterial(mat);
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
-	lineRend->setColor(Color::PURPLE);
+	lineRend->setColor(Color::PURPLE());
 	lineRend->setWidth(2.0f);
 
-	ship->addWeapon(new Weapon(Color::YELLOW), Vector3(-0.3f, -0.2f, 0.0f), Vector3::UP);
-	ship->addWeapon(new Weapon(Color::YELLOW), Vector3(0.3f, -0.2f, 0.0f), Vector3::UP);
-	ship->addWeapon(new Weapon(Color::RED), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
+	ship->addWeapon(new Weapon(Color::YELLOW()), Vector3(-0.3f, -0.2f, 0.0f), Vector3::UP);
+	ship->addWeapon(new Weapon(Color::YELLOW()), Vector3(0.3f, -0.2f, 0.0f), Vector3::UP);
+	ship->addWeapon(new Weapon(Color::RED()), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
 
 	collider->size = Vector2(1.2f, 1.4f);
 }
@@ -155,10 +155,10 @@ void GameController::createStandartSpaceship()
 	lineRend->setMainMaterial(mat);
 	lineRend->setPointsCount(points.size());
 	lineRend->setPoints(&points);
-	lineRend->setColor(Color::GREEN);
+	lineRend->setColor(Color::GREEN());
 	lineRend->setWidth(2.0f);
 
-	ship->addWeapon(new Weapon(Color::RED), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
+	ship->addWeapon(new Weapon(Color::RED()), Vector3(0.0f, 0.5f, 0.0f), Vector3::UP);
 
 	collider->size = Vector2(0.5f, 0.3f);
 }

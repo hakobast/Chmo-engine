@@ -48,7 +48,7 @@ void GameLogicSystem::removeComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		componentsList_.remove(dynamic_cast<GameLogic*>(&c)->logicSystemNode_);
+		componentsList_.remove(static_cast<GameLogic*>(&c)->logicSystemNode_);
 		removeFromBuffer(&c);
 	}
 }
@@ -63,7 +63,7 @@ void GameLogicSystem::OnBufferChange(std::vector<Component*>& components)
 	for (Component* component : components)
 	{
 		component->Init();
-		componentsList_.addToBack(dynamic_cast<GameLogic*>(component)->logicSystemNode_);
+		componentsList_.addToBack(static_cast<GameLogic*>(component)->logicSystemNode_);
 	}
 }
 

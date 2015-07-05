@@ -25,7 +25,7 @@ void ScreenSystem::removeComponent(Component &c)
 {
 	if (isSystemComponent(c))
 	{
-		componentsList_.remove(dynamic_cast<Camera*>(&c)->screenSystemNode_);
+		componentsList_.remove(static_cast<Camera*>(&c)->screenSystemNode_);
 		removeFromBuffer(&c);
 	}
 }
@@ -40,7 +40,7 @@ void ScreenSystem::OnBufferChange(std::vector<Component*>& components)
 	for (Component* component : components)
 	{
 		component->Init();
-		componentsList_.addToBack(dynamic_cast<Camera*>(component)->screenSystemNode_);
+		componentsList_.addToBack(static_cast<Camera*>(component)->screenSystemNode_);
 	}
 }
 

@@ -93,8 +93,6 @@ void SpriteRenderer::Create()
 
 void SpriteRenderer::Init()
 {
-	Component::Init();
-
 	//std::cout << "SpriteRenderer: Init() " << getGameObject()->name << std::endl;
 
 	setTextureFrame(frame_);

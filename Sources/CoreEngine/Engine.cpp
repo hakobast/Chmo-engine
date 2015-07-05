@@ -124,8 +124,7 @@ void Engine::draw()
 
 	while (componentsToDestroy_.size() > 0)
 	{
-		ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front());
-		if (activeComp != NULL)
+		if (ActiveComponent* activeComp = dynamic_cast<ActiveComponent*>(componentsToDestroy_.front()))
 			activeComp->OnDestroy();
 
 		delete componentsToDestroy_.front();

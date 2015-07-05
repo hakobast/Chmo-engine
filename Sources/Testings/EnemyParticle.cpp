@@ -5,7 +5,7 @@ void EnemyParticle::Create()
 	smart_pointer<Material> mat =
 		AssetManager::LoadMaterial("Particle", "Resources/Shaders/SimpleParticle.vert", "Resources/Shaders/SimpleParticle.frag");
 
-	mat->setFloat(10.0f, "speed");
+	mat->setFloat("speed", 10.0f);
 
 	particleRenderer = getGameObject()->addComponent<ParticleRenderer>();
 	particleRenderer->setMainMaterial(mat);
@@ -33,6 +33,6 @@ void EnemyParticle::setColor(Color color)
 {
 	if (!particleRenderer->getSharedMaterial().isEmpty())
 	{
-		particleRenderer->getSharedMaterial()->setColor(color);
+		particleRenderer->getSharedMaterial()->setColor("Color", color);
 	}
 }

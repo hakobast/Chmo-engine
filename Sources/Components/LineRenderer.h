@@ -50,16 +50,16 @@ inline void LineRenderer::setColor(Color c)
 {
 	smart_pointer<Material>& mat = getSharedMaterial();
 	if (!mat.isEmpty())
-		mat->setColor(c);
+		mat->setColor("Color", c);
 }
 
 inline Color LineRenderer::getColor()
 {
 	smart_pointer<Material>& mat = getSharedMaterial();
 	if (!mat.isEmpty())
-		return mat->getColor();
+		return mat->getColor("Color");
 
-	return Color::BLACK;
+	return Color::BLACK();
 }
 
 inline float LineRenderer::getWidth()

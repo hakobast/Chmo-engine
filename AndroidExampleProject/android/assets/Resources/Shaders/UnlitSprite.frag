@@ -1,6 +1,6 @@
-#version 120
+#version 100
 
-uniform vec4 Color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 Color;
 uniform sampler2D mainTexture;
 
 varying vec2 OutTexCoord0;

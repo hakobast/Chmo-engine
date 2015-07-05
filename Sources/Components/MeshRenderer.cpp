@@ -21,7 +21,7 @@ void MeshRenderer::Create()
 
 void MeshRenderer::Init()
 {
-	Component::Init();
+
 }
 
 void MeshRenderer::Update(){}

@@ -1,9 +1,8 @@
 
 #include "Logic/EngineInclude.h"
-#include "Logic/GameController.h"
+#include "Logic/TestComponent.h"
 
 void Main()
 {
-	GameController* gameController = (new GameObject("GameController"))->addComponent<GameController>();
-	gameController->spaceShipType = STANDART;
+	TestComponent* test = (new GameObject("Test"))->addComponent<TestComponent>();
 }

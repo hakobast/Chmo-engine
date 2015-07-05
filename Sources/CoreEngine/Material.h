@@ -19,14 +19,14 @@ class Material :public RemovableObject
 friend class RenderSystem;
 private:
 	static std::vector<Material*> allMaterials_;
-	std::vector<smart_pointer<Texture2D>> textures_;
+	std::map<int, smart_pointer<Texture2D>> textures_;
 	std::vector<MaterialShareInfo> sharingInfo_;
 	smart_pointer<ShaderProgram> shader_;
+	const char* name;
 
 	int getSharesCount();
 	void share(MaterialShareInfo shareInfo);
 	void unshare(MaterialShareInfo shareInfo);
-
 public:
 	////////////// SHADER STANDERT ATTRIBUTES ////////////////
 	static const char* vertexAttribName;
@@ -40,9 +40,6 @@ public:
 	static std::map<const char*, unsigned int> StandartAttributes;
 	/////////////////////////////////////////////////////////
 
-	static smart_pointer<Material> Diffuse();
-	static smart_pointer<Material> Unlit();
-
 	~Material();
 	Material(const Material& other);
 	Material(const char* name,
@@ -53,18 +50,25 @@ public:
 	void bind();
 	void unbind();
 	void setMainTexture	(smart_pointer<Texture2D> texture);
-	void setTexture		(smart_pointer<Texture2D> texture, int index);
-	void addTexture		(smart_pointer<Texture2D> texture, char* samplerName = NULL);
+	void setTexture(smart_pointer<Texture2D> texture, const char* propertyName);
 
-	smart_pointer<Texture2D>&		getTexture(int index);
+	smart_pointer<Texture2D>&		getTexture(const char* propertyName);
 	smart_pointer<Texture2D>&		getMainTexture();
 	smart_pointer<ShaderProgram>&	getShader();
 
-	void	setColor(Color c,		const char* propertyName = "Color");
-	void	setFloat(float value,	const char* propertyName);
-	Color	getColor(const char* propertyName = "Color");
-	float	getFloat(const char* propertyName);
-	const char* name;
+	void setFloat	(const char* name, float value);
+	void setVec2	(const char* name, Vector2& value);
+	void setVec3	(const char* name, Vector3& value);
+	void setVec4	(const char* name, Vector4& value);
+	void setColor	(const char* name, Color& value);
+	void setMatrix4	(const char* name, Matrix4& value);
+
+	float	getFloat	(const char* name);
+	Vector2 getVec2		(const char* name);
+	Vector3 getVec3		(const char* name);
+	Vector4 getVec4		(const char* name);
+	Color	getColor	(const char* name);
+	Matrix4 getMatrix4	(const char* name);
 };
 
 inline smart_pointer<ShaderProgram>& Material::getShader()
@@ -72,30 +76,14 @@ inline smart_pointer<ShaderProgram>& Material::getShader()
 	return shader_;
 }
 
-inline smart_pointer<Texture2D>& Material::getTexture(int index)
-{
-	if (index < (int)textures_.size())
-		return textures_[index];
-
-	return smart_pointer<Texture2D>::null();
-}
-
 inline smart_pointer<Texture2D>& Material::getMainTexture()
 {
-	if (textures_.size() > 0)
-		return textures_[0];
-
-	return smart_pointer<Texture2D>::null();
+	return getTexture("mainTexture");
 }
 
 inline void Material::setMainTexture(smart_pointer<Texture2D> texture)
 {
-	if (textures_.size() > 0)
-		textures_[0] = texture;
-	else
-	{
-		textures_.push_back(texture);
-	}
+	setTexture(texture, "mainTexture");
 }
 
 #endif

@@ -9,14 +9,14 @@ struct Color
 private:
 	float r,g,b,a;
 public:
-	static const Color BLACK;
-	static const Color WHITE;
-	static const Color RED;
-	static const Color GREEN;
-	static const Color BLUE;
-	static const Color YELLOW;
-	static const Color PURPLE;
-	static const Color CYAN;
+	static Color BLACK();
+	static Color WHITE();
+	static Color RED();
+	static Color GREEN();
+	static Color BLUE();
+	static Color YELLOW();
+	static Color PURPLE();
+	static Color CYAN();
 
 
 	Color() :r(1.0f), g(1.0f), b(1.0f), a(1.0f){};
